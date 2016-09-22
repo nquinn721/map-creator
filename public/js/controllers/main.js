@@ -7,7 +7,7 @@ app.controller('main', ['stage', '$scope', '$document', 'watch', '$http', '$time
 	vm.keys = {};
 
 	vm.save = function(name) {
-		if(vm.fileLoaded === 'untitled')
+		if(vm.stage.currentFile.name === 'untitled')
 			vm.showSaveMenu = true;
 		else {
 			vm.saveTileMap();
@@ -36,9 +36,10 @@ app.controller('main', ['stage', '$scope', '$document', 'watch', '$http', '$time
 		vm.showSaveMenu = false;
 	}
 	vm.saveTileMap = function() {
-		stage.save();
+		stage.file.save();
 		vm.hideSaveMenu();
 		vm.updateTileMaps();
+		vm.showSavedMessage();
 	}
 
 	$doc.find('body').on('mousemove', '#map-creator', function(e) {

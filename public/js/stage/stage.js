@@ -211,15 +211,7 @@ app.factory('stage', [
 		addItem : function(obj) {
 			this.currentFile.items.push(obj);
 		},
-		save : function() {
-			this.currentFile.isDirty = false;
-			this.tileMap.jsonTileMap();
-			this.currentFile.saved = true;
-			setTimeout(function() {
-				this.currentFile.saved = false;
-			}.bind(this), 1000);
-			$rootScope.$apply();
-		},
+		
 		clearStageItems : function() {
 			for(var i = 0; i < this.currentFile.items.length; i++)
 				this.currentFile.items[i].destroyImages();

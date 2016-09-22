@@ -1,4 +1,4 @@
-app.factory('File', ['$http', function($http) {
+app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 	function File(stage) {
 		this.stage = stage;
 	}
@@ -58,6 +58,16 @@ app.factory('File', ['$http', function($http) {
 		createItemsFromRaw : function(items) {
 			for(var i = 0; i < items.length; i++)
 				this.stage.createItem(items[i]);
+		},
+		save : function() {
+			console.log('save', this.stage.currentFile);
+			this.stage.currentFile.isDirty = false;
+			// this.stage.tileMap.jsonTileMap();
+			this.stage.currentFile.saved = true;
+			setTimeout(function() {
+				this.stage.currentFile.saved = false;
+			}.bind(this), 1000);
+			$rootScope.$apply();
 		}
 	}
 

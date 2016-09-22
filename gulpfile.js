@@ -29,6 +29,7 @@ gulp.task('less', function() {
 gulp.task('js', function() {
 	gulp.src([
 		'bower_components/jquery/dist/jquery.min.js',
+		'public/js/lib/jquery.mousewheel.js',
 		'bower_components/angular/angular.min.js',
 		'bower_components/jquery-ui/jquery-ui.min.js',
 		'bower_components/angular-ui-uploader/dist/uploader.min.js',
