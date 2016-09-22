@@ -6,12 +6,14 @@ app.controller('main', ['stage', '$scope', '$document', 'watch', '$http', '$time
 	vm.maps = [];
 	vm.keys = {};
 
-	vm.save = function(name) {
-		if(vm.stage.currentFile.name === 'untitled')
+	vm.save = function() {
+		if(!vm.stage.currentFile.isDirty)return;
+
+
+		if(vm.stage.currentFile.name === 'untitled.js')
 			vm.showSaveMenu = true;
 		else {
 			vm.saveTileMap();
-			vm.showSavedMessage();
 		}
 	}
 	vm.currentImage = function() {
@@ -23,10 +25,13 @@ app.controller('main', ['stage', '$scope', '$document', 'watch', '$http', '$time
 	vm.showFullScreenImg = function(url) {
 		vm.fullScreenImg = vm.stage.canvasImage.src;
 	}
-	vm.showSavedMessage = function() {
+	vm.showSaved = function() {
+		console.log(vm.saved);
 		vm.saved = true;
+		console.log(vm.saved);
 		$timeout(function() {
 			vm.saved = false;
+			console.log(vm.saved);
 		}, 1000);
 	}
 	vm.saveAs = function() {
@@ -36,10 +41,10 @@ app.controller('main', ['stage', '$scope', '$document', 'watch', '$http', '$time
 		vm.showSaveMenu = false;
 	}
 	vm.saveTileMap = function() {
-		stage.file.save();
 		vm.hideSaveMenu();
+		stage.file.save();
 		vm.updateTileMaps();
-		vm.showSavedMessage();
+		vm.showSaved();
 	}
 
 	$doc.find('body').on('mousemove', '#map-creator', function(e) {

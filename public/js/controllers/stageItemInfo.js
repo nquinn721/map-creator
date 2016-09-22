@@ -1,4 +1,4 @@
-app.controller('SelectedItemsMenu', ['$scope', 'watch', 'stage', function($scope, watch, stage) {
+app.controller('StageItemInfoMenu', ['$scope', 'watch', 'stage', function($scope, watch, stage) {
 	var vm = this;
 
 

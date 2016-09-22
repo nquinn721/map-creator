@@ -1,4 +1,4 @@
-app.factory('Move', ['draw', function(draw) {
+app.factory('Move', function() {
 	function Move(stage) {
 		this.stage = stage;
 		this.name = 'move';
@@ -34,4 +34,4 @@ app.factory('Move', ['draw', function(draw) {
 		}
 	}
 	return Move;
-}]);
+});

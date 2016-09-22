@@ -10,9 +10,14 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 			image.src = canvas.toDataURL("image/png");
 			return image;
 		},
+		updateCanvas : function() {
+			this.snapshotStage.canvas.width = this.stage.currentFile.size.w;
+			this.snapshotStage.canvas.height = this.stage.currentFile.size.h;	
+		},
 		updateSnapshotCanvas : function() {
 			var children = [],
 				stage = this.stage.getStage();
+			var timer = Date.now();
 
 			this.snapshotStage.children = null;
 			for(var i = 0; i < stage.children.length; i++){
@@ -20,6 +25,7 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 					children.push(stage.children[i].clone(true));
 			}
 			this.snapshotStage.children = children;
+			this.snapshotStage.update();
 			this.createSnapShot();
 		},
 		createSnapShot : function() {

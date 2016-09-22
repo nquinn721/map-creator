@@ -20,6 +20,7 @@ app.factory('TileMap', ['$http', function($http) {
 						el : item.element,
 						sprite : item.fileName,
 						file : item.file,
+						id : item.id,
 						src : item.src
 					});
 			}

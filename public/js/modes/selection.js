@@ -1,4 +1,4 @@
-app.factory('Selection', ['draw', '$rootScope', function(draw, $rootScope) {
+app.factory('Selection', ['$rootScope', function($rootScope) {
 	function Selection(stage) {
 		this.stage = stage;
 		this.name = 'selection';
@@ -8,7 +8,7 @@ app.factory('Selection', ['draw', '$rootScope', function(draw, $rootScope) {
 
 	Selection.prototype = {
 		selection : function() {
-			this.stage.selectionBox = draw.selection(
+			this.stage.selectionBox = this.stage.draw.selection(
 				this.stage.mouseDownMouseCoords.x, 
 				this.stage.mouseDownMouseCoords.y, 
 				this.stage.mouseMoveMouseCoords.x, 
@@ -21,7 +21,7 @@ app.factory('Selection', ['draw', '$rootScope', function(draw, $rootScope) {
 				up = this.stage.mouseUpMouseCoords,
 				items, x, y, w, h;
 
-			draw.destroySelection();
+			this.stage.draw.destroySelection();
 			x = down.x < up.x ? down.x : up.x;
 			w = down.x > up.x ? down.x - up.x : up.x - down.x;
 			y = down.y > up.y ? up.y : down.y;

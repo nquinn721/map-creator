@@ -60,14 +60,12 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 				this.stage.createItem(items[i]);
 		},
 		save : function() {
-			console.log('save', this.stage.currentFile);
 			this.stage.currentFile.isDirty = false;
-			// this.stage.tileMap.jsonTileMap();
+			this.stage.tileMap.jsonTileMap();
 			this.stage.currentFile.saved = true;
 			setTimeout(function() {
 				this.stage.currentFile.saved = false;
 			}.bind(this), 1000);
-			$rootScope.$apply();
 		}
 	}
 

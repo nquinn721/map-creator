@@ -1,7 +1,7 @@
 app.factory('stage', [
-	'Preload', 'draw', 'TileMap', 'Item', '$http', 'Selection', 'Paint', 'Erase', 'Move', 
+	'Preload', 'Draw', 'TileMap', 'Item', '$http', 'Selection', 'Paint', 'Erase', 'Move', 
 	'keys', 'cursor', '$rootScope', 'Snapshot', 'File',
-	function(Preload, draw, TileMap, Item, $http, Selection, Paint, Erase, Move, 
+	function(Preload, Draw, TileMap, Item, $http, Selection, Paint, Erase, Move, 
 			keys, cursor, $rootScope, Snapshot, File) {
 
 	function Stage(stageId) {
@@ -14,8 +14,7 @@ app.factory('stage', [
 		this.baseHeight = 800;
 
 		// Classes
-		this.draw = draw;
-		this.draw.init(this);
+		this.draw = new Draw(this);
 		this.tileMap = new TileMap(this);
 		this.snapshot = new Snapshot(this);
 		this.file = new File(this);
@@ -30,14 +29,14 @@ app.factory('stage', [
 		}
 
 		this.files = {
-			untitled : {
-				name : 'untitled',
+			'untitled.js' : {
+				name : 'untitled.js',
 				items : [],
 				size : {w : this.baseWidth, h : this.baseHeight}
 			}
 		};
-		this.currentFile = this.files.untitled;
-		this.currentFileName = 'untitled';
+		this.currentFile = this.files['untitled.js'];
+		this.currentFileName = 'untitled.js';
 		this.rows = this.stage.canvas.height / this.CELL_HEIGHT;
 		this.cols = this.stage.canvas.width / this.CELL_WIDTH;
 
@@ -86,8 +85,7 @@ app.factory('stage', [
 			this.cols = this.currentFile.size.w / this.CELL_WIDTH;
 			this.stage.canvas.width = this.currentFile.size.w;
 			this.stage.canvas.height = this.currentFile.size.h;
-			this.snapshot.snapshotStage.canvas.width = this.currentFile.size.w;
-			this.snapshot.snapshotStage.canvas.height = this.currentFile.size.h;
+			this.snapshot.updateCanvas();
 			this.draw.clearLines();
 			this.draw.drawCanvasGrid();	
 		},
@@ -201,6 +199,7 @@ app.factory('stage', [
 			}, item;
 
 			if(this.getItemByXY(x, y))return;
+			obj = $.extend(obj, this.getLoadedItemById(id));
 
 			item = new Item(this, obj);
 			item.drawImg();
@@ -261,8 +260,7 @@ app.factory('stage', [
 		update : function() {
 			setInterval(function() {
 				this.stage.update();
-				this.snapshot.snapshotStage.update();
-			}.bind(this), 100)
+			}.bind(this), 10)
 		},
 	}
 
