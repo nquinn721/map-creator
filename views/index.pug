@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  .wrapper(cursor, ng-controller='main as m')
+    .full-screen-img.ng-cloak(ng-show="m.fullScreenImg", ng-click="m.hideFullScreenImg()")
+      .image-content
+        img(ng-src="{{m.fullScreenImg}}")
+    .current-item.ng-cloak(ng-style="m.currentItemStyle", ng-class="{'no-paint' : m.stage.noPaint === true}")
+      .current-mode {{m.stage.mode.capitalize()}}
+      img(ng-if="m.stage.mode === 'paint'", ng-src="{{m.stage.currentItem.src}}")
+      .selection-img(ng-if="m.stage.mode === 'selection'")
+    include header
+        
+    include menus
+    .grid-tabs
+      .grid-tab.main-grid-toggle(ng-class="{selected : m.stage.currentFile.name === stage.name,'saved-bg' : stage.saved}", ng-repeat="stage in m.stage.files")
+        span(ng-click="m.stage.drawFile(stage.name)") {{stage.name}}
+        span.is-dirty
+          span.ng-cloak(ng-if="stage.isDirty") *
+        span.close-file(ng-click="m.stage.closeFile(stage.name)") x
+    include grid
+    include menus/context
+

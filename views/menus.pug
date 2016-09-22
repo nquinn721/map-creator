@@ -1,0 +1,23 @@
+mixin menu(cl, title, controller, ng)
+  .menu.minimizable(class=cl, ng-controller=controller, ng-if=ng)
+    .menu-title
+      =title
+      .minimize
+        i.fa.fa-minus.minus
+        i.fa.fa-plus.plus.none
+    .menu-content
+      if block
+        block
+      else
+        p No content provided
+
+include menus/save
+.menus
+  include menus/item
+  include menus/items
+  include menus/keyBindings
+  include menus/miniMap
+
+  
+  
+

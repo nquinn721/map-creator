@@ -1,0 +1,7 @@
++menu("items-menu", "Items", "ItemsMenu as im")
+	for sprite, i in sprites
+		- sp = sprite.split('.')[0]
+		- spName = sp.replace(/([A-Z])/g, ' $1').capitalize();
+			.item(id=sp.toLowerCase(), ng-class="{selected: im.selected == '" + sp.toLowerCase() + "'}", class="#{i == 0 ? 'selected' : ''}", ng-click="im.selectItem('" + sp.toLowerCase() + "', '" + sprite + "', '" + spName + "')")
+				span=spName
+				img(src="tilemaps/img/" + sprite)

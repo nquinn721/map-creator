@@ -1,0 +1,11 @@
+{
+  "name": "map-creator",
+  "dependencies": {
+    "angular-ui-uploader": "^1.1.3",
+    "bootstrap": "^3.3.7",
+    "jquery-ui": "jqueryui#^1.12.0",
+    "font-awesome": "^4.6.3",
+    "animate.css": "^3.5.2",
+    "angular": "^1.5.8"
+  }
+}

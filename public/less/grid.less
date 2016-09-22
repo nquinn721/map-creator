@@ -1,0 +1,118 @@
+.grid-tabs {
+    padding-left: 320px;
+    top: 92px;
+    position: absolute;
+    width: 100%;
+    padding-right: 53px;
+    overflow: hidden;
+    display: none;
+    .grid-tab {
+        height: 30px;
+        cursor: pointer;
+        background: #121212;
+        .close-file {
+            font-size: 15px;
+            color: #b53838;
+            font-weight: 900;
+        }
+
+        .close-file:hover {
+            color: #7d0d0d;
+        }
+        &.selected{
+            background: #222;
+        }
+        float: left;
+        padding: 5px;
+        padding-right: 10px;
+        min-width: 80px;
+        .is-dirty{
+            margin-left: 5px;
+            width: 20px;
+            display: inline-block;
+        }
+    }
+}
+.full-screen-grid {
+    position: fixed;
+    z-index: 1;
+    right: 50px;
+    top: 120px;
+    background: #252525;
+    padding: 2px;
+    width: 21px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: -1px 1px 2px #000000;
+}
+.grid {
+    box-sizing: border-box;
+    position: absolute;
+    padding:10px 50px;  
+    background: #222;
+    overflow: auto;
+    left: 320px;
+    top: 120px;
+    bottom: 15px;
+    right: 50px;
+    border: 2px solid transparent;
+    .full-screen-exit-text{
+        display: none;
+    }
+    &.fullscreen {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        .mode-menu{
+            left: 0;
+        }
+        .full-screen-grid{
+            top:0;
+            right: 0;
+        }
+        .full-screen-exit-text {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            text-align: center;
+            display: block;
+            > div {
+                background: #5f1e1e;
+                padding: 10px;
+                margin: auto;
+                width: 30%;
+                border-radius: 10px;
+                box-shadow: 0 0 9px 3px black;
+            }
+        }
+
+    }
+
+    &.saved{
+        border: 2px solid @saved-color;
+    }
+    canvas {
+        background: #232323;
+        box-shadow: 0 0 10px 3px #121212;
+        display: none;
+        margin-right: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .progress-container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .progress-bar {
+        height: 20px !important;
+    }
+
+    .progress {
+        width: 50%;
+    }
+}

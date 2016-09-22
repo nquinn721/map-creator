@@ -1,0 +1,119 @@
+.header {
+
+    .header-menu {
+        width: 100%;
+        background: #272727;
+        border-bottom: 1px solid #444;
+        min-height: 30px;
+
+        
+        
+        .dropdown {
+            z-index: 10;
+            display: none;
+            position: absolute;
+            background: #333;
+            list-style: none;
+            padding: 0;
+            left: 0;
+            top:30px;
+            width: 150px;
+            box-shadow: 0 3px 7px black;
+
+            li {
+                padding: 5px 15px;
+                display: flex;
+                justify-content: space-between;
+                &:not(:last-child) {
+                    border-bottom: 1px solid #444;
+                }
+                &:hover {
+                    background: #252525;
+                }
+            }
+
+
+        }
+
+        > div {
+            float: left;
+            cursor: pointer;
+            position: relative;
+            padding: 5px 15px;
+            &:not(:first-child) {
+                border-left: 1px solid #444;
+            }
+            &:hover {
+                background: #333;
+                .dropdown{
+                    display: block;
+                }
+            }
+        }
+
+    }
+    .header-panel {
+        height: 50px;
+        background: #222;
+        input, select {
+            font-size: 12px;
+            height: 25px !important;
+            margin-left: 5px;
+            padding: 5px !important;
+        }
+        .item-info {
+            input, select {
+                width: 85px;
+            }
+            > span {
+                margin: 10px;
+            }
+
+            img {
+                width: 23px;
+            }
+        }
+
+        .file-loaded{
+            width:15%;
+            span.isDirty {
+                position: absolute;
+                right: 5px;
+                top: 2px;
+                color: red;
+            }
+
+        }
+        > div{
+            position: relative;
+            float: left;
+            display: flex;
+            justify-content: space-between;
+            height: 100%;
+            align-items:center;
+            padding:0 10px;
+            &:not(:last-child){
+                border-right: 1px solid #444;
+            }
+            &:not(:first-child){
+                border-left:1px solid black;
+            }
+        }
+        .size {
+            width: 200px;
+            > div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            input{
+                width: 55px;
+
+            }
+        }
+
+
+    }
+
+}
+

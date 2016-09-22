@@ -1,0 +1,35 @@
+.header
+  .header-menu
+    .file File
+      ul.dropdown
+        li.save(ng-click="m.save()")
+          | Save 
+          .key Ctrl+S
+        li.saveAs(ng-click="m.saveAs()") Save As
+        li.export Export
+          ul.dropdown-submenu
+            li.export-image As image
+    .edit Edit
+    .map Map 
+      ul.dropdown
+        li.map(ng-repeat="map in m.maps", ng-click="m.stage.loadTileMap(map)", ng-if="map.label") {{map.id}}
+  .header-panel
+    .item-info
+      img(ng-src="{{m.stage.currentItem.src}}")
+      span Element Type
+      input.form-control(value="floor")
+      span Body Type
+      select.form-control
+        option(value="static") static
+        option(value="dynamic") dynamic
+        option(value="kinematic") kinematic
+
+    .size
+      .width
+        span W:
+        input.form-control(type='number', value='1600', step='25', ng-model="m.stage.currentFile.size.w", ng-change="m.stage.setSize()")
+      .height
+        span H:
+        input.form-control(type='number', value='800', step='25', ng-model="m.stage.currentFile.size.h", ng-change="m.stage.setSize()")
+    //- .print
+    //-   input.btn.btn-info(type="button", value="Save", ng-click="m.save()")

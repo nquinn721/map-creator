@@ -1,0 +1,21 @@
+.grid.main-grid(ng-class="{saved : m.saved == true, fullscreen : m.fullScreenGrid}")
+	.full-screen-exit-text(ng-show="m.showFullScreenExitText")
+		div 
+			| Press 
+			span.key ESC
+			| &nbsp;,
+			| &nbsp;
+			i.fa.fa-arrows-alt.key 
+			|&nbsp;,
+			| &nbsp; or &nbsp;
+			span.key F
+			| &nbsp; to exit Full Screen
+	.full-screen-grid(title="Full Screen", ng-click="m.setGridFullScreen()")
+		i.fa.fa-arrows-alt
+	.modes
+		include menus/mode
+	.progress-container
+		.progress
+			.progress-bar(role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', style='width: 0%;')
+				span.sr-only 60% Complete
+	canvas#map-creator
