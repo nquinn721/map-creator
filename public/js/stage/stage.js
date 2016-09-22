@@ -1,17 +1,14 @@
 app.factory('stage', [
 	'Preload', 'draw', 'TileMap', 'Item', '$http', 'Selection', 'Paint', 'Erase', 'Move', 
-	'keys', 'cursor', '$rootScope', 'snapshot',
-	function(Preload, draw, TileMap, Item, $http, Selection, Paint, Erase, Move, keys, cursor, $rootScope, snapshot) {
+	'keys', 'cursor', '$rootScope', 'Snapshot', 'File',
+	function(Preload, draw, TileMap, Item, $http, Selection, Paint, Erase, Move, 
+			keys, cursor, $rootScope, Snapshot, File) {
 
 	function Stage(stageId) {
 		this.CELL_WIDTH	= 25;
 		this.CELL_HEIGHT = 25;
-		// this.currentImage = 'box';
-		// this.currentImageName = 'Box';
-		// this.currentImageFile = 'box.jpg';
 		this.mode = 'paint';
 		this.stage = new createjs.Stage(stageId);
-		this.snapshotStage = new createjs.Stage(document.createElement('canvas'));
 
 		this.baseWidth = 1600;
 		this.baseHeight = 800;
@@ -20,8 +17,9 @@ app.factory('stage', [
 		this.draw = draw;
 		this.draw.init(this);
 		this.tileMap = new TileMap(this);
+		this.snapshot = new Snapshot(this);
+		this.file = new File(this);
 		this.preload = new Preload;
-		this.snapshot = snapshot;
 
 		// Modes
 		this.modes = {
@@ -56,7 +54,7 @@ app.factory('stage', [
 				this.setupClickEvents();
 				this.updateCanvas();
 				this.update();
-				this.createSnapShot();
+				this.snapshot.createSnapShot();
 				$rootScope.$apply();
 			}.bind(this));
 		},
@@ -88,8 +86,8 @@ app.factory('stage', [
 			this.cols = this.currentFile.size.w / this.CELL_WIDTH;
 			this.stage.canvas.width = this.currentFile.size.w;
 			this.stage.canvas.height = this.currentFile.size.h;
-			this.snapshotStage.canvas.width = this.currentFile.size.w;
-			this.snapshotStage.canvas.height = this.currentFile.size.h;
+			this.snapshot.snapshotStage.canvas.width = this.currentFile.size.w;
+			this.snapshot.snapshotStage.canvas.height = this.currentFile.size.h;
 			this.draw.clearLines();
 			this.draw.drawCanvasGrid();	
 		},
@@ -157,13 +155,7 @@ app.factory('stage', [
 			obj.col = obj.coords.col;
 			return obj;
 		},
-		createSnapShot : function() {
-			setTimeout(function() {
-				this.canvasImage = this.snapshot.create(this.snapshotStage.canvas);
-				$rootScope.$apply();
-				
-			}.bind(this), 100)
-		},
+		
 		createItemByXYWH : function(x, y, w, h) {
 			if(typeof x === 'object'){
 				y = x.y;
@@ -194,11 +186,7 @@ app.factory('stage', [
 		updateSelectedItems : function() {
 			this.selectedItems = this.modes.selection.getSelectedItems();	
 		},
-		createItemsFromRaw : function(items) {
-			console.log(items);
-			for(var i = 0; i < items.length; i++)
-				this.createItem(items[i]);
-		},
+		
 		createItem : function(row, col, x, y, w, h, file, src, id) {
 			var obj = row instanceof Object ? row : {
 				row : row, 
@@ -270,85 +258,20 @@ app.factory('stage', [
 		addChild : function(child) {
 			this.stage.addChild(child);
 			if(!this.fileIsLoading)
-				this.updateSnapshotCanvas();
+				this.snapshot.updateSnapshotCanvas();
 		},
 		removeChild : function(child) {
 			this.stage.removeChild(child);
 			if(!this.fileIsLoading)
-				this.updateSnapshotCanvas();
+				this.snapshot.updateSnapshotCanvas();
 		},
-		updateSnapshotCanvas : function() {
-			var children = [];
-			this.snapshotStage.children = null;
-			for(var i = 0; i < this.stage.children.length; i++){
-				if(!this.stage.children[i].graphics)
-					children.push(this.stage.children[i].clone(true));
-			}
-			this.snapshotStage.children = children;
-			this.createSnapShot();
-		},
+		
 		update : function() {
 			setInterval(function() {
 				this.stage.update();
-				this.snapshotStage.update();
+				this.snapshot.snapshotStage.update();
 			}.bind(this), 100)
 		},
-
-
-
-
-		// File Management
-		createFile : function(id, obj) {
-			this.fileIsLoading = true;
-			this.clearStageItems();
-			this.files[id] = {
-				name : id,
-				items : [],
-				size : obj ? ({w : obj.w || obj.width, h : obj.h || obj.height}) : {w : this.baseWidth, h : this.baseHeight}
-			};
-			this.changeFile(id);
-			this.updateCanvas();
-			if(obj.data)
-				this.createItemsFromRaw(obj.data);
-			this.fileIsLoading = false;
-			this.updateSnapshotCanvas();
-		},
-		closeFile : function(id) {
-			this.fileIsLoading = true;
-			var fileList = Object.keys(this.files),
-				prevOpenFile = fileList.indexOf(id) - 1,
-				nextOpenFile = fileList.indexOf(id) + 1,
-				fileToFocus = fileList[prevOpenFile > -1 ? prevOpenFile : nextOpenFile];
-
-			this.clearStageItems();
-			delete this.files[id];
-
-			if(fileToFocus && this.currentFile.name === id){
-				this.changeFile(fileToFocus);
-				this.drawCurrentFile();
-			}
-			this.fileIsLoading = false;
-			this.updateSnapshotCanvas();
-		},
-		loadTileMap : function(map) {
-			$http.get('/load-tilemap/' + map.id).then(function(data) {
-				this.createFile(map.id, data.data);
-			}.bind(this));
-		},
-		changeFile : function(file) {
-			this.currentFile = this.files[file];
-		},
-		drawCurrentFile : function() {
-			var items = this.currentFile.items;
-			for(var i = 0; i < items.length; i++)
-				items[i].drawImg();
-			this.updateCanvas();
-		},
-		drawFile : function(id) {
-			this.clearStageItems();	
-			this.currentFile = this.files[id];
-			this.drawCurrentFile();	
-		}
 	}
 
 	var stage = new Stage('map-creator');

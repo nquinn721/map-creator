@@ -2,4 +2,4 @@
 	| {{mm.title}}
 	.modes
 		div(ng-attr-title="{{mode.name.capitalize()}} [{{mode.shortcut}}]", ng-repeat="mode in mm.stage.modes", ng-class="{selected: mm.stage.mode == mode.name}", ng-click="mm.stage.setMode(mode.name)")
-			i(ng-class="mm.getFAClass(mode)")
+			i(ng-class="m.getFAClass(mode)")

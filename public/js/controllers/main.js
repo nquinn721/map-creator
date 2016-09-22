@@ -75,6 +75,10 @@ app.controller('main', ['stage', '$scope', '$document', 'watch', '$http', '$time
 		});
 		
 	}
+	vm.getFAClass = function(mode) {
+		return 'fa fa-' + mode.icon;
+	}
+
 
 	vm.updateTileMaps();
 

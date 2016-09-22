@@ -74,6 +74,7 @@ app.factory('Selection', ['draw', '$rootScope', function(draw, $rootScope) {
 		},
 		showFillMenu : function() {
 			this.stage.showcontextMenu = 'fill';
+			$rootScope.$apply();
 		},
 		fillSelected : function() {
 			this.stage.createItemByXYWH(this.currentFillSelectedObj);

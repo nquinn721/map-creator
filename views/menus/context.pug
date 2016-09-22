@@ -1,21 +1,10 @@
 .menu.context-menu.draggable(ng-style="cm.contextMenuPos", ng-show="cm.contextMenu", ng-controller="ContextMenu as cm")
 	.menu-title(ng-if="cm.options.modesTitle") Modes
 	.menu-title(ng-if="cm.options.selectionTitle") Options
-	.paint(ng-if="cm.options.paint", ng-click="cm.setMode('paint')") 
-		i.fa.fa-paint-brush 
-		| Paint
-	.selection(ng-if="cm.options.selection", ng-click="cm.setMode('selection')") 
-		i.fa.fa-object-group
-		| Selection
-	.move(ng-if="cm.options.move", ng-click="cm.setMode('move')") 
-		i.fa.fa-arrows
-		| Move
-	.erase(ng-if="cm.options.erase", ng-click="cm.setMode('erase')") 
-		i.fa.fa-eraser
-		| Erase
-	.delete(ng-if="cm.options.delete", ng-click="cm.deleteSelected()") 
-		i.fa.fa-trash-o
-		| Delete
+	div(ng-repeat="mode in cm.stage.modes", ng-if="cm.options[mode.name]" ng-class="mode.name", ng-click="cm.setMode(mode.name)")
+			i(ng-class="m.getFAClass(mode)")
+			| {{mode.name.capitalize()}}
+
 	.combine(ng-if="cm.options.combine", ng-click="cm.combineSelected()") 
 		i.fa.fa-chain
 		| Combine

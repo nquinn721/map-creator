@@ -19,7 +19,7 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 			}
 		};
 
-
+	vm.stage = stage;
 	vm.contextMenu = false;
 
 	vm.options = menus.base;
@@ -35,13 +35,13 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 	});
 	$('canvas').on('contextmenu', function(e) {
 		vm.contextMenu = true;
-		vm.contextMenuPos = {left : e.pageX + 20, top : e.pageY};		
+		vm.contextMenuPos = {left : e.pageX + 20, top : e.pageY};
+		$scope.$apply();		
 		return false;
 	});
 
 	watch(stage, 'showcontextMenu', function(newValue) {
 		vm.contextmenu = false;
-		console.log(newValue);
 		if(newValue){
 			if(menus[newValue])
 				vm.options = menus[newValue];
@@ -52,7 +52,7 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 			vm.contextMenu = false;
 			vm.options = menus.base;
 		}
-	})
+	});
 
 	vm.deleteSelected = function() {
 		stage.modes.selection.destroySelectedItems();
