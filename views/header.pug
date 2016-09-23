@@ -19,9 +19,9 @@
     .item-info
       img(ng-src="{{m.stage.currentItem.src}}")
       span Element Type
-      input.form-control(value="floor")
+      input.form-control(value="floor", ng-model="m.stage.currentItem.elType")
       span Body Type
-      select.form-control
+      select.form-control(ng-model="m.stage.currentItem.body")
         option(value="static") static
         option(value="dynamic") dynamic
         option(value="kinematic") kinematic

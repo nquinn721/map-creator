@@ -14,6 +14,7 @@ app.factory('Item', function () {
 		this.id = obj.id
 		this.element = obj.element;
 		this.body = obj.body;
+		this.type = obj.elType;
 	}
 
 	Item.prototype = {

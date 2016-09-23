@@ -17,7 +17,7 @@ app.controller('StageItemInfoMenu', ['$scope', 'watch', 'stage', function($scope
 			for(var i = 0; i < selectedItems.length; i++){
 				if(!items[selectedItems[i].file])items[selectedItems[i].file] = [];
 				items[selectedItems[i].file].push(selectedItems[i]);
-				vm.element = selectedItems[i].element;
+				vm.element = selectedItems[i].type;
 			}
 			vm.selectedItems = items;
 		}

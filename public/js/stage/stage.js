@@ -47,7 +47,10 @@ app.factory('stage', [
 	Stage.prototype = {
 		init : function() {
 			this.preload.init(function(items) {
-				console.log(items);
+				for(var i = 0; i < items.length; i++){
+					items[i].elType = 'floor';
+					items[i].body = 'static';
+				}
 				this.loadedItems = items;
 				this.currentItem = items[0];
 				this.setupClickEvents();
@@ -187,7 +190,10 @@ app.factory('stage', [
 		updateSelectedItems : function() {
 			this.selectedItems = this.modes.selection.getSelectedItems();	
 		},
-		
+		updateLoadedItem : function(id, attr, value) {
+			var item = this.getLoadedItemById(id);
+			item[attr] = value;	
+		},
 		createItem : function(row, col, x, y, w, h, file, src, element) {
 			var obj = row instanceof Object ? row : {
 				row : row, 
@@ -203,8 +209,8 @@ app.factory('stage', [
 
 			if(this.getItemByXY(x, y))return;
 			obj = $.extend(obj, this.getLoadedItemById(element));
-
 			item = new Item(this, obj);
+			console.log(item);
 			item.drawImg();
 			
 			this.addItem(item);
