@@ -1,7 +1,7 @@
 div(ng-controller="StageItemInfoMenu as info")
-	.stage-item-info-menu.minimizable.ng-cloak(ng-if="info.selectedItems")
+	.stage-item-info-menu.minimizable.ng-cloak(ng-if="info.selectedItems", slider="right")
 		.menu-title
-			i.fa.fa-caret-right.show-hide(slider="right")
+			i.fa.fa-caret-right.show-hide.slide-button
 			| Selected Items
 		.menu-content
 			.item-info
