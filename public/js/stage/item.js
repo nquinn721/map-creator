@@ -12,9 +12,8 @@ app.factory('Item', function () {
 		this.file = obj.file;
 		this.src = obj.src;
 		this.id = obj.id
-
-		this.element = 'floor';
-		this.body = 'static';
+		this.element = obj.element;
+		this.body = obj.body;
 	}
 
 	Item.prototype = {

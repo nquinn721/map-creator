@@ -37,7 +37,7 @@ app.factory('Draw', function() {
 			return g;
 		},
 		img : function(obj) {
-			var img = new createjs.Bitmap(this.stage.preload.queue.getResult(obj.id));
+			var img = new createjs.Bitmap(this.stage.preload.queue.getResult(obj.element));
 			img.x = obj.x;
 			img.y = obj.y;
 			img.scaleY = (obj.h || this.stage.CELL_HEIGHT) / img.image.height;

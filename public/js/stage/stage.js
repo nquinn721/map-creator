@@ -81,6 +81,7 @@ app.factory('stage', [
 		},
 		updateCanvas : function() {
 			if(!this.draw)return;
+			this.dontUpdateMiniMap = true;
 			this.rows = this.currentFile.size.h / this.CELL_HEIGHT;
 			this.cols = this.currentFile.size.w / this.CELL_WIDTH;
 			this.stage.canvas.width = this.currentFile.size.w;
@@ -109,6 +110,7 @@ app.factory('stage', [
 			this.savedMode = false;
 			this.mouseUpMouseCoords = this.getMouseAndRowCoords(e);
 			this.showcontextMenu = false;
+			this.dontUpdateMiniMap = false;
 
 			this.setModeFromMouseEvent('MouseUp', e);
 		},
@@ -122,6 +124,7 @@ app.factory('stage', [
 			} else this.overRideMode = false;
 
 			this.setModeFromMouseEvent('', e);
+			this.dontUpdateMiniMap = false;
 
 
 		},
@@ -172,7 +175,7 @@ app.factory('stage', [
 					col : startCol,
 					file : this.currentItem.file,
 					src : this.currentItem.src,
-					id : this.currentItem.id,
+					element : this.currentItem.element,
 					y : startRow * this.CELL_HEIGHT,
 					x : startCol * this.CELL_WIDTH,
 					w : (endCol - startCol + 1) * this.CELL_WIDTH, 
@@ -185,7 +188,7 @@ app.factory('stage', [
 			this.selectedItems = this.modes.selection.getSelectedItems();	
 		},
 		
-		createItem : function(row, col, x, y, w, h, file, src, id) {
+		createItem : function(row, col, x, y, w, h, file, src, element) {
 			var obj = row instanceof Object ? row : {
 				row : row, 
 				col : col, 
@@ -195,11 +198,11 @@ app.factory('stage', [
 				h : h,
 				file : file,
 				src : src,
-				id : id
+				element : element
 			}, item;
 
 			if(this.getItemByXY(x, y))return;
-			obj = $.extend(obj, this.getLoadedItemById(id));
+			obj = $.extend(obj, this.getLoadedItemById(element));
 
 			item = new Item(this, obj);
 			item.drawImg();
@@ -212,6 +215,7 @@ app.factory('stage', [
 		},
 		
 		clearStageItems : function() {
+			this.dontUpdateMiniMap = true;
 			for(var i = 0; i < this.currentFile.items.length; i++)
 				this.currentFile.items[i].destroyImages();
 		},
@@ -248,12 +252,14 @@ app.factory('stage', [
 		},
 		addChild : function(child) {
 			this.stage.addChild(child);
-			if(!this.fileIsLoading)
+			if(!this.dontUpdateMiniMap){
+				console.log('updateg');
 				this.snapshot.updateSnapshotCanvas();
+			}
 		},
 		removeChild : function(child) {
 			this.stage.removeChild(child);
-			if(!this.fileIsLoading)
+			if(!this.dontUpdateMiniMap)
 				this.snapshot.updateSnapshotCanvas();
 		},
 		

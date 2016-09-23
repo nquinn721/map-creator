@@ -6,6 +6,7 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 
 	Snapshot.prototype = {
 		create : function(canvas) {
+			var timer = Date.now();
 			var image = new Image();
 			image.src = canvas.toDataURL("image/png");
 			return image;
@@ -17,7 +18,6 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 		updateSnapshotCanvas : function() {
 			var children = [],
 				stage = this.stage.getStage();
-			var timer = Date.now();
 
 			this.snapshotStage.children = null;
 			for(var i = 0; i < stage.children.length; i++){
@@ -29,9 +29,7 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 			this.createSnapShot();
 		},
 		createSnapShot : function() {
-			$timeout(function() {
-				this.stage.canvasImage = this.create(this.snapshotStage.canvas);
-			}.bind(this), 100)
+			this.stage.canvasImage = this.create(this.snapshotStage.canvas);
 		}
 	}
 

@@ -16,7 +16,6 @@ app.factory('Paint', function() {
 				col = mouse.col,
 				el;
 			
-
 			this.stage.createItem(
 				row, 
 				col, 
@@ -26,7 +25,7 @@ app.factory('Paint', function() {
 				this.stage.CELL_HEIGHT, 
 				this.stage.currentItem.file, 
 				this.stage.currentItem.src,
-				this.stage.currentItem.id
+				this.stage.currentItem.element
 			  );
 
 		},

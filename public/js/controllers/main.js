@@ -26,12 +26,9 @@ app.controller('main', ['stage', '$scope', '$document', 'watch', '$http', '$time
 		vm.fullScreenImg = vm.stage.canvasImage.src;
 	}
 	vm.showSaved = function() {
-		console.log(vm.saved);
 		vm.saved = true;
-		console.log(vm.saved);
 		$timeout(function() {
 			vm.saved = false;
-			console.log(vm.saved);
 		}, 1000);
 	}
 	vm.saveAs = function() {

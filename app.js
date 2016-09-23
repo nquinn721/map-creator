@@ -46,7 +46,8 @@ app.get('/manifest', function(req, res) {
 	for(var i = 0; i < images.length; i++)
 		manifest.push({
 			src : images[i], 
-			id : images[i].split('.')[0].toLowerCase(), 
+			element : images[i].split('.')[0].toLowerCase(),
+			id : images[i].split('.')[0].toLowerCase(),
 			file : images[i],
 			name : images[i].replace(/([A-Z])/g, ' $1').split('.')[0].capitalize()
 		});

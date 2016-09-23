@@ -5,7 +5,8 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 
 	File.prototype = {
 		createFile : function(id, obj) {
-			this.stage.fileIsLoading = true;
+			if(this.getFileById(id))return;
+			this.stage.dontUpdateMiniMap = true;
 			this.stage.clearStageItems();
 			this.stage.files[id] = {
 				name : id,
@@ -16,24 +17,21 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 			this.stage.updateCanvas();
 			if(obj.data)
 				this.createItemsFromRaw(obj.data);
-			this.stage.fileIsLoading = false;
 			this.stage.snapshot.updateSnapshotCanvas();
 		},
 		closeFile : function(id) {
-			this.stage.fileIsLoading = true;
+			this.stage.dontUpdateMiniMap = true;
 			var fileList = Object.keys(this.stage.files),
 				prevOpenFile = fileList.indexOf(id) - 1,
 				nextOpenFile = fileList.indexOf(id) + 1,
 				fileToFocus = fileList[prevOpenFile > -1 ? prevOpenFile : nextOpenFile];
 
-			this.stage.clearStageItems();
 			delete this.stage.files[id];
-
-			if(fileToFocus && this.currentFile.name === id){
+			if(fileToFocus && this.stage.currentFile.name === id){
+				this.stage.clearStageItems();
 				this.changeFile(fileToFocus);
 				this.drawCurrentFile();
 			}
-			this.stage.fileIsLoading = false;
 			this.stage.snapshot.updateSnapshotCanvas();
 		},
 		loadTileMap : function(map) {
@@ -42,7 +40,7 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 			}.bind(this));
 		},
 		changeFile : function(file) {
-			this.currentFile = this.stage.files[file];
+			this.stage.currentFile = this.stage.files[file];
 		},
 		drawCurrentFile : function() {
 			var items = this.stage.currentFile.items;
@@ -52,12 +50,17 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 		},
 		drawFile : function(id) {
 			this.stage.clearStageItems();	
-			this.currentFile = this.stage.files[id];
+			this.stage.currentFile = this.getFileById(id);
 			this.drawCurrentFile();	
+			this.stage.snapshot.updateSnapshotCanvas();
 		},
 		createItemsFromRaw : function(items) {
 			for(var i = 0; i < items.length; i++)
 				this.stage.createItem(items[i]);
+		},
+		getFileById : function(id) {
+			for(var i in this.stage.files)
+				if(this.stage.files[i].name === id)return this.stage.files[i];
 		},
 		save : function() {
 			this.stage.currentFile.isDirty = false;
