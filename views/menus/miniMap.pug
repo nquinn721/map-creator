@@ -1,3 +1,5 @@
 +menu("mini-map-menu", "Mini Map", "MiniMapMenu as mmm")
-	img.mini-map-img(ng-src="{{mmm.stage.canvasImage.src}}", ng-click="m.showFullScreenImg()")
+	.mini-map-container
+		.scroll-location
+		img.mini-map-img(ng-src="{{mmm.stage.canvasImage.src}}", ng-click="m.showFullScreenImg()")
 

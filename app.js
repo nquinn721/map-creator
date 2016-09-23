@@ -32,6 +32,10 @@ app.get('/', function(req, res) {
 		maps : maps
 	});
 });
+app.post('/canvas-image', function(req, res) {
+	console.log(req.body);
+	
+});
 app.get('/tilemap-names', function(req, res) {
 	var files = fs.readdirSync('tilemaps');
 	files = files.map(function(file) {

@@ -210,7 +210,6 @@ app.factory('stage', [
 			if(this.getItemByXY(x, y))return;
 			obj = $.extend(obj, this.getLoadedItemById(element));
 			item = new Item(this, obj);
-			console.log(item);
 			item.drawImg();
 			
 			this.addItem(item);

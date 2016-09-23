@@ -8,7 +8,7 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 		create : function(canvas) {
 			var timer = Date.now();
 			var image = new Image();
-			image.src = canvas.toDataURL("image/png");
+			image.src = canvas.toDataURL();
 			return image;
 		},
 		updateCanvas : function() {

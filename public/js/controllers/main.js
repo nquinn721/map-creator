@@ -37,6 +37,15 @@ app.controller('main', ['stage', '$scope', '$document', 'watch', '$http', '$time
 	vm.hideSaveMenu = function() {
 		vm.showSaveMenu = false;
 	}
+	vm.downloadCanvasImage = function() {
+		var link = document.createElement('a');
+		link.href = vm.stage.canvasImage.src;
+		link.download = 'map.png';
+		link.click();
+		// $http.post('/canvas-image', {img : vm.stage.canvasImage.src}).then(function(data) {
+		// 	console.log(data);
+		// });
+	}
 	vm.saveTileMap = function() {
 		vm.hideSaveMenu();
 		stage.file.save();
