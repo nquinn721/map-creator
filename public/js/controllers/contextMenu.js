@@ -33,7 +33,7 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 			$scope.$apply();
 		}
 	});
-	$('canvas').on('contextmenu', function(e) {
+	$('#map-creator').on('contextmenu', function(e) {
 		vm.contextMenu = true;
 		vm.contextMenuPos = {left : e.pageX + 20, top : e.pageY};
 		$scope.$apply();		

@@ -12,7 +12,7 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 		vm.fullScreenImg = null;
 	}
 	vm.showFullScreenImg = function(url) {
-		vm.fullScreenImg = vm.stage.canvasImage.src;
+		vm.fullScreenImg = vm.stage.snapshot.createSnapShot();
 	}
 	
 	vm.downloadCanvasImage = function() {
@@ -22,11 +22,14 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 		link.click();
 	}
 	
-	keyEvents.register('keydown', 'esc', function() {
+	keyEvents.register('keydown', 'esc', function(e) {
 		vm.fullScreenGrid = false;
 	});
-	keyEvents.register('keydown', 'f', function() {
+	keyEvents.register('keydown', 'f', function(e) {
 		vm.setGridFullScreen();
+	});
+	keyEvents.registerAll('keydown', function(e) {
+		vm.stage.keydown(e);
 	});
 
 

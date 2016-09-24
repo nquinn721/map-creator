@@ -494,7 +494,7 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 			$scope.$apply();
 		}
 	});
-	$('canvas').on('contextmenu', function(e) {
+	$('#map-creator').on('contextmenu', function(e) {
 		vm.contextMenu = true;
 		vm.contextMenuPos = {left : e.pageX + 20, top : e.pageY};
 		$scope.$apply();		
@@ -553,9 +553,10 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 		if(!vm.stage.currentFile.isDirty)return;
 
 
-		if(vm.stage.currentFile.name === 'untitled.js')
+		if(vm.stage.currentFile.name === 'untitled.js'){
+			vm.keys.ctrl = false;
 			vm.showSaveMenu = true;
-		else {
+		} else {
 			vm.saveTileMap();
 		}
 	}
@@ -567,6 +568,7 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 		}, 1000);
 	}
 	vm.saveAs = function() {
+		vm.keys.ctrl = false;
 		vm.showSaveMenu = true;
 	}
 	vm.hideSaveMenu = function() {
@@ -581,13 +583,13 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	}
 
 	vm.showCreateFileMenu = function(type) {
-		vm.newFileType = type.camelCaseToText();
+		vm.newFileType = type;
+		vm.newFileTypeText = type.camelCaseToText();
 		vm.showCreateNewFileMenu = true;
 	}
 	vm.createNewFile = function() {
 		vm.newFileName = vm.newFileName.split('.')[0] + '.' + vm.newFileExtension;
 		vm.showCreateNewFileMenu = false;
-		console.log(vm.newFileExtension);
 		vm.stage.file.createFile(vm.newFileName, {
 			name : vm.newFileName,
 			w : vm.newFileWidth, 
@@ -652,7 +654,7 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 		vm.fullScreenImg = null;
 	}
 	vm.showFullScreenImg = function(url) {
-		vm.fullScreenImg = vm.stage.canvasImage.src;
+		vm.fullScreenImg = vm.stage.snapshot.createSnapShot();
 	}
 	
 	vm.downloadCanvasImage = function() {
@@ -662,11 +664,14 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 		link.click();
 	}
 	
-	keyEvents.register('keydown', 'esc', function() {
+	keyEvents.register('keydown', 'esc', function(e) {
 		vm.fullScreenGrid = false;
 	});
-	keyEvents.register('keydown', 'f', function() {
+	keyEvents.register('keydown', 'f', function(e) {
 		vm.setGridFullScreen();
+	});
+	keyEvents.registerAll('keydown', function(e) {
+		vm.stage.keydown(e);
 	});
 
 
@@ -976,6 +981,20 @@ app.directive('draggable', function() {
 		}
 	}
 });
+app.directive('focusMe', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+
+      scope.$watch(function() {
+      	return attrs.focusMe;
+      }, function(value) {
+          $timeout(function() {
+            element[0].focus(); 
+          });
+      });
+    }
+  };
+});
 app.directive('minimizable', function() {
 	return {
 		restrict : 'C',
@@ -1121,6 +1140,8 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 	function KeyEvents() {
 		this.keyupEvents = {};
 		this.keydownEvents = {};
+		this.allkeydownEvents = [];
+		this.allkeyupEvents = [];
 	}
 
 	KeyEvents.prototype = {
@@ -1135,6 +1156,9 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 			if(!this[type + 'Events'][key])this[type + 'Events'][key] = [];
 			this[type + 'Events'][key].push(cb);
 		},
+		registerAll : function(event, cb) {
+			this['all' + event + 'Events'].push(cb);
+		},
 		keyDown : function(e) {
 			if(e.target.localName === 'input')return true;
 			var key = keys(e),
@@ -1144,6 +1168,9 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 				for(var i = 0; i < event.length; i++)
 					event[i](e);
 			$rootScope.$apply();
+
+			for(var i = 0; i < this.allkeydownEvents.length; i++)
+				this.allkeydownEvents[i](e);
 			
 			return false;
 		},
@@ -1156,6 +1183,9 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 				for(var i = 0; i < event.length; i++)
 					event[i](e);	
 			$rootScope.$apply();
+
+			for(var i = 0; i < this.allkeyupEvents.length; i++)
+				this.allkeyupEvents[i](e);
 
 			return false;
 		}
@@ -1385,14 +1415,13 @@ app.factory('Item', function () {
 app.factory('Snapshot', ['$timeout', function($timeout) {
 	function Snapshot(stage) {
 		this.stage = stage;
-		this.snapshotStage = new createjs.Stage(document.createElement('canvas'));
+		this.snapshotStage = new createjs.Stage('mini-map');//document.createElement('canvas'));
 	}
 
 	Snapshot.prototype = {
 		create : function(canvas) {
-			var timer = Date.now();
 			var image = new Image();
-			image.src = canvas.toDataURL();
+			image.src = this.snapshotStage.canvas.toDataURL();
 			return image;
 		},
 		updateCanvas : function() {
@@ -1410,10 +1439,10 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 			}
 			this.snapshotStage.children = children;
 			this.snapshotStage.update();
-			this.createSnapShot();
+			// this.createSnapShot();
 		},
 		createSnapShot : function() {
-			this.stage.canvasImage = this.create(this.snapshotStage.canvas);
+			return this.create().src;
 		}
 	}
 

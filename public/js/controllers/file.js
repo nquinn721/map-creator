@@ -13,9 +13,10 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 		if(!vm.stage.currentFile.isDirty)return;
 
 
-		if(vm.stage.currentFile.name === 'untitled.js')
+		if(vm.stage.currentFile.name === 'untitled.js'){
+			vm.keys.ctrl = false;
 			vm.showSaveMenu = true;
-		else {
+		} else {
 			vm.saveTileMap();
 		}
 	}
@@ -27,6 +28,7 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 		}, 1000);
 	}
 	vm.saveAs = function() {
+		vm.keys.ctrl = false;
 		vm.showSaveMenu = true;
 	}
 	vm.hideSaveMenu = function() {
@@ -41,13 +43,13 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	}
 
 	vm.showCreateFileMenu = function(type) {
-		vm.newFileType = type.camelCaseToText();
+		vm.newFileType = type;
+		vm.newFileTypeText = type.camelCaseToText();
 		vm.showCreateNewFileMenu = true;
 	}
 	vm.createNewFile = function() {
 		vm.newFileName = vm.newFileName.split('.')[0] + '.' + vm.newFileExtension;
 		vm.showCreateNewFileMenu = false;
-		console.log(vm.newFileExtension);
 		vm.stage.file.createFile(vm.newFileName, {
 			name : vm.newFileName,
 			w : vm.newFileWidth, 

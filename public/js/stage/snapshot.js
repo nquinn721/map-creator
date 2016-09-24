@@ -1,14 +1,13 @@
 app.factory('Snapshot', ['$timeout', function($timeout) {
 	function Snapshot(stage) {
 		this.stage = stage;
-		this.snapshotStage = new createjs.Stage(document.createElement('canvas'));
+		this.snapshotStage = new createjs.Stage('mini-map');//document.createElement('canvas'));
 	}
 
 	Snapshot.prototype = {
 		create : function(canvas) {
-			var timer = Date.now();
 			var image = new Image();
-			image.src = canvas.toDataURL();
+			image.src = this.snapshotStage.canvas.toDataURL();
 			return image;
 		},
 		updateCanvas : function() {
@@ -26,10 +25,10 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 			}
 			this.snapshotStage.children = children;
 			this.snapshotStage.update();
-			this.createSnapShot();
+			// this.createSnapShot();
 		},
 		createSnapShot : function() {
-			this.stage.canvasImage = this.create(this.snapshotStage.canvas);
+			return this.create().src;
 		}
 	}
 

@@ -557,6 +557,7 @@ ul.nav.nav-tabs {
 .mini-map-menu .mini-map-img {
   cursor: pointer;
   width: 280px;
+  height: 200px;
   background: #131313;
 }
 .mini-map-menu .scroll-location {

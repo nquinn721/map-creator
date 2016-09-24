@@ -2,6 +2,8 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 	function KeyEvents() {
 		this.keyupEvents = {};
 		this.keydownEvents = {};
+		this.allkeydownEvents = [];
+		this.allkeyupEvents = [];
 	}
 
 	KeyEvents.prototype = {
@@ -16,6 +18,9 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 			if(!this[type + 'Events'][key])this[type + 'Events'][key] = [];
 			this[type + 'Events'][key].push(cb);
 		},
+		registerAll : function(event, cb) {
+			this['all' + event + 'Events'].push(cb);
+		},
 		keyDown : function(e) {
 			if(e.target.localName === 'input')return true;
 			var key = keys(e),
@@ -25,6 +30,9 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 				for(var i = 0; i < event.length; i++)
 					event[i](e);
 			$rootScope.$apply();
+
+			for(var i = 0; i < this.allkeydownEvents.length; i++)
+				this.allkeydownEvents[i](e);
 			
 			return false;
 		},
@@ -37,6 +45,9 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 				for(var i = 0; i < event.length; i++)
 					event[i](e);	
 			$rootScope.$apply();
+
+			for(var i = 0; i < this.allkeyupEvents.length; i++)
+				this.allkeyupEvents[i](e);
 
 			return false;
 		}
