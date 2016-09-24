@@ -1,0 +1,1737 @@
+@saved-color:#61bd61;
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #353535;
+    user-select: none;
+    overflow:hidden;
+}
+*{
+    -webkit-user-select: none;  
+    -moz-user-select: none;     
+    -ms-user-select: none; 
+}
+
+.wrapper {
+    height: 100%;
+    color: white;
+}
+input[type=file] {
+    position: absolute;
+    left: -9999px;
+}
+
+.current-item {
+    position: absolute;
+    z-index: 200;
+    left: -100px;
+    background: #1f1f1f;
+    padding: 5px;
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    width: 65px;
+    height: 65px;
+    flex-direction: column;
+    justify-content: space-around;
+    border: 1px solid #777;
+    box-shadow: 0 0 10px black;
+    img {
+        width: 40px;
+        height: 40px;
+    }
+    .selection-img {
+        background: rgba(18, 30, 185, 0.58);
+        width: 40px;
+        height: 40px;
+        border: 1px solid blue;
+    }
+    &.no-paint {
+        background: #3e0e0e;
+    }
+}
+
+.none{
+	display: none;
+}
+.mCSB_inside>.mCSB_container {
+    margin-right: -1px;
+}
+div#mCSB_1_container {
+    outline-color: #222;
+}
+
+div#mCSB_1 {
+    outline-color: #222;
+}
+.pointer {
+    cursor: pointer;
+}
+
+
+/** BOOTSTRAP OVERRIDES */
+.nav-tabs>li>a:hover {
+    background: none;
+    border: none;
+}
+
+a.dropdown-toggle {
+    color: white;
+}
+
+ul.nav.nav-tabs {
+    border-bottom: none;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    background: none;
+}
+.key {
+    border: 1px solid white;
+    padding: 2px 4px;
+    border-radius: 5px;
+    font-size: 11px;
+}
+.saved-text{
+    color:@saved-color !important;
+}
+.saved-bg{
+    background: @saved-color !important;
+}
+.draggable{
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+}
+.ui-draggable-dragging .ui-draggable-handle{
+    cursor: -webkit-grabbing !important;
+    cursor: -moz-grabbing !important;
+
+}
+.clear{
+    clear: both;
+}
+
+
+.radio-inline-group{
+    border-radius: 5px;
+    float: left;
+    overflow: hidden;
+
+    * {
+        cursor: pointer;
+    }
+    .radio-inline {
+        padding: 5px;
+        margin-left: 0;
+        background: #181818;
+        &.radio-selected {
+            background: #4c844c;
+        }
+
+        [type=radio] {
+            position: absolute;
+            left: -9999px;
+        }
+    }
+}
+.new-file-splash {
+    background: rgba(0,0,0,0.4);
+    position: absolute;
+    color:white;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h3 {
+        padding: 0;
+        margin: 0;
+    }
+    .new-file-menu {
+        background: #222;
+        display: flex;
+        width: 320px;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 200px;
+        padding: 0 20px;
+        .new-file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        input.new-file-name {
+            width: 80%;
+        }
+        .radio-inline-group {
+            float: left;
+            overflow: hidden;
+            * {
+                cursor: pointer;
+            }
+        }
+
+        .form-control {
+            width: 79px;
+            display: inline;
+        }
+    }
+    .input-group {
+        display: flex;
+        .new-file-name{
+            color:black;
+        }
+    }
+}
+
+.save-menu{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    color:white;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .content {
+        background: #222;
+        width: 400px;
+        height: 250px;
+        padding: 50px;
+        border-radius: 5px;
+        box-shadow: 0 0 50px #190909;
+        .title {
+            font-size: 18px;
+            height: 50%;
+        }
+
+        form .form-control {
+            width: 75%;
+            display: inline-block;
+            margin-right: 5%;
+        }
+    }
+
+}
+
+
+
+.full-screen-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    padding: 50px;
+    .image-content {
+        background: #222;
+        height: 100%;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+
+.grid-tabs {
+    padding-left: 320px;
+    top: 92px;
+    position: absolute;
+    width: 100%;
+    padding-right: 53px;
+    overflow: hidden;
+    display: none;
+    .grid-tab {
+        height: 30px;
+        cursor: pointer;
+        background: #121212;
+        .close-file {
+            font-size: 15px;
+            color: #b53838;
+            font-weight: 900;
+        }
+
+        .close-file:hover {
+            color: #7d0d0d;
+        }
+        &.selected{
+            background: #222;
+        }
+        float: left;
+        padding: 5px;
+        padding-right: 10px;
+        min-width: 80px;
+        .is-dirty{
+            margin-left: 5px;
+            width: 20px;
+            display: inline-block;
+        }
+    }
+}
+.full-screen-grid {
+    position: fixed;
+    z-index: 1;
+    right: 52px;
+    top: 122px;
+    background: #252525;
+    padding: 2px;
+    width: 21px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: -1px 1px 2px #000000;
+}
+
+.grid {
+    box-sizing: border-box;
+    position: absolute;
+    padding:10px 50px;  
+    background: #222;
+    overflow: auto;
+    left: 320px;
+    top: 120px;
+    bottom: 15px;
+    right: 50px;
+    border: 2px solid transparent;
+    .full-screen-exit-text{
+        display: none;
+    }
+    &.fullscreen {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        .mode-menu{
+            left: 0;
+        }
+        .full-screen-grid{
+            top:0;
+            right: 0;
+        }
+        .full-screen-exit-text {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            text-align: center;
+            display: block;
+            > div {
+                background: #5f1e1e;
+                padding: 10px;
+                margin: auto;
+                width: 30%;
+                border-radius: 10px;
+                box-shadow: 0 0 9px 3px black;
+            }
+        }
+
+    }
+
+    &.saved{
+        border: 2px solid @saved-color;
+    }
+    canvas {
+        background: #232323;
+        box-shadow: 0 0 10px 3px #121212;
+        display: none;
+        margin-right: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .progress-container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .progress-bar {
+        height: 20px !important;
+    }
+
+    .progress {
+        width: 50%;
+    }
+
+
+    .stage-item-info-menu {
+        position: absolute;
+        right: 0;
+        top: 25%;
+        height: 40%;
+        background: #222;
+        width: 250px;
+        z-index: 500;
+        box-shadow: 0 0 5px #888;
+        .show-hide {
+            width: 11px;
+            border-right: 1px solid #333;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        .menu-content{
+            padding-left: 17px;
+        }
+        .selected-item {
+            float: left;
+            width: 50px;
+        }
+        .menu-title {
+            padding: 10px;
+            border-bottom: 1px solid #444;
+        }
+        .item-info {
+            padding: 10px;
+            font-size:12px;
+            border-top: 1px solid #353535;
+            .selected-items {
+                margin-bottom: 10px;
+                img {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+
+
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0 10px 0;
+            input {
+                width: 50%;
+                border: 1px solid black;
+                border-radius: 5px;
+                padding: 0 8px;
+                color: white;
+                background: #111;
+            }
+
+            select {
+                background: #111;
+                border: 1px solid black;
+                border-radius: 5px;
+                width: 50%;
+                padding: 0 5px;
+            }
+        }
+
+    }
+
+}
+.header {
+
+    .header-menu {
+        width: 100%;
+        background: #272727;
+        border-bottom: 1px solid #444;
+        min-height: 30px;
+
+        
+        
+        .dropdown {
+            z-index: 10;
+            display: none;
+            position: absolute;
+            background: #333;
+            list-style: none;
+            padding: 0;
+            left: 0;
+            top:30px;
+            width: 150px;
+            box-shadow: 0 3px 7px black;
+            .dropdown-submenu {
+                position: absolute;
+                left: 150px;
+                width: 150px;
+                padding: 0;
+                background: #373737;
+                margin-top: -5px;
+                border: 1px solid #111;
+                display: none;
+            }
+
+            li {
+                &:hover .dropdown-submenu{
+                    display: block !important;
+                }
+                padding: 5px 15px;
+                display: flex;
+                justify-content: space-between;
+                &:not(:last-child) {
+                    border-bottom: 1px solid #444;
+                }
+                &:hover {
+                    background: #252525;
+                }
+            }
+
+
+        }
+
+        > div {
+            float: left;
+            cursor: pointer;
+            position: relative;
+            padding: 5px 15px;
+            &:not(:first-child) {
+                border-left: 1px solid #444;
+            }
+            &:hover {
+                background: #333;
+                .dropdown{
+                    display: block;
+                }
+            }
+        }
+
+    }
+    .header-panel {
+        height: 50px;
+        background: #222;
+        input, select {
+            font-size: 12px;
+            height: 25px !important;
+            margin-left: 5px;
+            padding: 5px !important;
+        }
+        .item-info {
+            input, select {
+                width: 85px;
+            }
+            > span {
+                margin: 10px;
+            }
+
+            img {
+                width: 23px;
+            }
+        }
+
+        .file-loaded{
+            width:15%;
+            span.isDirty {
+                position: absolute;
+                right: 5px;
+                top: 2px;
+                color: red;
+            }
+
+        }
+        > div{
+            position: relative;
+            float: left;
+            display: flex;
+            justify-content: space-between;
+            height: 100%;
+            align-items:center;
+            padding:0 10px;
+            &:not(:last-child){
+                border-right: 1px solid #444;
+            }
+            &:not(:first-child){
+                border-left:1px solid black;
+            }
+        }
+        .size {
+            width: 200px;
+            > div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            input{
+                width: 55px;
+
+            }
+        }
+
+
+    }
+
+}
+
+
+.context-menu {
+    background: #521b1b;
+    position: absolute;
+    width: 125px;
+    left: -9999px;
+    box-shadow: 0 0 10px black;
+    z-index: 200;
+    .fa {
+        width: 35%;
+        display: inline-block;
+    }
+
+    > div {
+        padding: 5px 13px;
+        &:not(:first-child):not(:last-child) {
+            border-bottom: 1px solid #000;
+        }
+        &:not(:first-child):hover {
+            background: #212121;
+            cursor: pointer;     
+        }   
+        &:nth-child(2){
+            border-top: 1px solid #4c2222;
+        }
+    }
+    .menu-title {
+        border-bottom: 1px solid #000;
+        cursor: -webkit-grab;
+        cursor: -moz-grab;
+        background: #3a0505;
+
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#383838+0,2c2c2c+27,1c1c1c+91,131313+100 */
+        background: #383838; /* Old browsers */
+        background: -moz-linear-gradient(top,  #383838 0%, #2c2c2c 27%, #1c1c1c 91%, #131313 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #383838 0%,#2c2c2c 27%,#1c1c1c 91%,#131313 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #383838 0%,#2c2c2c 27%,#1c1c1c 91%,#131313 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#383838', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
+
+    }
+    
+}
+.mini-map-menu{
+    .menu-content {
+        padding: 10px;
+    }
+    .mini-map-container{
+        position: relative;
+    }
+    .mini-map-img{
+        cursor: pointer;
+        width: 280px;
+        background: #131313;
+    }
+    .scroll-location {
+        margin-top: 0;
+        margin-left: 0;
+        width: 50px;
+        height: 50px;
+        border: 1px solid;
+        position: absolute;
+    }
+}
+
+.mode-menu {
+    position: fixed;
+    left: 320px;
+    width: 40px;
+    .modes > div {
+        padding: 10px;
+        background: #111;
+        cursor:pointer;
+        &.selected {
+            background: #631919 !important;
+            color: black;
+        }
+    }
+}
+
+
+.menus{
+    box-shadow: 2px 2px 7px 2px #171717;
+    float: left;
+    height: 100%;
+    background: #121212;
+    
+
+    
+    .key-binding-title {
+        font-size: 14px;
+        background: #2b2b2b;
+        border-bottom: 1px solid #333;
+        padding: 5px 3px;
+    }
+    .mode-menu {
+        .menu-content > .modes div {
+            &.selected {
+                background: #631919;
+                color: #000000;
+            }
+            float: left;
+            width: 15%;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        .modes {
+            width: 100%;
+            height: 30px;
+        }
+
+        .mode-sub-menu {
+            background: #2b2b2b;
+            font-size: 11px;
+            width: 100%;
+        }
+
+        .mode-sub-menu .selected {
+            background: #631919;
+        }
+
+        .mode-sub-menu span {
+            width: 20%;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .eraser-sub-menu span {padding-top: 3px;padding-bottom: 3px;}
+    }
+    .menu {
+        z-index: 100;
+        background: #222;
+        width: 300px;
+        // max-height: 600px;
+        // overflow-y: auto;
+        // overflow-x: hidden;
+        &:not(:last-child){
+            border-bottom: 1px solid #555;
+        }
+
+
+        .menu-title {
+            background: #313131;
+            font-size: 15px;
+            position: relative;
+            padding: 10px;
+            border-bottom: 1px solid #555;
+          /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#383838+0,2c2c2c+27,1c1c1c+91,131313+100 */
+        background: #383838; /* Old browsers */
+        background: -moz-linear-gradient(top,  #383838 0%, #2c2c2c 27%, #1c1c1c 91%, #131313 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #383838 0%,#2c2c2c 27%,#1c1c1c 91%,#131313 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #383838 0%,#2c2c2c 27%,#1c1c1c 91%,#131313 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#383838', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
+
+
+
+            &.moving{
+                cursor: -webkit-grabing !important;
+                cursor: -moz-grabbing !important;
+            }
+        }
+
+        .minimize {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 40px;
+            cursor: pointer;
+            width: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-left: 1px solid #555;
+        }
+
+        .minimize:hover {
+            background: #2f2f2f;
+        }
+
+        .menu-content {
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .menu-content .item img {
+            float: right;
+        }
+
+        .item {
+            height: 35px;
+            width: 300px;
+            display: flex;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 12px;
+            padding-right: 20px !important;
+            align-items: center;
+            justify-content: space-between;
+            span {
+                margin-right: 36px;
+            }
+            img {
+                width: 25px;
+                height: 25px;
+            }
+            &:not(:last-child) {
+                border-bottom: 1px solid #333;
+            }
+            &.selected {
+                background: #111;
+            }
+        }
+
+
+
+
+    }
+}
+/* perfect-scrollbar v0.6.12 */
+.ps-container{-ms-touch-action:none;touch-action:none;overflow:hidden !important;-ms-overflow-style:none}@supports (-ms-overflow-style: none){.ps-container{overflow:auto !important}}@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){.ps-container{overflow:auto !important}}.ps-container.ps-active-x>.ps-scrollbar-x-rail,.ps-container.ps-active-y>.ps-scrollbar-y-rail{display:block;background-color:transparent}.ps-container.ps-in-scrolling{pointer-events:none}.ps-container.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail{background-color:#eee;opacity:.9}.ps-container.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail>.ps-scrollbar-x{background-color:#999}.ps-container.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail{background-color:#eee;opacity:.9}.ps-container.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail>.ps-scrollbar-y{background-color:#999}.ps-container>.ps-scrollbar-x-rail{display:none;position:absolute;opacity:0;-webkit-transition:background-color .2s linear, opacity .2s linear;-o-transition:background-color .2s linear, opacity .2s linear;-moz-transition:background-color .2s linear, opacity .2s linear;transition:background-color .2s linear, opacity .2s linear;bottom:0px;height:15px}.ps-container>.ps-scrollbar-x-rail>.ps-scrollbar-x{position:absolute;background-color:#aaa;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;-o-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;-moz-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;bottom:2px;height:6px}.ps-container>.ps-scrollbar-x-rail:hover>.ps-scrollbar-x,.ps-container>.ps-scrollbar-x-rail:active>.ps-scrollbar-x{height:11px}.ps-container>.ps-scrollbar-y-rail{display:none;position:absolute;opacity:0;-webkit-transition:background-color .2s linear, opacity .2s linear;-o-transition:background-color .2s linear, opacity .2s linear;-moz-transition:background-color .2s linear, opacity .2s linear;transition:background-color .2s linear, opacity .2s linear;right:0;width:15px}.ps-container>.ps-scrollbar-y-rail>.ps-scrollbar-y{position:absolute;background-color:#aaa;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;-o-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;-moz-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;right:2px;width:6px}.ps-container>.ps-scrollbar-y-rail:hover>.ps-scrollbar-y,.ps-container>.ps-scrollbar-y-rail:active>.ps-scrollbar-y{width:11px}.ps-container:hover.ps-in-scrolling{pointer-events:none}.ps-container:hover.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail{background-color:#eee;opacity:.9}.ps-container:hover.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail>.ps-scrollbar-x{background-color:#999}.ps-container:hover.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail{background-color:#eee;opacity:.9}.ps-container:hover.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail>.ps-scrollbar-y{background-color:#999}.ps-container:hover>.ps-scrollbar-x-rail,.ps-container:hover>.ps-scrollbar-y-rail{opacity:.6}.ps-container:hover>.ps-scrollbar-x-rail:hover{background-color:#eee;opacity:.9}.ps-container:hover>.ps-scrollbar-x-rail:hover>.ps-scrollbar-x{background-color:#999}.ps-container:hover>.ps-scrollbar-y-rail:hover{background-color:#eee;opacity:.9}.ps-container:hover>.ps-scrollbar-y-rail:hover>.ps-scrollbar-y{background-color:#999}
+
+/*************** SCROLLBAR BASE CSS ***************/
+.scroll-wrapper {
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: relative;
+}
+.scroll-wrapper > .scroll-content {
+  border: none !important;
+  box-sizing: content-box !important;
+  height: auto;
+  left: 0;
+  margin: 0;
+  max-height: none;
+  max-width: none !important;
+  overflow: scroll !important;
+  padding: 0;
+  position: relative !important;
+  top: 0;
+  width: auto !important;
+}
+.scroll-wrapper > .scroll-content::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+.scroll-wrapper.scroll--rtl {
+  direction: rtl;
+}
+
+.scroll-element {
+  box-sizing: content-box;
+  display: none;
+}
+.scroll-element div {
+  box-sizing: content-box;
+}
+.scroll-element .scroll-bar,
+.scroll-element .scroll-arrow {
+  cursor: default;
+}
+.scroll-element.scroll-x.scroll-scrollx_visible, .scroll-element.scroll-y.scroll-scrolly_visible {
+  display: block;
+}
+
+.scroll-textarea {
+  border: 1px solid #cccccc;
+  border-top-color: #999999;
+}
+.scroll-textarea > .scroll-content {
+  overflow: hidden !important;
+}
+.scroll-textarea > .scroll-content > textarea {
+  border: none !important;
+  box-sizing: border-box;
+  height: 100% !important;
+  margin: 0;
+  max-height: none !important;
+  max-width: none !important;
+  overflow: scroll !important;
+  outline: none;
+  padding: 2px;
+  position: relative !important;
+  top: 0;
+  width: 100% !important;
+}
+.scroll-textarea > .scroll-content > textarea::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+
+/*************** SIMPLE INNER SCROLLBAR ***************/
+.scrollbar-inner > .scroll-element,
+.scrollbar-inner > .scroll-element div {
+  border: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.scrollbar-inner > .scroll-element div {
+  display: block;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.scrollbar-inner > .scroll-element.scroll-x {
+  bottom: 2px;
+  height: 8px;
+  left: 0;
+  width: 100%;
+}
+
+.scrollbar-inner > .scroll-element.scroll-y {
+  height: 100%;
+  right: 2px;
+  top: 0;
+  width: 8px;
+}
+
+.scrollbar-inner > .scroll-element .scroll-element_outer {
+  overflow: hidden;
+}
+
+.scrollbar-inner > .scroll-element .scroll-element_outer,
+.scrollbar-inner > .scroll-element .scroll-element_track,
+.scrollbar-inner > .scroll-element .scroll-bar {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+
+.scrollbar-inner > .scroll-element .scroll-element_track,
+.scrollbar-inner > .scroll-element .scroll-bar {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+  filter: alpha(opacity=40);
+  opacity: 0.4;
+}
+
+.scrollbar-inner > .scroll-element .scroll-element_track {
+  background-color: #e0e0e0;
+}
+
+.scrollbar-inner > .scroll-element .scroll-bar {
+  background-color: #c2c2c2;
+}
+
+.scrollbar-inner > .scroll-element:hover .scroll-bar {
+  background-color: #919191;
+}
+
+.scrollbar-inner > .scroll-element.scroll-draggable .scroll-bar {
+  background-color: #919191;
+}
+
+/* update scrollbar offset if both scrolls are visible */
+.scrollbar-inner > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track {
+  left: -12px;
+}
+
+.scrollbar-inner > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track {
+  top: -12px;
+}
+
+.scrollbar-inner > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size {
+  left: -12px;
+}
+
+.scrollbar-inner > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
+  top: -12px;
+}
+
+/*************** SIMPLE OUTER SCROLLBAR ***************/
+.scrollbar-outer > .scroll-element,
+.scrollbar-outer > .scroll-element div {
+  border: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.scrollbar-outer > .scroll-element {
+  background-color: #ffffff;
+}
+
+.scrollbar-outer > .scroll-element div {
+  display: block;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.scrollbar-outer > .scroll-element.scroll-x {
+  bottom: 0;
+  height: 12px;
+  left: 0;
+  width: 100%;
+}
+
+.scrollbar-outer > .scroll-element.scroll-y {
+  height: 100%;
+  right: 0;
+  top: 0;
+  width: 12px;
+}
+
+.scrollbar-outer > .scroll-element.scroll-x .scroll-element_outer {
+  height: 8px;
+  top: 2px;
+}
+
+.scrollbar-outer > .scroll-element.scroll-y .scroll-element_outer {
+  left: 2px;
+  width: 8px;
+}
+
+.scrollbar-outer > .scroll-element .scroll-element_outer {
+  overflow: hidden;
+}
+
+.scrollbar-outer > .scroll-element .scroll-element_track {
+  background-color: #eeeeee;
+}
+
+.scrollbar-outer > .scroll-element .scroll-element_outer,
+.scrollbar-outer > .scroll-element .scroll-element_track,
+.scrollbar-outer > .scroll-element .scroll-bar {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+
+.scrollbar-outer > .scroll-element .scroll-bar {
+  background-color: #d9d9d9;
+}
+
+.scrollbar-outer > .scroll-element .scroll-bar:hover {
+  background-color: #c2c2c2;
+}
+
+.scrollbar-outer > .scroll-element.scroll-draggable .scroll-bar {
+  background-color: #919191;
+}
+
+/* scrollbar height/width & offset from container borders */
+.scrollbar-outer > .scroll-content.scroll-scrolly_visible {
+  left: -12px;
+  margin-left: 12px;
+}
+
+.scrollbar-outer > .scroll-content.scroll-scrollx_visible {
+  top: -12px;
+  margin-top: 12px;
+}
+
+.scrollbar-outer > .scroll-element.scroll-x .scroll-bar {
+  min-width: 10px;
+}
+
+.scrollbar-outer > .scroll-element.scroll-y .scroll-bar {
+  min-height: 10px;
+}
+
+/* update scrollbar offset if both scrolls are visible */
+.scrollbar-outer > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track {
+  left: -14px;
+}
+
+.scrollbar-outer > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track {
+  top: -14px;
+}
+
+.scrollbar-outer > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size {
+  left: -14px;
+}
+
+.scrollbar-outer > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
+  top: -14px;
+}
+
+/*************** SCROLLBAR MAC OS X ***************/
+.scrollbar-macosx > .scroll-element,
+.scrollbar-macosx > .scroll-element div {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.scrollbar-macosx > .scroll-element div {
+  display: block;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.scrollbar-macosx > .scroll-element .scroll-element_track {
+  display: none;
+}
+
+.scrollbar-macosx > .scroll-element .scroll-bar {
+  background-color: #6C6E71;
+  display: block;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  opacity: 0;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  -webkit-transition: opacity 0.2s linear;
+  -moz-transition: opacity 0.2s linear;
+  -o-transition: opacity 0.2s linear;
+  -ms-transition: opacity 0.2s linear;
+  transition: opacity 0.2s linear;
+}
+
+.scrollbar-macosx:hover > .scroll-element .scroll-bar,
+.scrollbar-macosx > .scroll-element.scroll-draggable .scroll-bar {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity=70);
+  opacity: 0.7;
+}
+
+.scrollbar-macosx > .scroll-element.scroll-x {
+  bottom: 0px;
+  height: 0px;
+  left: 0;
+  min-width: 100%;
+  overflow: visible;
+  width: 100%;
+}
+
+.scrollbar-macosx > .scroll-element.scroll-y {
+  height: 100%;
+  min-height: 100%;
+  right: 0px;
+  top: 0;
+  width: 0px;
+}
+
+/* scrollbar height/width & offset from container borders */
+.scrollbar-macosx > .scroll-element.scroll-x .scroll-bar {
+  height: 7px;
+  min-width: 10px;
+  top: -9px;
+}
+
+.scrollbar-macosx > .scroll-element.scroll-y .scroll-bar {
+  left: -9px;
+  min-height: 10px;
+  width: 7px;
+}
+
+.scrollbar-macosx > .scroll-element.scroll-x .scroll-element_outer {
+  left: 2px;
+}
+
+.scrollbar-macosx > .scroll-element.scroll-x .scroll-element_size {
+  left: -4px;
+}
+
+.scrollbar-macosx > .scroll-element.scroll-y .scroll-element_outer {
+  top: 2px;
+}
+
+.scrollbar-macosx > .scroll-element.scroll-y .scroll-element_size {
+  top: -4px;
+}
+
+/* update scrollbar offset if both scrolls are visible */
+.scrollbar-macosx > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size {
+  left: -11px;
+}
+
+.scrollbar-macosx > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
+  top: -11px;
+}
+
+/*************** SCROLLBAR LIGHT ***************/
+.scrollbar-light > .scroll-element,
+.scrollbar-light > .scroll-element div {
+  border: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.scrollbar-light > .scroll-element {
+  background-color: #ffffff;
+}
+
+.scrollbar-light > .scroll-element div {
+  display: block;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.scrollbar-light > .scroll-element .scroll-element_outer {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.scrollbar-light > .scroll-element .scroll-element_size {
+  background: #dbdbdb;
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RiZGJkYiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlOGU4ZTgiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+");
+  background: -moz-linear-gradient(left, #dbdbdb 0%, #e8e8e8 100%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #dbdbdb), color-stop(100%, #e8e8e8));
+  background: -webkit-linear-gradient(left, #dbdbdb 0%, #e8e8e8 100%);
+  background: -o-linear-gradient(left, #dbdbdb 0%, #e8e8e8 100%);
+  background: -ms-linear-gradient(left, #dbdbdb 0%, #e8e8e8 100%);
+  background: linear-gradient(to right, #dbdbdb 0%, #e8e8e8 100%);
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.scrollbar-light > .scroll-element.scroll-x {
+  bottom: 0;
+  height: 17px;
+  left: 0;
+  min-width: 100%;
+  width: 100%;
+}
+
+.scrollbar-light > .scroll-element.scroll-y {
+  height: 100%;
+  min-height: 100%;
+  right: 0;
+  top: 0;
+  width: 17px;
+}
+
+.scrollbar-light > .scroll-element .scroll-bar {
+  background: #fefefe;
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZlZmVmZSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWY1ZjUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+");
+  background: -moz-linear-gradient(left, #fefefe 0%, #f5f5f5 100%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #fefefe), color-stop(100%, #f5f5f5));
+  background: -webkit-linear-gradient(left, #fefefe 0%, #f5f5f5 100%);
+  background: -o-linear-gradient(left, #fefefe 0%, #f5f5f5 100%);
+  background: -ms-linear-gradient(left, #fefefe 0%, #f5f5f5 100%);
+  background: linear-gradient(to right, #fefefe 0%, #f5f5f5 100%);
+  border: 1px solid #dbdbdb;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+/* scrollbar height/width & offset from container borders */
+.scrollbar-light > .scroll-content.scroll-scrolly_visible {
+  left: -17px;
+  margin-left: 17px;
+}
+
+.scrollbar-light > .scroll-content.scroll-scrollx_visible {
+  top: -17px;
+  margin-top: 17px;
+}
+
+.scrollbar-light > .scroll-element.scroll-x .scroll-bar {
+  height: 10px;
+  min-width: 10px;
+  top: 0px;
+}
+
+.scrollbar-light > .scroll-element.scroll-y .scroll-bar {
+  left: 0px;
+  min-height: 10px;
+  width: 10px;
+}
+
+.scrollbar-light > .scroll-element.scroll-x .scroll-element_outer {
+  height: 12px;
+  left: 2px;
+  top: 2px;
+}
+
+.scrollbar-light > .scroll-element.scroll-x .scroll-element_size {
+  left: -4px;
+}
+
+.scrollbar-light > .scroll-element.scroll-y .scroll-element_outer {
+  left: 2px;
+  top: 2px;
+  width: 12px;
+}
+
+.scrollbar-light > .scroll-element.scroll-y .scroll-element_size {
+  top: -4px;
+}
+
+/* update scrollbar offset if both scrolls are visible */
+.scrollbar-light > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size {
+  left: -19px;
+}
+
+.scrollbar-light > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
+  top: -19px;
+}
+
+.scrollbar-light > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track {
+  left: -19px;
+}
+
+.scrollbar-light > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track {
+  top: -19px;
+}
+
+/*************** SCROLLBAR RAIL ***************/
+.scrollbar-rail > .scroll-element,
+.scrollbar-rail > .scroll-element div {
+  border: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.scrollbar-rail > .scroll-element {
+  background-color: #ffffff;
+}
+
+.scrollbar-rail > .scroll-element div {
+  display: block;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.scrollbar-rail > .scroll-element .scroll-element_size {
+  background-color: #999;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.scrollbar-rail > .scroll-element .scroll-element_outer:hover .scroll-element_size {
+  background-color: #666;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.scrollbar-rail > .scroll-element.scroll-x {
+  bottom: 0;
+  height: 12px;
+  left: 0;
+  min-width: 100%;
+  padding: 3px 0 2px;
+  width: 100%;
+}
+
+.scrollbar-rail > .scroll-element.scroll-y {
+  height: 100%;
+  min-height: 100%;
+  padding: 0 2px 0 3px;
+  right: 0;
+  top: 0;
+  width: 12px;
+}
+
+.scrollbar-rail > .scroll-element .scroll-bar {
+  background-color: #d0b9a0;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.scrollbar-rail > .scroll-element .scroll-element_outer:hover .scroll-bar {
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* scrollbar height/width & offset from container borders */
+.scrollbar-rail > .scroll-content.scroll-scrolly_visible {
+  left: -17px;
+  margin-left: 17px;
+}
+
+.scrollbar-rail > .scroll-content.scroll-scrollx_visible {
+  margin-top: 17px;
+  top: -17px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-x .scroll-bar {
+  height: 10px;
+  min-width: 10px;
+  top: 1px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-y .scroll-bar {
+  left: 1px;
+  min-height: 10px;
+  width: 10px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-x .scroll-element_outer {
+  height: 15px;
+  left: 5px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-x .scroll-element_size {
+  height: 2px;
+  left: -10px;
+  top: 5px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-y .scroll-element_outer {
+  top: 5px;
+  width: 15px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-y .scroll-element_size {
+  left: 5px;
+  top: -10px;
+  width: 2px;
+}
+
+/* update scrollbar offset if both scrolls are visible */
+.scrollbar-rail > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size {
+  left: -25px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
+  top: -25px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track {
+  left: -25px;
+}
+
+.scrollbar-rail > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track {
+  top: -25px;
+}
+
+/*************** SCROLLBAR DYNAMIC ***************/
+.scrollbar-dynamic > .scroll-element,
+.scrollbar-dynamic > .scroll-element div {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.scrollbar-dynamic > .scroll-element div {
+  display: block;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-x {
+  bottom: 2px;
+  height: 7px;
+  left: 0;
+  min-width: 100%;
+  width: 100%;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-y {
+  height: 100%;
+  min-height: 100%;
+  right: 2px;
+  top: 0;
+  width: 7px;
+}
+
+.scrollbar-dynamic > .scroll-element .scroll-element_outer {
+  opacity: 0.3;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+}
+
+.scrollbar-dynamic > .scroll-element .scroll-element_size {
+  background-color: #cccccc;
+  opacity: 0;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  -webkit-transition: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+}
+
+.scrollbar-dynamic > .scroll-element .scroll-bar {
+  background-color: #6c6e71;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+
+/* scrollbar height/width & offset from container borders */
+.scrollbar-dynamic > .scroll-element.scroll-x .scroll-bar {
+  bottom: 0;
+  height: 7px;
+  min-width: 24px;
+  top: auto;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-y .scroll-bar {
+  left: auto;
+  min-height: 24px;
+  right: 0;
+  width: 7px;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-x .scroll-element_outer {
+  bottom: 0;
+  top: auto;
+  left: 2px;
+  -webkit-transition: height 0.2s;
+  -moz-transition: height 0.2s;
+  -o-transition: height 0.2s;
+  -ms-transition: height 0.2s;
+  transition: height 0.2s;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-y .scroll-element_outer {
+  left: auto;
+  right: 0;
+  top: 2px;
+  -webkit-transition: width 0.2s;
+  -moz-transition: width 0.2s;
+  -o-transition: width 0.2s;
+  -ms-transition: width 0.2s;
+  transition: width 0.2s;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-x .scroll-element_size {
+  left: -4px;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-y .scroll-element_size {
+  top: -4px;
+}
+
+/* update scrollbar offset if both scrolls are visible */
+.scrollbar-dynamic > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size {
+  left: -11px;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
+  top: -11px;
+}
+
+/* hover & drag */
+.scrollbar-dynamic > .scroll-element:hover .scroll-element_outer,
+.scrollbar-dynamic > .scroll-element.scroll-draggable .scroll-element_outer {
+  overflow: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity=70);
+  opacity: 0.7;
+}
+
+.scrollbar-dynamic > .scroll-element:hover .scroll-element_outer .scroll-element_size,
+.scrollbar-dynamic > .scroll-element.scroll-draggable .scroll-element_outer .scroll-element_size {
+  opacity: 1;
+}
+
+.scrollbar-dynamic > .scroll-element:hover .scroll-element_outer .scroll-bar,
+.scrollbar-dynamic > .scroll-element.scroll-draggable .scroll-element_outer .scroll-bar {
+  height: 100%;
+  width: 100%;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-x:hover .scroll-element_outer,
+.scrollbar-dynamic > .scroll-element.scroll-x.scroll-draggable .scroll-element_outer {
+  height: 20px;
+  min-height: 7px;
+}
+
+.scrollbar-dynamic > .scroll-element.scroll-y:hover .scroll-element_outer,
+.scrollbar-dynamic > .scroll-element.scroll-y.scroll-draggable .scroll-element_outer {
+  min-width: 7px;
+  width: 20px;
+}
+
+/*************** SCROLLBAR GOOGLE CHROME ***************/
+.scrollbar-chrome > .scroll-element,
+.scrollbar-chrome > .scroll-element div {
+  border: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.scrollbar-chrome > .scroll-element {
+  background-color: #ffffff;
+}
+
+.scrollbar-chrome > .scroll-element div {
+  display: block;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.scrollbar-chrome > .scroll-element .scroll-element_track {
+  background: #f1f1f1;
+  border: 1px solid #dbdbdb;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-x {
+  bottom: 0;
+  height: 16px;
+  left: 0;
+  min-width: 100%;
+  width: 100%;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-y {
+  height: 100%;
+  min-height: 100%;
+  right: 0;
+  top: 0;
+  width: 16px;
+}
+
+.scrollbar-chrome > .scroll-element .scroll-bar {
+  background-color: #d9d9d9;
+  border: 1px solid #bdbdbd;
+  cursor: default;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.scrollbar-chrome > .scroll-element .scroll-bar:hover {
+  background-color: #c2c2c2;
+  border-color: #a9a9a9;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-draggable .scroll-bar {
+  background-color: #919191;
+  border-color: #7e7e7e;
+}
+
+/* scrollbar height/width & offset from container borders */
+.scrollbar-chrome > .scroll-content.scroll-scrolly_visible {
+  left: -16px;
+  margin-left: 16px;
+}
+
+.scrollbar-chrome > .scroll-content.scroll-scrollx_visible {
+  top: -16px;
+  margin-top: 16px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-x .scroll-bar {
+  height: 8px;
+  min-width: 10px;
+  top: 3px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-y .scroll-bar {
+  left: 3px;
+  min-height: 10px;
+  width: 8px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-x .scroll-element_outer {
+  border-left: 1px solid #dbdbdb;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-x .scroll-element_track {
+  height: 14px;
+  left: -3px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-x .scroll-element_size {
+  height: 14px;
+  left: -4px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-y .scroll-element_outer {
+  border-top: 1px solid #dbdbdb;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-y .scroll-element_track {
+  top: -3px;
+  width: 14px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-y .scroll-element_size {
+  top: -4px;
+  width: 14px;
+}
+
+/* update scrollbar offset if both scrolls are visible */
+.scrollbar-chrome > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size {
+  left: -19px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
+  top: -19px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track {
+  left: -19px;
+}
+
+.scrollbar-chrome > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track {
+  top: -19px;
+}
+.ui-tooltip, .arrow:after {
+	background: #121212;
+	border: 1px solid #333 !important;
+}
+.ui-tooltip {
+	padding: 5px 10px;
+	color:#eee;
+	border-radius: 10px;
+	font: 12px "Helvetica Neue", Sans-Serif;
+	text-transform: uppercase;
+	box-shadow: 0 0 7px black;
+	.arrow {
+		width: 70px;
+		height: 16px;
+		overflow: hidden;
+		position: absolute;
+		left: 50%;
+		margin-left: -35px;
+		bottom: -16px;
+	}
+	.arrow.top {
+		top: -16px;
+		bottom: auto;
+	}
+	.arrow.left {
+		left: 20%;
+	}
+	.arrow:after {
+		content: "";
+		position: absolute;
+		left: 20px;
+		top: -20px;
+		width: 25px;
+		height: 25px;
+		box-shadow: 6px 5px 9px -9px black;
+		-webkit-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		transform: rotate(45deg);
+	}
+	.arrow.top:after {
+		bottom: -20px;
+		top: auto;
+	}
+}
