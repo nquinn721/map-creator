@@ -1,3 +1,11 @@
+String.prototype.capitalize = function() {
+  return this.substr(0,1).toUpperCase() + this.substr(1);
+}
+String.prototype.camelCaseToText = function() {
+  return this.replace(/([A-Z])/g, ' $1').capitalize();
+}
+
+
 var app = angular.module('app', ['ui.uploader']);
 $( document ).tooltip({
   position: {
@@ -24,9 +32,6 @@ $('.file-loader').on('click', function() {
 $(".items-menu .menu-content").mCustomScrollbar();
 // $('.grid').mCustomScrollbar();
 // $('.grid').scrollbar();
-String.prototype.capitalize = function() {
-	return this.substr(0,1).toUpperCase() + this.substr(1);
-}
 
 $('.grid').on('scroll', function() {
   setUpMiniMapScrollLocation();
@@ -34,7 +39,7 @@ $('.grid').on('scroll', function() {
 });
 setTimeout(function() {
   setUpMiniMapScrollLocation();
-}, 3000);
+}, 2000);
 function setUpMiniMapScrollLocation() {
   var grid = $('.grid'),
     canvas = grid.find('canvas'),
@@ -71,9 +76,11 @@ function setUpMiniMapScrollLocation() {
 //         $(this).scrollTop(100);
 //     }
 
-// });
-
-
+$('.radio-inline').find(':checked').each(function() {
+  $(this).parents('.radio-inline').addClass('radio-selected');
+}).end().find('input[type=radio]').on('change', function() {
+  $('.radio-inline').removeClass('radio-selected').find(':checked').parents('.radio-inline').addClass('radio-selected');
+});
 
 
     $('.grid').perfectScrollbar();

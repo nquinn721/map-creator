@@ -10,8 +10,8 @@ app.factory('stage', [
 		this.mode = 'paint';
 		this.stage = new createjs.Stage(stageId);
 
-		this.baseWidth = 1600;
-		this.baseHeight = 800;
+		this.baseWidth = 2000;
+		this.baseHeight = 2000;
 
 		// Classes
 		this.draw = new Draw(this);

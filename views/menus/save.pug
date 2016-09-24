@@ -1,6 +1,0 @@
-.menu.save-menu.ng-cloak(ng-if="m.showSaveMenu", ng-click="m.hideSaveMenu(); $event.stopPropagation();")
-	.content(ng-click="$event.stopPropagation()")
-		.title Save Tile Map
-		form.name(ng-submit="m.saveTileMap()")
-			input.form-control(ng-model="m.stage.currentFile.name", placeholder="Filename...")
-			input.btn.btn-primary(type="submit", value="Save")

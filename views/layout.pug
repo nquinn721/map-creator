@@ -8,7 +8,7 @@ html(lang='en', ng-app='app')
     //- link(rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css")
     link(rel='stylesheet', href='css/lib.css')
     link(rel='stylesheet', href='css/main.css')
-  body
+  body(ng-controller="FileController as file")
     block content
 
     script(src='scripts/main.js')

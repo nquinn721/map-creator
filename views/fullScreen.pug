@@ -1,0 +1,31 @@
+.new-file-splash.ng-cloak(ng-show="file.showCreateNewFileMenu", ng-click="file.hideNewFileMenu();")
+	.new-file-menu.ng-cloak(ng-click="$event.stopPropagation()")
+		h3 Create New {{file.newFileType}}
+		.new-file-info
+			.radio-inline-group
+				.radio-inline
+					label
+						input(type="radio", ng-model="file.newFileExtension", value="js", checked)
+						| JS
+				.radio-inline
+					label
+						input(type="radio", ng-model="file.newFileExtension", value="ts")
+						| TS
+			span.new-file-width W:
+			input.form-control(type="number", step="25", ng-model="file.newFileWidth", value="2000")
+			span.new-file-width H:
+			input.form-control(type="number", step="25", ng-model="file.newFileHeight", value="2000")
+		form.input-group(ng-submit="file.createNewFile()")
+			input.new-file-name(ng-model="file.newFileName", placeholder="File name...")
+			input.btn.btn-primary(type="submit", value="Create")
+
+.full-screen-img.ng-cloak(ng-show="m.fullScreenImg", ng-click="m.hideFullScreenImg()")
+	.image-content.ng-cloak
+		img(ng-src="{{m.fullScreenImg}}")
+
+.save-menu.ng-cloak(ng-if="file.showSaveMenu", ng-click="file.hideSaveMenu();")
+	.content.ng-cloak(ng-click="$event.stopPropagation()")
+		.title Save Tile Map
+		form.name(ng-submit="file.saveTileMap()")
+			input.form-control(ng-model="m.stage.currentFile.name", placeholder="Filename...")
+			input.btn.btn-primary(type="submit", value="Save")

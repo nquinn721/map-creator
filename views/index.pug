@@ -1,14 +1,9 @@
 extends layout
 
 block content
-  .wrapper(cursor, ng-controller='main as m')
-    .full-screen-img.ng-cloak(ng-show="m.fullScreenImg", ng-click="m.hideFullScreenImg()")
-      .image-content
-        img(ng-src="{{m.fullScreenImg}}")
-    .current-item.ng-cloak(ng-style="m.currentItemStyle", ng-class="{'no-paint' : m.stage.noPaint === true}")
-      .current-mode {{m.stage.mode.capitalize()}}
-      img(ng-if="m.stage.mode === 'paint'", ng-src="{{m.stage.currentItem.src}}")
-      .selection-img(ng-if="m.stage.mode === 'selection'")
+  include fullScreen
+  .wrapper(cursor, ng-controller='MainController as m')
+    
     include header
         
     include menus

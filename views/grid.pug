@@ -4,8 +4,13 @@
 		span.is-dirty
 			span.ng-cloak(ng-if="stage.isDirty") *
 		span.close-file(ng-click="m.stage.file.closeFile(stage.name)") x
-.grid.main-grid(ng-class="{saved : m.saved, fullscreen : m.fullScreenGrid}")
+.grid.main-grid(ng-class="{saved : file.saved, fullscreen : m.fullScreenGrid}")
 	include menus/stageItemInfo
+	.current-item.ng-cloak(ng-style="m.currentItemStyle", ng-class="{'no-paint' : m.stage.noPaint === true}")
+		.current-mode {{m.stage.mode.capitalize()}}
+		img(ng-if="m.stage.mode === 'paint'", ng-src="{{m.stage.currentItem.src}}")
+		.selection-img(ng-if="m.stage.mode === 'selection'")
+			
 	.full-screen-exit-text(ng-show="m.showFullScreenExitText")
 		div 
 			| Press 

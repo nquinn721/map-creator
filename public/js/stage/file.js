@@ -11,7 +11,7 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 			this.stage.files[id] = {
 				name : id,
 				items : [],
-				size : obj ? ({w : obj.w || obj.width, h : obj.h || obj.height}) : {w : this.baseWidth, h : this.baseHeight}
+				size : obj && obj.w && obj.h ? ({w : obj.w, h : obj.h}) : {w : this.stage.baseWidth, h : this.stage.baseHeight}
 			};
 			this.changeFile(id);
 			this.stage.updateCanvas();
