@@ -12,7 +12,8 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 				name : id,
 				items : [],
 				size : obj && obj.w && obj.h ? ({w : obj.w, h : obj.h}) : {w : this.stage.baseWidth, h : this.stage.baseHeight},
-				type : type || 'tilemap'
+				type : type || 'tilemap',
+				frames : []
 			};
 			this.changeFile(id);
 			this.stage.updateCanvas();
@@ -42,9 +43,11 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 		},
 		loadSpriteSheet : function(spritesheet) {
 			// $http.get('/load-spritesheet/' + spritesheet.id).then(function(data) {
-				this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600});
-				this.stage.createSpriteSheet({spritesheet : spritesheet, w : 800, h : 600})
-			this.stage.setupModes();
+				if(!this.getFileById(spritesheet)){
+					this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600});
+					this.stage.createSpriteSheet({spritesheet : spritesheet, w : 800, h : 600})
+					this.stage.setupModes();
+				}
 				// this.stage.draw.spritesheet(spritesheet);
 			// }.bind(this));
 		},
@@ -56,6 +59,11 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 			var items = this.stage.currentFile.items;
 			for(var i = 0; i < items.length; i++)
 				items[i].drawImg();
+			if(this.stage.currentFile.frames){
+				var frames = this.stage.currentFile.frames;
+				for(var i = 0; i < frames.length; i++)
+					frames[i].create();
+			}
 			this.stage.updateCanvas();
 		},
 		drawFile : function(id) {

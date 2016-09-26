@@ -326,6 +326,8 @@ ul.nav.nav-tabs {
 }
 .grid .stage-item-info-menu .menu-content {
   padding-left: 17px;
+  overflow: auto;
+  height: 85%;
 }
 .grid .stage-item-info-menu .selected-item {
   float: left;
@@ -353,10 +355,33 @@ ul.nav.nav-tabs {
   border-radius: 5px;
   margin-right: 9px;
 }
+.grid .stage-item-info-menu .set-size span {
+  width: 13%;
+  display: inline-block;
+  margin-left: 6px;
+}
+.grid .stage-item-info-menu .info.input-group.frame {
+  display: block;
+}
+.grid .stage-item-info-menu .info.input-group.frame .frame-info div {
+  width: 50%;
+  float: left;
+}
+.grid .stage-item-info-menu .info.input-group.frame .frame-info div:first-child {
+  padding-right: 10px;
+}
+.grid .stage-item-info-menu .info.input-group.frame input {
+  width: 50%;
+  font-size: 10px;
+}
+.grid .stage-item-info-menu .info.input-group.frame span {
+  width: 50%;
+  display: inline-block;
+}
 .grid .stage-item-info-menu .info {
   display: flex;
   justify-content: space-between;
-  margin: 10px 0 10px 0;
+  margin: 10px 10px 10px 0;
 }
 .grid .stage-item-info-menu .info input {
   width: 50%;

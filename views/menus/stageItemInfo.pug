@@ -15,11 +15,20 @@ div(ng-controller="StageItemInfoMenu as info")
 			.info.input-group
 				span Frames
 				input(ng-model="info.stage.currentFile.frames.length")
-			.info.input-group(ng-repeat="frame in info.stage.currentFile.frames")
-				span x: {{frame.body.graphics.command.x}}
-				span y: {{frame.body.graphics.command.y}}
-				span w: {{frame.body.graphics.command.w}}
-				span h: {{frame.body.graphics.command.h}}
+			.info.input-group.frame(ng-repeat="frame in info.stage.currentFile.frames")
+				.frame-number
+					| Frame {{info.stage.currentFile.frames.indexOf(frame) + 1}}
+				.frame-info
+					div
+						span x: 
+						input(type="number", ng-model="frame.body.x")
+						span y: 
+						input(type="number", ng-model="frame.body.y")
+					div
+						span w: 
+						input(type="number", ng-model="frame.w", ng-change="frame.updateBodyWidth()")
+						span h: 
+						input(type="number", ng-model="frame.h", ng-change="frame.updateBodyHeight()")
 	.stage-item-info-menu.minimizable.ng-cloak(ng-if="info.selectedItems", slider="right")
 		.menu-title
 			i.fa.fa-caret-right.show-hide.slide-button

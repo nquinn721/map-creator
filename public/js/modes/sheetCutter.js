@@ -35,18 +35,27 @@ app.factory('SheetCutter', function() {
 				h = this.frameHeight;
 			}
 
-			this.currentFrame.create(x, y, w, h);
+			if(w > 10 && h > 10){
+				console.log('create');
+				this.currentFrame.create(x, y, w, h);
+				this.destroyFrame = false;
+			}else{
+				console.log('destroy');
+				this.destroyFrame = true;
+			}
 			
 		},
 		
 
 		sheetCutterMouseUp : function() {
-			if(!this.stage.currentFile.frames)this.stage.currentFile.frames = [];
-			if(this.currentFrame){
+			console.log(this.destroyFrame);
+			if(this.currentFrame && !this.destroyFrame){
 				this.stage.currentFile.frames.push(this.currentFrame);
 
-				this.currentFrame = null;
 			}
+			this.currentFrame = null;
+		},
+		keydown : function(key) {
 		}
 	}
 

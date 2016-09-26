@@ -254,6 +254,10 @@ app.factory('stage', [
 			this.dontUpdateMiniMap = true;
 			for(var i = 0; i < this.currentFile.items.length; i++)
 				this.currentFile.items[i].destroyImages();
+
+			if(this.currentFile.frames)
+				for(var i = 0; i < this.currentFile.frames.length; i++)
+					this.currentFile.frames[i].destroy();
 		},
 		destroyItem : function(item) {
 			item.destroyImages();

@@ -353,6 +353,8 @@ ul.nav.nav-tabs {
         }
         .menu-content{
             padding-left: 17px;
+            overflow: auto;
+            height: 85%;
         }
         .selected-item {
             float: left;
@@ -375,17 +377,43 @@ ul.nav.nav-tabs {
             }
         }
 
-        .set-size input {
-            width: 50px;
-            border: 1px solid black;
-            border-radius: 5px;
-            margin-right: 9px;
+        .set-size {
+            input {
+                width: 50px;
+                border: 1px solid black;
+                border-radius: 5px;
+                margin-right: 9px;
+            }
+            span {
+                width: 13%;
+                display: inline-block;
+                margin-left: 6px;
+            }
+            
         }
+        .info.input-group.frame {
+            display: block;
+            .frame-info div {width: 50%;float: left;}
+
+            .frame-info div:first-child {
+                padding-right: 10px;
+            }
+            input {
+                width: 50%;
+                font-size: 10px;
+            }
+            span {
+                width: 50%;
+                display: inline-block;
+            }
+        }
+
+
 
         .info {
             display: flex;
             justify-content: space-between;
-            margin: 10px 0 10px 0;
+            margin: 10px 10px 10px 0;
             input {
                 width: 50%;
                 border: 1px solid black;
