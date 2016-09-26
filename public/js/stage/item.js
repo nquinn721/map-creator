@@ -15,19 +15,21 @@ app.factory('Item', function () {
 		this.element = obj.element;
 		this.body = obj.body;
 		this.type = obj.elType;
+
 	}
 
 	Item.prototype = {
 		drawImg : function() {
 			this.img = this.stage.draw.img(this);
-			this.img.on('click', this.mousedown.bind(this));
+			this.img.on('click', this.click.bind(this));
 			this.img.on('pressmove', this.pressmove.bind(this));
 		},
-		mousedown : function() {
+		click : function() {
 			if(this.selected)
 				this.deselect();
 			else
 				this.select();
+			this.stage.modes.move.moveMouseUp();
 		},
 		pressmove : function(e) {
 			this.stage.modes.move.move();

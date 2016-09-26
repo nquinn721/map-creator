@@ -41,6 +41,7 @@ gulp.task('js', function() {
 		'public/js/modes/*.js',
 		'public/js/directives/*.js',
 		'public/js/factories/*.js',
+		'public/js/stage/shapes/*.js',
 		'public/js/stage/*.js',
 		'public/js/*.js'
 		])

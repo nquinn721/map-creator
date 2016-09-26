@@ -17,7 +17,7 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 	
 	vm.downloadCanvasImage = function() {
 		var link = document.createElement('a');
-		link.href = vm.stage.canvasImage.src;
+		link.href = vm.stage.snapshot.createSnapShot();
 		link.download = 'map.png';
 		link.click();
 	}

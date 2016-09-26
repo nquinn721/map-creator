@@ -409,11 +409,12 @@ $(".items-menu .menu-content").mCustomScrollbar();
 
 $('.grid').on('scroll', function() {
   setUpMiniMapScrollLocation();
-  
 });
+
 setTimeout(function() {
   setUpMiniMapScrollLocation();
-}, 2000);
+}, 1500);
+$(window).on('resize', setUpMiniMapScrollLocation);
 function setUpMiniMapScrollLocation() {
   var grid = $('.grid'),
     canvas = grid.find('canvas'),
@@ -429,12 +430,19 @@ function setUpMiniMapScrollLocation() {
     topPercent = top / canvasHeight * 100,
     leftPercent = left / canvasWidth * 100;
 
-  $('.scroll-location').css({
-    width : (width / canvasWidth) * miniMapWidth,
-    height : (height / canvasHeight) * miniMapHeight,
-    top : (topPercent > 0 ? topPercent + 1 : topPercent) + '%',
-    left : (leftPercent > 0 ? leftPercent + 1 : leftPercent) + '%'
-  });
+  if(width < canvasWidth && height < canvasHeight){
+    $('.scroll-location').css({
+      width : (width / canvasWidth) * miniMapWidth,
+      height : (height / canvasHeight) * miniMapHeight,
+      top : (topPercent > 0 ? topPercent + 1 : topPercent) + '%',
+      left : (leftPercent > 0 ? leftPercent + 1 : leftPercent) + '%'
+    });
+  }else{
+    $('.scroll-location').css({
+      width : miniMapWidth,
+      height : miniMapHeight
+    })
+  }
 }
 // $('canvas').on('contextmenu', function() {
 // 	return false;
@@ -610,10 +618,18 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 				});
 			}
 		});
-		
+	}
+	vm.updateSpriteSheets = function() {
+		vm.spritesheets = [];
+		$http.get('/spritesheet-names').then(function(data) {
+			for(var i = 0; i < data.data.length; i++){
+				vm.spritesheets.push(data.data[i]);
+			}
+		});
 	}
 
 	vm.updateTileMaps();
+	vm.updateSpriteSheets();
 
 	keyEvents.register('keydown', 'ctrl', function() {
 		vm.keys.ctrl = true;
@@ -659,7 +675,7 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 	
 	vm.downloadCanvasImage = function() {
 		var link = document.createElement('a');
-		link.href = vm.stage.canvasImage.src;
+		link.href = vm.stage.snapshot.createSnapShot();
 		link.download = 'map.png';
 		link.click();
 	}
@@ -713,6 +729,7 @@ app.controller('ModeMenu', ['$scope', 'watch', 'stage', function($scope, watch, 
 }]);
 app.controller('StageItemInfoMenu', ['$scope', 'watch', 'stage', function($scope, watch, stage) {
 	var vm = this;
+	vm.stage = stage;
 
 
 	watch(vm, 'element', function(value) {
@@ -800,9 +817,10 @@ app.factory('Move', function() {
 					row : coords.row - this.currentRow,
 					col : coords.col - this.currentCol
 				};
-			if(this.currentRow !== row || this.currentCol != col && !this.stage.getItemByXY(x, y))
+			if((this.currentRow !== row || this.currentCol != col) && !this.stage.getItemByXY(x, y)){
 				for(var i = 0; i < items.length; i++)
 					items[i].move(movedObj);
+			}
 			this.currentRow = row;
 			this.currentCol = col;
 		},
@@ -973,6 +991,60 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 
 	return Selection;
 }]);
+app.factory('SheetCutter', function() {
+	function SheetCutter(stage) {
+		this.stage = stage;
+		this.name = 'sheetCutter';
+		this.icon = 'scissors';
+		this.cursor = 'crosshairs';
+
+
+		this.useSetSize = false;
+		this.frameWidth = 32;
+		this.frameHeight = 32;
+
+	}
+
+	SheetCutter.prototype = {
+		sheetCutterMouseDown : function(e) {
+			if(!e.relatedTarget)
+				this.currentFrame = this.stage.draw.createResizableSquare();
+			
+		},
+		sheetCutter : function() {
+			if(!this.currentFrame)return;
+
+			var x = this.stage.mouseDownMouseCoords.x,
+				y = this.stage.mouseDownMouseCoords.y, 
+				w = this.stage.mouseMoveMouseCoords.x, 
+				h = this.stage.mouseMoveMouseCoords.y;
+
+
+			w = w - x;
+			h = h - y;
+
+			if(this.useSetSize){
+				w = this.frameWidth;
+				h = this.frameHeight;
+			}
+
+			this.currentFrame.create(x, y, w, h);
+			
+		},
+		
+
+		sheetCutterMouseUp : function() {
+			if(!this.stage.currentFile.frames)this.stage.currentFile.frames = [];
+			if(this.currentFrame){
+				this.stage.currentFile.frames.push(this.currentFrame);
+
+				this.currentFrame = null;
+			}
+		}
+	}
+
+	return SheetCutter;
+});
 app.directive('draggable', function() {
 	return {
 		restrict : 'C',
@@ -1069,18 +1141,18 @@ app.factory('cursor', function() {
 			this.update();
 		},
 		update : function() {
-			var canvas = document.createElement("canvas");
-		    canvas.width = 60;
-		    canvas.height = 60;
-		    //document.body.appendChild(canvas);
-		    var ctx = canvas.getContext("2d");
-		    ctx.fillStyle = "#ffffff";
-		    ctx.font = "14px FontAwesome";
-		    ctx.textAlign = "right";
-		    ctx.textBaseline = "bottom";
-		    ctx.fillText(this.currentFont, 15, 15);
-		    var dataURL = canvas.toDataURL('image/png')
-		    $('#map-creator').css('cursor', 'url('+dataURL+'), auto');
+			// var canvas = document.createElement("canvas");
+		 //    canvas.width = 60;
+		 //    canvas.height = 60;
+		 //    //document.body.appendChild(canvas);
+		 //    var ctx = canvas.getContext("2d");
+		 //    ctx.fillStyle = "#ffffff";
+		 //    ctx.font = "14px FontAwesome";
+		 //    ctx.textAlign = "right";
+		 //    ctx.textBaseline = "bottom";
+		 //    ctx.fillText(this.currentFont, 15, 15);
+		 //    var dataURL = canvas.toDataURL('image/png')
+		 //    $('#map-creator').css('cursor', 'url('+dataURL+'), auto');
 		}
 	}
 	var cursor = new Cursor;
@@ -1195,10 +1267,179 @@ app.factory('keyEvents', ['keys', '$document', '$rootScope', function(keys, $doc
 	keyEvents.init();
 	return keyEvents;
 }]);
+app.factory('keys', function() {
+	var keys = {
+		17 : 'ctrl',
+		46 : 'delete',
+		32 : 'spacebar',
+		27 : 'esc',
+		65 : 'a',
+		66 : 'b',
+		67 : 'c',
+		68 : 'd',
+		69 : 'e',
+		70 : 'f',
+		71 : 'g',
+		72 : 'h',
+		73 : 'i',
+		74 : 'j',
+		75 : 'k',
+		76 : 'l',
+		77 : 'm',
+		78 : 'n',
+		79 : 'o',
+		80 : 'p',
+		81 : 'q',
+		82 : 'r',
+		83 : 's',
+		84 : 't',
+		85 : 'u',
+		86 : 'v',
+		87 : 'w',
+		88 : 'x',
+		89 : 'y',
+		90 : 'z'
+	};
+	return function(e) {
+		return keys[e.keyCode];
+	}
+});
 app.factory('stageManager', function() {
 	
 });
-app.factory('Draw', function() {
+app.factory('ResizableSquare', function() {
+	function ResizableSquare(stage) {
+		this.stage = stage;
+	}
+
+	ResizableSquare.prototype = {
+		create : function(x, y, w, h) {
+			this.destroy();
+			this.body = this.stage.draw.square(x, y, w, h);
+			this.createCorners(x, y, w, h);
+
+			this.createBodyEvents();
+		},
+		destroy : function() {
+			if(!this.body)return;
+			this.stage.removeChild(this.body);
+			this.stage.removeChild.apply(this.stage, this.corners);
+		},
+		createBodyEvents : function() {
+			this.body.on('pressmove', this.bodypressmove.bind(this));
+			this.body.on('pressup', this.bodypressup.bind(this));
+		},
+		createCorners : function(x, y, w, h) {
+			this.corners = [
+				this.createCorner('top-left', x - 2.5, y - 2.5),
+				this.createCorner('top-right', x + w - 2.5, y - 2.5),
+				this.createCorner('bottom-left', x - 2.5, y + h - 2.5),
+				this.createCorner('bottom-right', x + w - 2.5, y + h - 2.5)
+			];
+		},
+		createCorner : function(pos, x,y,w,h) {
+			var corner = this.stage.draw.square(x, y, 5, 5, 'black', 'white')	
+			corner.on('mouseover', this.mouseover.bind(this, pos));
+			corner.on('pressmove', this.pressmove.bind(this, pos));
+			corner.on('mouseout', this.mouseout.bind(this, pos));
+			corner.on('pressup', this.pressup.bind(this, pos));
+			
+			return corner;
+		},
+		mouseover : function(pos) {
+			if(pos === 'bottom-left' || pos === 'top-right')
+				$('body').css('cursor', 'nesw-resize');
+			else $('body').css('cursor', 'nwse-resize');
+			this.cursorover = pos;
+			this.mouseEvent = true;
+		},
+		mouseout : function() {
+			$('body').css('cursor', 'auto');
+			this.mouseEvent = false;
+		},
+		pressmove : function(e) {
+			var body = this.body.graphics.command,
+				mousePos = this.stage.mouseMoveMouseCoords,
+				x = body.x, 
+				y = body.y, 
+				w = mousePos.x - body.x, 
+				h = mousePos.y - body.y;
+
+			this.destroy();
+			if(this.cursorover === 'bottom-left'){
+				x = mousePos.x;
+				w = (body.x + body.w) - x;
+			}
+			if(this.cursorover === 'top-right'){
+				y = mousePos.y;
+				h = (body.y + body.h) - y;
+			}
+
+			if(this.cursorover === 'top-left'){
+				x = mousePos.x;
+				y = mousePos.y;
+				w = (body.x + body.w) - x;
+				h = (body.y + body.h) - y;
+			}
+
+			this.body = this.stage.draw.square(x, y, w, h);
+			this.createCorners(x, y, w, h);
+			this.createBodyEvents();
+		},
+		pressup : function() {
+		},
+		bodypressmove : function(e) {
+			if(!this.originalX)this.originalX = e.stageX;
+			if(!this.originalY)this.originalY = e.stageY;
+			var newx = e.stageX - this.originalX,
+				newy = e.stageY - this.originalY,
+				targetX = e.target.graphics.command.x,
+				targetY = e.target.graphics.command.y,
+				targetW = e.target.graphics.command.w,
+				targetH = e.target.graphics.command.h,
+				canvas = this.stage.getStage().canvas,
+				xDidntMove, yDidntMove;
+
+
+
+			targetX += newx;
+		    targetY += newy;
+
+		    if(targetX < 0){
+		    	targetX = 0;
+		    	xDidntMove = true;
+		    }
+		    if(targetY < 0){
+		    	targetY = 0;
+		    	yDidntMove = true;
+		    }
+		    if(targetX + targetW > canvas.width){
+		    	targetX = canvas.width - targetW;
+		    	xDidntMove = true;
+		    }
+		    if(targetY +  targetH > canvas.height){
+		    	targetY = canvas.height - targetH;
+		    	yDidntMove = true;
+		    }
+
+		    for(var i = 0 ; i < this.corners.length; i++){
+		    	if(!xDidntMove)
+			    	this.corners[i].graphics.command.x += newx;
+			    if(!yDidntMove)
+			    	this.corners[i].graphics.command.y += newy;
+		    }
+
+		    this.originalY = e.stageY;
+		    this.originalX = e.stageX;
+		},
+		bodypressup : function() {
+			this.originalY = false;
+		    this.originalX = false;	
+		}
+	}
+	return ResizableSquare;
+});
+app.factory('Draw', ['ResizableSquare', function(ResizableSquare) {
 		
 	function Draw(stage) {
 		this.stage = stage;
@@ -1220,6 +1461,7 @@ app.factory('Draw', function() {
 		selection : function(x, y, w, h) {
 			w = w - x;
 			h = h - y;
+
 			this.destroySelection();
 			this.selectionBox = this.square(x, y, w, h);
 			return this.selectionBox;
@@ -1227,13 +1469,28 @@ app.factory('Draw', function() {
 		destroySelection : function() {
 			if(this.selectionBox)this.stage.getStage().removeChild(this.selectionBox);
 		},
+		spritesheet : function(spritesheet) {
+			if(this.currentSpriteSheet)this.stage.removeChild(this.currentSpriteSheet);
+			var img = new createjs.Bitmap('spritesheets/' + spritesheet);
+			img.image.onload =function() {
+				img.scaleY = this.stage.getStage().canvas.height / img.image.height;
+				img.scaleX = this.stage.getStage().canvas.width / img.image.width;
+			}.bind(this);
+			this.currentSpriteSheet = img;
+			this.stage.addChild(img);
+			return img;
+		},
+		createResizableSquare : function() {
+			var rs = new ResizableSquare(this.stage, this);
+			return rs;
+		},
+
 		square : function(x, y, w, h, stroke, color) {
 			var g = new createjs.Shape();
 			g.graphics.beginStroke(stroke || "blue")
 				.beginFill(color || "rgba(18, 30, 185, 0.58)")
 				.drawRect(x, y, w, h);
 			this.stage.addChild(g);
-
 			return g;
 		},
 		img : function(obj) {
@@ -1260,7 +1517,7 @@ app.factory('Draw', function() {
 	}
 
 	return Draw;
-});
+}]);
 
 app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 	function File(stage) {
@@ -1268,18 +1525,19 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 	}
 
 	File.prototype = {
-		createFile : function(id, obj) {
+		createFile : function(id, type, obj) {
 			if(this.getFileById(id))return;
 			this.stage.dontUpdateMiniMap = true;
 			this.stage.clearStageItems();
 			this.stage.files[id] = {
 				name : id,
 				items : [],
-				size : obj && obj.w && obj.h ? ({w : obj.w, h : obj.h}) : {w : this.stage.baseWidth, h : this.stage.baseHeight}
+				size : obj && obj.w && obj.h ? ({w : obj.w, h : obj.h}) : {w : this.stage.baseWidth, h : this.stage.baseHeight},
+				type : type || 'tilemap'
 			};
 			this.changeFile(id);
 			this.stage.updateCanvas();
-			if(obj.data)
+			if(obj && obj.data)
 				this.createItemsFromRaw(obj.data);
 			this.stage.snapshot.updateSnapshotCanvas();
 		},
@@ -1300,11 +1558,20 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 		},
 		loadTileMap : function(map) {
 			$http.get('/load-tilemap/' + map.id).then(function(data) {
-				this.createFile(map.id, data.data);
+				this.createFile(map.id, 'map', data.data);
 			}.bind(this));
+		},
+		loadSpriteSheet : function(spritesheet) {
+			// $http.get('/load-spritesheet/' + spritesheet.id).then(function(data) {
+				this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600});
+				this.stage.createSpriteSheet({spritesheet : spritesheet, w : 800, h : 600})
+			this.stage.setupModes();
+				// this.stage.draw.spritesheet(spritesheet);
+			// }.bind(this));
 		},
 		changeFile : function(file) {
 			this.stage.currentFile = this.stage.files[file];
+			this.stage.setupModes();
 		},
 		drawCurrentFile : function() {
 			var items = this.stage.currentFile.items;
@@ -1316,7 +1583,8 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 			this.stage.clearStageItems();	
 			this.stage.currentFile = this.getFileById(id);
 			this.drawCurrentFile();	
-			this.stage.snapshot.updateSnapshotCanvas();
+			this.stage.snapshot.updateSnapshotCanvas();		
+			this.stage.setupModes();
 		},
 		createItemsFromRaw : function(items) {
 			for(var i = 0; i < items.length; i++)
@@ -1355,19 +1623,21 @@ app.factory('Item', function () {
 		this.element = obj.element;
 		this.body = obj.body;
 		this.type = obj.elType;
+
 	}
 
 	Item.prototype = {
 		drawImg : function() {
 			this.img = this.stage.draw.img(this);
-			this.img.on('click', this.mousedown.bind(this));
+			this.img.on('click', this.click.bind(this));
 			this.img.on('pressmove', this.pressmove.bind(this));
 		},
-		mousedown : function() {
+		click : function() {
 			if(this.selected)
 				this.deselect();
 			else
 				this.select();
+			this.stage.modes.move.moveMouseUp();
 		},
 		pressmove : function(e) {
 			this.stage.modes.move.move();
@@ -1433,13 +1703,13 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 				stage = this.stage.getStage();
 
 			this.snapshotStage.children = null;
+			
 			for(var i = 0; i < stage.children.length; i++){
 				if(!stage.children[i].graphics)
 					children.push(stage.children[i].clone(true));
 			}
 			this.snapshotStage.children = children;
 			this.snapshotStage.update();
-			// this.createSnapShot();
 		},
 		createSnapShot : function() {
 			return this.create().src;
@@ -1448,10 +1718,37 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 
 	return Snapshot;
 }]);
+app.factory('Spritesheet', function() {
+	function Spritesheet(stage, obj) {
+		this.stage = stage;
+		this.file = obj.spritesheet;
+		this.frames = [];
+		this.animations = {};
+	}
+	Spritesheet.prototype = {
+		drawImg : function() {
+			this.img = this.stage.draw.spritesheet(this.file);
+		},
+		createAnimation : function (name) {
+			this.animations[name] = [];
+		},
+		addAnimationFrame : function(name, frame) {
+			this.animation[name].push(frame);	
+		},
+		createFrame : function() {
+			
+		},
+		destroyImages : function() {
+			this.stage.removeChild(this.img);
+		}
+	}
+
+	return Spritesheet;
+})
 app.factory('stage', [
-	'Preload', 'Draw', 'TileMap', 'Item', '$http', 'Selection', 'Paint', 'Erase', 'Move', 
+	'Preload', 'Draw', 'TileMap', 'Item', 'Spritesheet', '$http', 'Selection', 'Paint', 'Erase', 'Move',  'SheetCutter',
 	'keys', 'cursor', '$rootScope', 'Snapshot', 'File',
-	function(Preload, Draw, TileMap, Item, $http, Selection, Paint, Erase, Move, 
+	function(Preload, Draw, TileMap, Item, Spritesheet, $http, Selection, Paint, Erase, Move, SheetCutter,
 			keys, cursor, $rootScope, Snapshot, File) {
 
 	function Stage(stageId) {
@@ -1459,7 +1756,7 @@ app.factory('stage', [
 		this.CELL_HEIGHT = 25;
 		this.mode = 'paint';
 		this.stage = new createjs.Stage(stageId);
-
+		this.stage.enableMouseOver(20);  
 		this.baseWidth = 2000;
 		this.baseHeight = 2000;
 
@@ -1472,17 +1769,22 @@ app.factory('stage', [
 
 		// Modes
 		this.modes = {
+		}
+		this.mapModes = {
 			paint : new Paint(this),
 			selection : new Selection(this),
 			move : new Move(this),
 			erase : new Erase(this)
 		}
-
+		this.spritesheetModes = {
+			sheetCutter : new SheetCutter(this)
+		}
 		this.files = {
 			'untitled.js' : {
 				name : 'untitled.js',
 				items : [],
-				size : {w : this.baseWidth, h : this.baseHeight}
+				size : {w : this.baseWidth, h : this.baseHeight},
+				type : 'tilemap'
 			}
 		};
 		this.currentFile = this.files['untitled.js'];
@@ -1507,6 +1809,7 @@ app.factory('stage', [
 				this.updateCanvas();
 				this.update();
 				this.snapshot.createSnapShot();
+				this.setupModes();
 				$rootScope.$apply();
 			}.bind(this));
 		},
@@ -1526,6 +1829,16 @@ app.factory('stage', [
 				this.setMode('move');
 			if(key === 'e')
 				this.setMode('erase');
+
+			for(var i in this.modes)
+				if(this.modes[i].keydown)this.modes[i].keydown(key, e);
+		},
+		keyup : function(e) {
+			if(e.target.localName === 'input')return true;
+
+			var key = keys(e);
+			for(var i in this.modes)
+				if(this.modes[i].keyup)this.modes[i].keyup(key, e);
 		},
 		setupClickEvents : function() {
 			this.getStage().on('stagemousedown', this.mouseDown.bind(this));
@@ -1541,7 +1854,9 @@ app.factory('stage', [
 			this.stage.canvas.height = this.currentFile.size.h;
 			this.snapshot.updateCanvas();
 			this.draw.clearLines();
-			this.draw.drawCanvasGrid();	
+			if(this.currentFile.type !== 'spritesheet'){
+				this.draw.drawCanvasGrid();	
+			}
 		},
 		setCurrentItem : function(id) {
 			this.currentItem = this.getLoadedItemById(id);
@@ -1569,7 +1884,7 @@ app.factory('stage', [
 		},
 		mouseMove : function(e) {
 			this.mouseMoveMouseCoords = this.getMouseAndRowCoords(e);
-			if(this.modes[this.mode][this.mode + 'FollowMouse'])this.modes[this.mode][this.mode + 'FollowMouse'](e);
+			if(this.modes[this.mode] && this.modes[this.mode][this.mode + 'FollowMouse'])this.modes[this.mode][this.mode + 'FollowMouse'](e);
 
 			if(!this.drawing)return;
 			if(this.isMoving){
@@ -1578,7 +1893,6 @@ app.factory('stage', [
 
 			this.setModeFromMouseEvent('', e);
 			this.dontUpdateMiniMap = false;
-
 
 		},
 		setMode : function(mode) {
@@ -1592,9 +1906,11 @@ app.factory('stage', [
 		},
 		setModeFromMouseEvent : function(mouseEvent, e) {
 			if(this.overRideMode){
+				if(!this.modes[this.overRideMode])return;
 				if(this.modes[this.overRideMode][this.overRideMode + mouseEvent])
 					this.modes[this.overRideMode][this.overRideMode + mouseEvent](e);
 			} else{
+				if(!this.modes[this.mode])return;
 				if(this.modes[this.mode][this.mode + mouseEvent])
 					this.modes[this.mode][this.mode + mouseEvent](e);
 			}
@@ -1643,6 +1959,18 @@ app.factory('stage', [
 		updateLoadedItem : function(id, attr, value) {
 			var item = this.getLoadedItemById(id);
 			item[attr] = value;	
+		},
+		createSpriteSheet : function(spriteSheetName, w, h) {
+			var obj = spriteSheetName instanceof Object ? spriteSheetName : {
+				spritesheet : spriteSheetName,
+				w : w,
+				h : h
+			}, item;
+
+			item = new Spritesheet(this, obj);
+			item.drawImg();
+			this.addItem(item);
+			this.snapshot.updateSnapshotCanvas();		
 		},
 		createItem : function(row, col, x, y, w, h, file, src, element) {
 			var obj = row instanceof Object ? row : {
@@ -1707,21 +2035,31 @@ app.factory('stage', [
 		},
 		addChild : function(child) {
 			this.stage.addChild(child);
-			if(!this.dontUpdateMiniMap){
-				console.log('updateg');
-				this.snapshot.updateSnapshotCanvas();
-			}
-		},
-		removeChild : function(child) {
-			this.stage.removeChild(child);
 			if(!this.dontUpdateMiniMap)
 				this.snapshot.updateSnapshotCanvas();
+		},
+		removeChild : function() {
+			this.stage.removeChild.apply(this.stage, arguments);
+			if(!this.dontUpdateMiniMap)
+				this.snapshot.updateSnapshotCanvas();
+		},
+		setupModes : function() {
+			this.modes = {};
+			if(this.currentFile.type === 'tilemap')
+				for(var i in this.mapModes)
+					this.modes[i] = this.mapModes[i];
+			else
+				for(var i in this.spritesheetModes)
+					this.modes[i] = this.spritesheetModes[i];
+
+			var keys = Object.keys(this.modes);
+			this.mode = this.modes[keys[0]].name;
 		},
 		
 		update : function() {
 			setInterval(function() {
 				this.stage.update();
-			}.bind(this), 10)
+			}.bind(this), 10);
 		},
 	}
 
@@ -1730,42 +2068,6 @@ app.factory('stage', [
 	return stage;
 }]);
 
-app.factory('keys', function() {
-	var keys = {
-		17 : 'ctrl',
-		46 : 'delete',
-		27 : 'esc',
-		65 : 'a',
-		66 : 'b',
-		67 : 'c',
-		68 : 'd',
-		69 : 'e',
-		70 : 'f',
-		71 : 'g',
-		72 : 'h',
-		73 : 'i',
-		74 : 'j',
-		75 : 'k',
-		76 : 'l',
-		77 : 'm',
-		78 : 'n',
-		79 : 'o',
-		80 : 'p',
-		81 : 'q',
-		82 : 'r',
-		83 : 's',
-		84 : 't',
-		85 : 'u',
-		86 : 'v',
-		87 : 'w',
-		88 : 'x',
-		89 : 'y',
-		90 : 'z'
-	};
-	return function(e) {
-		return keys[e.keyCode];
-	}
-});
 app.factory('Preload', ['$http', function($http) {
 	
 	function Preload() {

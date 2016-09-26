@@ -35,11 +35,12 @@ $(".items-menu .menu-content").mCustomScrollbar();
 
 $('.grid').on('scroll', function() {
   setUpMiniMapScrollLocation();
-  
 });
+
 setTimeout(function() {
   setUpMiniMapScrollLocation();
-}, 2000);
+}, 1500);
+$(window).on('resize', setUpMiniMapScrollLocation);
 function setUpMiniMapScrollLocation() {
   var grid = $('.grid'),
     canvas = grid.find('canvas'),
@@ -55,12 +56,19 @@ function setUpMiniMapScrollLocation() {
     topPercent = top / canvasHeight * 100,
     leftPercent = left / canvasWidth * 100;
 
-  $('.scroll-location').css({
-    width : (width / canvasWidth) * miniMapWidth,
-    height : (height / canvasHeight) * miniMapHeight,
-    top : (topPercent > 0 ? topPercent + 1 : topPercent) + '%',
-    left : (leftPercent > 0 ? leftPercent + 1 : leftPercent) + '%'
-  });
+  if(width < canvasWidth && height < canvasHeight){
+    $('.scroll-location').css({
+      width : (width / canvasWidth) * miniMapWidth,
+      height : (height / canvasHeight) * miniMapHeight,
+      top : (topPercent > 0 ? topPercent + 1 : topPercent) + '%',
+      left : (leftPercent > 0 ? leftPercent + 1 : leftPercent) + '%'
+    });
+  }else{
+    $('.scroll-location').css({
+      width : miniMapWidth,
+      height : miniMapHeight
+    })
+  }
 }
 // $('canvas').on('contextmenu', function() {
 // 	return false;

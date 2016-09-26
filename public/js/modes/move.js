@@ -23,9 +23,10 @@ app.factory('Move', function() {
 					row : coords.row - this.currentRow,
 					col : coords.col - this.currentCol
 				};
-			if(this.currentRow !== row || this.currentCol != col && !this.stage.getItemByXY(x, y))
+			if((this.currentRow !== row || this.currentCol != col) && !this.stage.getItemByXY(x, y)){
 				for(var i = 0; i < items.length; i++)
 					items[i].move(movedObj);
+			}
 			this.currentRow = row;
 			this.currentCol = col;
 		},

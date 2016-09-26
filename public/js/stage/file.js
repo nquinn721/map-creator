@@ -4,18 +4,19 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 	}
 
 	File.prototype = {
-		createFile : function(id, obj) {
+		createFile : function(id, type, obj) {
 			if(this.getFileById(id))return;
 			this.stage.dontUpdateMiniMap = true;
 			this.stage.clearStageItems();
 			this.stage.files[id] = {
 				name : id,
 				items : [],
-				size : obj && obj.w && obj.h ? ({w : obj.w, h : obj.h}) : {w : this.stage.baseWidth, h : this.stage.baseHeight}
+				size : obj && obj.w && obj.h ? ({w : obj.w, h : obj.h}) : {w : this.stage.baseWidth, h : this.stage.baseHeight},
+				type : type || 'tilemap'
 			};
 			this.changeFile(id);
 			this.stage.updateCanvas();
-			if(obj.data)
+			if(obj && obj.data)
 				this.createItemsFromRaw(obj.data);
 			this.stage.snapshot.updateSnapshotCanvas();
 		},
@@ -36,11 +37,20 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 		},
 		loadTileMap : function(map) {
 			$http.get('/load-tilemap/' + map.id).then(function(data) {
-				this.createFile(map.id, data.data);
+				this.createFile(map.id, 'map', data.data);
 			}.bind(this));
+		},
+		loadSpriteSheet : function(spritesheet) {
+			// $http.get('/load-spritesheet/' + spritesheet.id).then(function(data) {
+				this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600});
+				this.stage.createSpriteSheet({spritesheet : spritesheet, w : 800, h : 600})
+			this.stage.setupModes();
+				// this.stage.draw.spritesheet(spritesheet);
+			// }.bind(this));
 		},
 		changeFile : function(file) {
 			this.stage.currentFile = this.stage.files[file];
+			this.stage.setupModes();
 		},
 		drawCurrentFile : function() {
 			var items = this.stage.currentFile.items;
@@ -52,7 +62,8 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 			this.stage.clearStageItems();	
 			this.stage.currentFile = this.getFileById(id);
 			this.drawCurrentFile();	
-			this.stage.snapshot.updateSnapshotCanvas();
+			this.stage.snapshot.updateSnapshotCanvas();		
+			this.stage.setupModes();
 		},
 		createItemsFromRaw : function(items) {
 			for(var i = 0; i < items.length; i++)

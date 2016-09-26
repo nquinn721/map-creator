@@ -19,13 +19,13 @@ app.factory('Snapshot', ['$timeout', function($timeout) {
 				stage = this.stage.getStage();
 
 			this.snapshotStage.children = null;
+			
 			for(var i = 0; i < stage.children.length; i++){
 				if(!stage.children[i].graphics)
 					children.push(stage.children[i].clone(true));
 			}
 			this.snapshotStage.children = children;
 			this.snapshotStage.update();
-			// this.createSnapShot();
 		},
 		createSnapShot : function() {
 			return this.create().src;

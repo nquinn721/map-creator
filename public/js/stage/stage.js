@@ -1,7 +1,7 @@
 app.factory('stage', [
-	'Preload', 'Draw', 'TileMap', 'Item', '$http', 'Selection', 'Paint', 'Erase', 'Move', 
+	'Preload', 'Draw', 'TileMap', 'Item', 'Spritesheet', '$http', 'Selection', 'Paint', 'Erase', 'Move',  'SheetCutter',
 	'keys', 'cursor', '$rootScope', 'Snapshot', 'File',
-	function(Preload, Draw, TileMap, Item, $http, Selection, Paint, Erase, Move, 
+	function(Preload, Draw, TileMap, Item, Spritesheet, $http, Selection, Paint, Erase, Move, SheetCutter,
 			keys, cursor, $rootScope, Snapshot, File) {
 
 	function Stage(stageId) {
@@ -9,7 +9,7 @@ app.factory('stage', [
 		this.CELL_HEIGHT = 25;
 		this.mode = 'paint';
 		this.stage = new createjs.Stage(stageId);
-
+		this.stage.enableMouseOver(20);  
 		this.baseWidth = 2000;
 		this.baseHeight = 2000;
 
@@ -22,17 +22,22 @@ app.factory('stage', [
 
 		// Modes
 		this.modes = {
+		}
+		this.mapModes = {
 			paint : new Paint(this),
 			selection : new Selection(this),
 			move : new Move(this),
 			erase : new Erase(this)
 		}
-
+		this.spritesheetModes = {
+			sheetCutter : new SheetCutter(this)
+		}
 		this.files = {
 			'untitled.js' : {
 				name : 'untitled.js',
 				items : [],
-				size : {w : this.baseWidth, h : this.baseHeight}
+				size : {w : this.baseWidth, h : this.baseHeight},
+				type : 'tilemap'
 			}
 		};
 		this.currentFile = this.files['untitled.js'];
@@ -57,6 +62,7 @@ app.factory('stage', [
 				this.updateCanvas();
 				this.update();
 				this.snapshot.createSnapShot();
+				this.setupModes();
 				$rootScope.$apply();
 			}.bind(this));
 		},
@@ -76,6 +82,16 @@ app.factory('stage', [
 				this.setMode('move');
 			if(key === 'e')
 				this.setMode('erase');
+
+			for(var i in this.modes)
+				if(this.modes[i].keydown)this.modes[i].keydown(key, e);
+		},
+		keyup : function(e) {
+			if(e.target.localName === 'input')return true;
+
+			var key = keys(e);
+			for(var i in this.modes)
+				if(this.modes[i].keyup)this.modes[i].keyup(key, e);
 		},
 		setupClickEvents : function() {
 			this.getStage().on('stagemousedown', this.mouseDown.bind(this));
@@ -91,7 +107,9 @@ app.factory('stage', [
 			this.stage.canvas.height = this.currentFile.size.h;
 			this.snapshot.updateCanvas();
 			this.draw.clearLines();
-			this.draw.drawCanvasGrid();	
+			if(this.currentFile.type !== 'spritesheet'){
+				this.draw.drawCanvasGrid();	
+			}
 		},
 		setCurrentItem : function(id) {
 			this.currentItem = this.getLoadedItemById(id);
@@ -119,7 +137,7 @@ app.factory('stage', [
 		},
 		mouseMove : function(e) {
 			this.mouseMoveMouseCoords = this.getMouseAndRowCoords(e);
-			if(this.modes[this.mode][this.mode + 'FollowMouse'])this.modes[this.mode][this.mode + 'FollowMouse'](e);
+			if(this.modes[this.mode] && this.modes[this.mode][this.mode + 'FollowMouse'])this.modes[this.mode][this.mode + 'FollowMouse'](e);
 
 			if(!this.drawing)return;
 			if(this.isMoving){
@@ -128,7 +146,6 @@ app.factory('stage', [
 
 			this.setModeFromMouseEvent('', e);
 			this.dontUpdateMiniMap = false;
-
 
 		},
 		setMode : function(mode) {
@@ -142,9 +159,11 @@ app.factory('stage', [
 		},
 		setModeFromMouseEvent : function(mouseEvent, e) {
 			if(this.overRideMode){
+				if(!this.modes[this.overRideMode])return;
 				if(this.modes[this.overRideMode][this.overRideMode + mouseEvent])
 					this.modes[this.overRideMode][this.overRideMode + mouseEvent](e);
 			} else{
+				if(!this.modes[this.mode])return;
 				if(this.modes[this.mode][this.mode + mouseEvent])
 					this.modes[this.mode][this.mode + mouseEvent](e);
 			}
@@ -193,6 +212,18 @@ app.factory('stage', [
 		updateLoadedItem : function(id, attr, value) {
 			var item = this.getLoadedItemById(id);
 			item[attr] = value;	
+		},
+		createSpriteSheet : function(spriteSheetName, w, h) {
+			var obj = spriteSheetName instanceof Object ? spriteSheetName : {
+				spritesheet : spriteSheetName,
+				w : w,
+				h : h
+			}, item;
+
+			item = new Spritesheet(this, obj);
+			item.drawImg();
+			this.addItem(item);
+			this.snapshot.updateSnapshotCanvas();		
 		},
 		createItem : function(row, col, x, y, w, h, file, src, element) {
 			var obj = row instanceof Object ? row : {
@@ -257,21 +288,31 @@ app.factory('stage', [
 		},
 		addChild : function(child) {
 			this.stage.addChild(child);
-			if(!this.dontUpdateMiniMap){
-				console.log('updateg');
-				this.snapshot.updateSnapshotCanvas();
-			}
-		},
-		removeChild : function(child) {
-			this.stage.removeChild(child);
 			if(!this.dontUpdateMiniMap)
 				this.snapshot.updateSnapshotCanvas();
+		},
+		removeChild : function() {
+			this.stage.removeChild.apply(this.stage, arguments);
+			if(!this.dontUpdateMiniMap)
+				this.snapshot.updateSnapshotCanvas();
+		},
+		setupModes : function() {
+			this.modes = {};
+			if(this.currentFile.type === 'tilemap')
+				for(var i in this.mapModes)
+					this.modes[i] = this.mapModes[i];
+			else
+				for(var i in this.spritesheetModes)
+					this.modes[i] = this.spritesheetModes[i];
+
+			var keys = Object.keys(this.modes);
+			this.mode = this.modes[keys[0]].name;
 		},
 		
 		update : function() {
 			setInterval(function() {
 				this.stage.update();
-			}.bind(this), 10)
+			}.bind(this), 10);
 		},
 	}
 

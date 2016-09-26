@@ -70,10 +70,18 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 				});
 			}
 		});
-		
+	}
+	vm.updateSpriteSheets = function() {
+		vm.spritesheets = [];
+		$http.get('/spritesheet-names').then(function(data) {
+			for(var i = 0; i < data.data.length; i++){
+				vm.spritesheets.push(data.data[i]);
+			}
+		});
 	}
 
 	vm.updateTileMaps();
+	vm.updateSpriteSheets();
 
 	keyEvents.register('keydown', 'ctrl', function() {
 		vm.keys.ctrl = true;

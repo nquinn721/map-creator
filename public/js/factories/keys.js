@@ -2,6 +2,7 @@ app.factory('keys', function() {
 	var keys = {
 		17 : 'ctrl',
 		46 : 'delete',
+		32 : 'spacebar',
 		27 : 'esc',
 		65 : 'a',
 		66 : 'b',

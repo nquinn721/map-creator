@@ -1,5 +1,6 @@
 app.controller('StageItemInfoMenu', ['$scope', 'watch', 'stage', function($scope, watch, stage) {
 	var vm = this;
+	vm.stage = stage;
 
 
 	watch(vm, 'element', function(value) {

@@ -1,4 +1,4 @@
-app.factory('Draw', function() {
+app.factory('Draw', ['ResizableSquare', function(ResizableSquare) {
 		
 	function Draw(stage) {
 		this.stage = stage;
@@ -20,6 +20,7 @@ app.factory('Draw', function() {
 		selection : function(x, y, w, h) {
 			w = w - x;
 			h = h - y;
+
 			this.destroySelection();
 			this.selectionBox = this.square(x, y, w, h);
 			return this.selectionBox;
@@ -27,13 +28,28 @@ app.factory('Draw', function() {
 		destroySelection : function() {
 			if(this.selectionBox)this.stage.getStage().removeChild(this.selectionBox);
 		},
+		spritesheet : function(spritesheet) {
+			if(this.currentSpriteSheet)this.stage.removeChild(this.currentSpriteSheet);
+			var img = new createjs.Bitmap('spritesheets/' + spritesheet);
+			img.image.onload =function() {
+				img.scaleY = this.stage.getStage().canvas.height / img.image.height;
+				img.scaleX = this.stage.getStage().canvas.width / img.image.width;
+			}.bind(this);
+			this.currentSpriteSheet = img;
+			this.stage.addChild(img);
+			return img;
+		},
+		createResizableSquare : function() {
+			var rs = new ResizableSquare(this.stage, this);
+			return rs;
+		},
+
 		square : function(x, y, w, h, stroke, color) {
 			var g = new createjs.Shape();
 			g.graphics.beginStroke(stroke || "blue")
 				.beginFill(color || "rgba(18, 30, 185, 0.58)")
 				.drawRect(x, y, w, h);
 			this.stage.addChild(g);
-
 			return g;
 		},
 		img : function(obj) {
@@ -60,4 +76,4 @@ app.factory('Draw', function() {
 	}
 
 	return Draw;
-});
+}]);
