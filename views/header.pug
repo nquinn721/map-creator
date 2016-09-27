@@ -38,7 +38,7 @@
     .size
       .width
         span W:
-        input.form-control(type='number', value='1600', step='25', ng-model="m.stage.currentFile.size.w", ng-change="m.stage.setSize()")
+        input.form-control.number(value='1600', step='25', ng-model="m.stage.currentFile.size.w", ng-change="m.stage.setSize()")
       .height
         span H:
-        input.form-control(type='number', value='800', step='25', ng-model="m.stage.currentFile.size.h", ng-change="m.stage.setSize()")
+        input.form-control.number(value='800', step='25', ng-model="m.stage.currentFile.size.h", ng-change="m.stage.setSize()")

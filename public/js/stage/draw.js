@@ -54,8 +54,8 @@ app.factory('Draw', ['ResizableSquare', function(ResizableSquare) {
 				.beginFill(color || "rgba(18, 30, 185, 0.58)")
 				.drawRect(x, y, w, h);
 
-			if(!dontAddChild)
-				this.stage.addChild(g);
+			// if(!dontAddChild)
+			// 	this.stage.addChild(g);
 			return g;
 		},
 		rawSquare : function(x, y, w, h, stroke, color) {

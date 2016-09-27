@@ -21,8 +21,8 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 			this.h = h || this.h;
 			this.destroy();
 			this.body = this.stage.draw.squareContainer(this.x, this.y, this.w, this.h);
-			this.createCorners(this.x, this.y, this.w, this.h);
 			this.drawFrameNumber();
+			this.createCorners(this.x, this.y, this.w, this.h);
 			this.createBodyEvents();
 		},
 		createBodyEvents : function() {
@@ -32,6 +32,7 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 		drawFrameNumber : function() {
 			var text = this.stage.draw.text(this.frameNumber, '11px', '#eee');
 			text.x += 8;
+			text.y += 1;
 			var textbackground = this.stage.draw.square(0,0, 15, 15, 'none', '#222', true);
 			this.body.addChild(textbackground, text);
 		},
@@ -98,8 +99,7 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 			if(!this.originalY)this.originalY = e.stageY;
 			var newx = e.stageX - this.originalX,
 				newy = e.stageY - this.originalY,
-				canvas = this.stage.getStage().canvas,
-				xDidntMove, yDidntMove;
+				canvas = this.stage.getStage().canvas;
 
 			if(this.spacebar){
 				if(newx !== 0 && !this.lockedVertical){

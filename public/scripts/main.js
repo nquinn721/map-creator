@@ -403,7 +403,11 @@ $('.file-loader').on('click', function() {
 		self.val(filename);
 	});
 });
-$(".items-menu .menu-content").mCustomScrollbar();
+
+$('.scrollable').perfectScrollbar();
+$('.number').spinner();
+
+// $(".items-menu .menu-content").mCustomScrollbar();
 // $('.grid').mCustomScrollbar();
 // $('.grid').scrollbar();
 
@@ -465,7 +469,6 @@ $('.radio-inline').find(':checked').each(function() {
 });
 
 
-    $('.grid').perfectScrollbar();
 
 app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', function($document, $scope, watch, keys, stage) {
 	var vm = this,
@@ -889,6 +892,7 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 				this.stage.mouseMoveMouseCoords.x, 
 				this.stage.mouseMoveMouseCoords.y
 			);
+			this.stage.addChild(this.stage.selectionBox);
 		},
 		selectionMouseUp : function() {
 			if(!this.stage.selectionBox)return;
@@ -1339,8 +1343,8 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 			this.h = h || this.h;
 			this.destroy();
 			this.body = this.stage.draw.squareContainer(this.x, this.y, this.w, this.h);
-			this.createCorners(this.x, this.y, this.w, this.h);
 			this.drawFrameNumber();
+			this.createCorners(this.x, this.y, this.w, this.h);
 			this.createBodyEvents();
 		},
 		createBodyEvents : function() {
@@ -1350,6 +1354,7 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 		drawFrameNumber : function() {
 			var text = this.stage.draw.text(this.frameNumber, '11px', '#eee');
 			text.x += 8;
+			text.y += 1;
 			var textbackground = this.stage.draw.square(0,0, 15, 15, 'none', '#222', true);
 			this.body.addChild(textbackground, text);
 		},
@@ -1416,8 +1421,7 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 			if(!this.originalY)this.originalY = e.stageY;
 			var newx = e.stageX - this.originalX,
 				newy = e.stageY - this.originalY,
-				canvas = this.stage.getStage().canvas,
-				xDidntMove, yDidntMove;
+				canvas = this.stage.getStage().canvas;
 
 			if(this.spacebar){
 				if(newx !== 0 && !this.lockedVertical){
@@ -1541,8 +1545,8 @@ app.factory('Draw', ['ResizableSquare', function(ResizableSquare) {
 				.beginFill(color || "rgba(18, 30, 185, 0.58)")
 				.drawRect(x, y, w, h);
 
-			if(!dontAddChild)
-				this.stage.addChild(g);
+			// if(!dontAddChild)
+			// 	this.stage.addChild(g);
 			return g;
 		},
 		rawSquare : function(x, y, w, h, stroke, color) {
@@ -1707,6 +1711,7 @@ app.factory('Item', function () {
 	Item.prototype = {
 		drawImg : function() {
 			this.img = this.stage.draw.img(this);
+			this.stage.addChild(this.img);
 			this.img.on('click', this.click.bind(this));
 			this.img.on('pressmove', this.pressmove.bind(this));
 		},

@@ -14,6 +14,7 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 				this.stage.mouseMoveMouseCoords.x, 
 				this.stage.mouseMoveMouseCoords.y
 			);
+			this.stage.addChild(this.stage.selectionBox);
 		},
 		selectionMouseUp : function() {
 			if(!this.stage.selectionBox)return;

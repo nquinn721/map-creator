@@ -70,9 +70,8 @@
         background: #222;
         input, select {
             font-size: 12px;
-            height: 25px !important;
+            height: 26px;
             margin-left: 5px;
-            padding: 5px !important;
         }
         .item-info {
             input, select {
@@ -120,8 +119,8 @@
                 align-items: center;
             }
             input{
-                width: 55px;
-
+                width: 35px;
+    
             }
         }
 
@@ -130,3 +129,18 @@
 
 }
 
+
+
+/** jQuery UI overrides **/
+span.ui-spinner.ui-corner-all.ui-widget.ui-widget-content {
+    height: 25px !important;
+}
+
+input.form-control.number.ui-spinner-input.ng-pristine.ng-valid.ng-not-empty.ng-touched {
+    padding: 0 !important;
+}
+
+
+input.form-control.number.ui-spinner-input {
+    height: 19px;
+}

@@ -21,6 +21,7 @@ app.factory('Item', function () {
 	Item.prototype = {
 		drawImg : function() {
 			this.img = this.stage.draw.img(this);
+			this.stage.addChild(this.img);
 			this.img.on('click', this.click.bind(this));
 			this.img.on('pressmove', this.pressmove.bind(this));
 		},

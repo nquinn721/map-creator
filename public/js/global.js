@@ -29,7 +29,11 @@ $('.file-loader').on('click', function() {
 		self.val(filename);
 	});
 });
-$(".items-menu .menu-content").mCustomScrollbar();
+
+$('.scrollable').perfectScrollbar();
+$('.number').spinner();
+
+// $(".items-menu .menu-content").mCustomScrollbar();
 // $('.grid').mCustomScrollbar();
 // $('.grid').scrollbar();
 
@@ -91,4 +95,3 @@ $('.radio-inline').find(':checked').each(function() {
 });
 
 
-    $('.grid').perfectScrollbar();
