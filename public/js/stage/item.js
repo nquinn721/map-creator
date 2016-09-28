@@ -26,13 +26,16 @@ app.factory('Item', function () {
 			this.img.on('pressmove', this.pressmove.bind(this));
 		},
 		click : function() {
-			if(this.selected)
-				this.deselect();
-			else
-				this.select();
-			this.stage.modes.move.moveMouseUp();
+			if(!this.isMoving){
+				if(this.selected)
+					this.deselect();
+				else
+					this.select();
+			}
+			this.isMoving = false;
 		},
 		pressmove : function(e) {
+			this.isMoving = true;
 			this.stage.modes.move.move();
 		},
 		move : function (obj) {
@@ -49,7 +52,8 @@ app.factory('Item', function () {
 		},
 		select : function() {
 			if(this.selected)return;
-			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');	
+			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
+			this.stage.addChild(this.selectionBox);
 			this.selected = true;
 			this.stage.updateSelectedItems();
 		},

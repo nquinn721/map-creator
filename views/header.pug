@@ -28,9 +28,9 @@
     .item-info
       img(ng-src="{{m.stage.currentItem.src}}")
       span Element Type
-      input.form-control(value="floor", ng-model="m.stage.currentItem.elType")
+      input(value="floor", ng-model="m.stage.currentItem.elType")
       span Body Type
-      select.form-control(ng-model="m.stage.currentItem.body")
+      select(ng-model="m.stage.currentItem.body")
         option(value="static") static
         option(value="dynamic") dynamic
         option(value="kinematic") kinematic
@@ -38,7 +38,7 @@
     .size
       .width
         span W:
-        input.form-control.number(value='1600', step='25', ng-model="m.stage.currentFile.size.w", ng-change="m.stage.setSize()")
+        input(type="number", value='1600', step='25', ng-model="m.stage.currentFile.size.w", ng-change="m.stage.setSize()")
       .height
         span H:
-        input.form-control.number(value='800', step='25', ng-model="m.stage.currentFile.size.h", ng-change="m.stage.setSize()")
+        input(type="number", value='800', step='25', ng-model="m.stage.currentFile.size.h", ng-change="m.stage.setSize()")

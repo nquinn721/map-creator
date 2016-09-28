@@ -31,11 +31,8 @@ $('.file-loader').on('click', function() {
 });
 
 $('.scrollable').perfectScrollbar();
-$('.number').spinner();
+// $('.number').spinner();
 
-// $(".items-menu .menu-content").mCustomScrollbar();
-// $('.grid').mCustomScrollbar();
-// $('.grid').scrollbar();
 
 $('.grid').on('scroll', function() {
   setUpMiniMapScrollLocation();

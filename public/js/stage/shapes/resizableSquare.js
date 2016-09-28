@@ -24,6 +24,7 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 			this.drawFrameNumber();
 			this.createCorners(this.x, this.y, this.w, this.h);
 			this.createBodyEvents();
+			this.stage.addChild(this.body);
 		},
 		createBodyEvents : function() {
 			this.body.on('pressmove', this.bodypressmove.bind(this));

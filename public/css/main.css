@@ -99,6 +99,19 @@ ul.nav.nav-tabs {
   position: absolute;
   left: -9999px;
 }
+input,
+select {
+  background: none !important;
+  color: #d64242 !important;
+  border-bottom: 1px solid white !important;
+  border-radius: 0 !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+}
+input {
+  padding-left: 5px;
+}
 .new-file-splash {
   background: rgba(0, 0, 0, 0.4);
   position: absolute;
@@ -312,7 +325,7 @@ ul.nav.nav-tabs {
   width: 50%;
 }
 .grid .stage-item-info-menu {
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 25%;
   height: 40%;
@@ -396,7 +409,6 @@ ul.nav.nav-tabs {
   width: 50%;
   border: 1px solid black;
   border-radius: 5px;
-  padding: 0 8px;
   color: white;
   background: #111;
 }
@@ -405,7 +417,6 @@ ul.nav.nav-tabs {
   border: 1px solid black;
   border-radius: 5px;
   width: 50%;
-  padding: 0 5px;
 }
 .grid .current-item {
   position: absolute;
@@ -546,7 +557,7 @@ ul.nav.nav-tabs {
   align-items: center;
 }
 .header .header-panel .size input {
-  width: 35px;
+  width: 52px;
 }
 /** jQuery UI overrides **/
 span.ui-spinner.ui-corner-all.ui-widget.ui-widget-content {

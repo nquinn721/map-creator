@@ -21,6 +21,8 @@ app.factory('SheetCutter', function() {
 		sheetCutter : function() {
 			if(!this.currentFrame)return;
 
+			this.creatingFrame = true;
+
 			var x = this.stage.mouseDownMouseCoords.x,
 				y = this.stage.mouseDownMouseCoords.y, 
 				w = this.stage.mouseMoveMouseCoords.x, 
@@ -36,11 +38,9 @@ app.factory('SheetCutter', function() {
 			}
 
 			if(w > 10 && h > 10){
-				console.log('create');
 				this.currentFrame.create(x, y, w, h);
 				this.destroyFrame = false;
 			}else{
-				console.log('destroy');
 				this.destroyFrame = true;
 			}
 			
@@ -48,12 +48,12 @@ app.factory('SheetCutter', function() {
 		
 
 		sheetCutterMouseUp : function() {
-			console.log(this.destroyFrame);
-			if(this.currentFrame && !this.destroyFrame){
+			if(this.currentFrame && !this.destroyFrame && this.creatingFrame){
 				this.stage.currentFile.frames.push(this.currentFrame);
 
 			}
 			this.currentFrame = null;
+			this.creatingFrame = false;
 		},
 		keydown : function(key) {
 		}

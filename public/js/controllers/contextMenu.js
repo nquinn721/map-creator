@@ -48,6 +48,7 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 			else vm.options = menus.base;
 			vm.contextMenu = true;
 			vm.contextMenuPos = coords;
+			console.log(vm.options);
 		}else{
 			vm.contextMenu = false;
 			vm.options = menus.base;

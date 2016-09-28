@@ -8,6 +8,9 @@
 	.combine(ng-if="cm.options.combine", ng-click="cm.combineSelected()") 
 		i.fa.fa-chain
 		| Combine
+	.delete(ng-if="cm.options.delete", ng-click="cm.deleteSelected()")
+		i.fa.fa-trash
+		| Delete
 	.fill.pointer(ng-if="cm.options.fill", ng-click="cm.fillSelected()") 
 		i.fa.fa-th-large
 		| Fill?

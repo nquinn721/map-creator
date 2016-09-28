@@ -41,7 +41,8 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 					w : w, 
 					h : h
 				}
-				this.showFillMenu();
+				if(w > 10 && h > 10)
+					this.showFillMenu();
 			}
 		},
 		
