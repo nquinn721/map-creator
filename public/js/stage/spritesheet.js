@@ -1,7 +1,7 @@
 app.factory('Spritesheet', function() {
 	function Spritesheet(stage, obj) {
 		this.stage = stage;
-		this.file = obj.spritesheet;
+		this.file = 'img/' + obj.spritesheet;
 		this.frames = [];
 		this.animations = {};
 	}

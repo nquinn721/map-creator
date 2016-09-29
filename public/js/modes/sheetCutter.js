@@ -15,7 +15,7 @@ app.factory('SheetCutter', function() {
 	SheetCutter.prototype = {
 		sheetCutterMouseDown : function(e) {
 			if(!e.relatedTarget)
-				this.currentFrame = this.stage.draw.createResizableSquare();
+				this.currentFrame = this.stage.createFrame();
 			
 		},
 		sheetCutter : function() {
@@ -38,7 +38,7 @@ app.factory('SheetCutter', function() {
 			}
 
 			if(w > 10 && h > 10){
-				this.currentFrame.create(x, y, w, h);
+				this.currentFrame.create(this.stage.currentFile.frames.length + 1, x, y, w, h);
 				this.destroyFrame = false;
 			}else{
 				this.destroyFrame = true;

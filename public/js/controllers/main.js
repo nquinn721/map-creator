@@ -34,8 +34,13 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 
 
 	$doc.find('body').on('mousemove', '#map-creator', function(e) {
+		vm.hideCurrentItem = false;
 		vm.currentItemStyle = {left : e.offsetX + 80, top : e.offsetY + 40};
 		$scope.$apply();
+	}).on('mouseleave', '#map-creator', function() {
+		vm.hideCurrentItem = true;
+		$scope.$apply();
+		
 	});
 	
 	

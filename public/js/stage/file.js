@@ -1,4 +1,4 @@
-app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
+app.factory('File', ['$http', '$rootScope', 'util',  function($http, $rootScope, util) {
 	function File(stage) {
 		this.stage = stage;
 	}
@@ -13,7 +13,8 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 				items : [],
 				size : obj && obj.w && obj.h ? ({w : obj.w, h : obj.h}) : {w : this.stage.baseWidth, h : this.stage.baseHeight},
 				type : type || 'tilemap',
-				frames : []
+				frames : obj && obj.frames || [],
+				spritesheet : obj && obj.spritesheet || null
 			};
 			this.changeFile(id);
 			this.stage.updateCanvas();
@@ -42,14 +43,18 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 			}.bind(this));
 		},
 		loadSpriteSheet : function(spritesheet) {
-			// $http.get('/load-spritesheet/' + spritesheet.id).then(function(data) {
+			$http.get('/load-spritesheet/' + spritesheet).then(function(data) {
 				if(!this.getFileById(spritesheet)){
-					this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600});
-					this.stage.createSpriteSheet({spritesheet : spritesheet, w : 800, h : 600})
+					// this.stage.createSpriteSheet({spritesheet : data.data.images[0], w : 800, h : 600})
+					this.stage.draw.spritesheet('img/' + data.data.images[0], function() {
+						this.stage.snapshot.updateSnapshotCanvas();
+						
+					}.bind(this)); 
+					
+					this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600, frames : this.createFramesFromRaw(data.data.frames), spritesheet : data.data.images[0]});
 					this.stage.setupModes();
 				}
-				// this.stage.draw.spritesheet(spritesheet);
-			// }.bind(this));
+			}.bind(this));
 		},
 		changeFile : function(file) {
 			this.stage.currentFile = this.stage.files[file];
@@ -77,13 +82,26 @@ app.factory('File', ['$http', '$rootScope', function($http, $rootScope) {
 			for(var i = 0; i < items.length; i++)
 				this.stage.createItem(items[i]);
 		},
+		createFramesFromRaw : function(frames) {
+			var frameCol = [];
+			for(var i = 0; i < frames.length; i++){
+				var obj = frames[i],
+					frame = this.stage.createFrame();
+				frame.create(i + 1, obj[0], obj[1], obj[2], obj[3]);
+				frameCol.push(frame);
+			}
+			return frameCol;
+		},
 		getFileById : function(id) {
 			for(var i in this.stage.files)
 				if(this.stage.files[i].name === id)return this.stage.files[i];
 		},
 		save : function() {
 			this.stage.currentFile.isDirty = false;
-			this.stage.tileMap.jsonTileMap();
+			if(this.stage.currentFile.type === 'tilemap')
+				this.stage.save.jsonTileMap();
+			else
+				this.stage.save.spritesheet();
 			this.stage.currentFile.saved = true;
 			setTimeout(function() {
 				this.stage.currentFile.saved = false;

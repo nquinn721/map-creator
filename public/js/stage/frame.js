@@ -1,13 +1,13 @@
-app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
-	function ResizableSquare(stage) {
+app.factory('Frame', ['keyEvents', function(keyEvents) {
+	function Frame(stage) {
 		this.stage = stage;
 		keyEvents.register('keydown', 'spacebar', this.keydown.bind(this));
 		keyEvents.register('keyup', 'spacebar', this.keyup.bind(this));
 	}
 
-	ResizableSquare.prototype = {
-		create : function(x, y, w, h) {
-			this.frameNumber = this.stage.currentFile.frames.length + 1;
+	Frame.prototype = {
+		create : function(frameNumber, x, y, w, h) {
+			this.frameNumber = frameNumber || this.frameNumber;
 			this.createElements(x, y, w, h);
 		},
 		destroy : function() {
@@ -90,7 +90,7 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 				h = (body.y + body.h) - y;
 			}
 
-			this.create(x,y,w,h);
+			this.create(this.frameNumber, x,y,w,h);
 		},
 		pressup : function() {
 		},
@@ -166,5 +166,5 @@ app.factory('ResizableSquare', ['keyEvents', function(keyEvents) {
 			this.verticalLine = false;
 		}
 	}
-	return ResizableSquare;
+	return Frame;
 }]);

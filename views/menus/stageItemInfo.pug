@@ -14,7 +14,7 @@ div(ng-controller="StageItemInfoMenu as info")
 				input(type="number", value="32", ng-model="info.stage.modes.sheetCutter.frameHeight")
 			.info.input-group
 				span Frames
-				input(ng-model="info.stage.currentFile.frames.length")
+				span {{info.stage.currentFile.frames.length}}
 			.info.input-group.frame(ng-repeat="frame in info.stage.currentFile.frames")
 				.frame-number
 					| Frame {{info.stage.currentFile.frames.indexOf(frame) + 1}}

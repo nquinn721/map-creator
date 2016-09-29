@@ -47,6 +47,9 @@ app.get('/tilemap-names', function(req, res) {
 
 app.get('/spritesheet-names', function(req, res) {
 	var files = fs.readdirSync('spritesheets');
+	files = files.map(function(file) {
+		if(file.indexOf('.js') > -1)return file;
+	});
 	res.send(files);
 });
 
@@ -76,6 +79,7 @@ app.get('/load-tilemap/:map', function(req, res) {
 
 app.get('/load-spritesheet/:spritesheet', function(req, res) {
 	if(!req.params.spritesheet)return;
+	console.log(req.params.spritesheet);
 	res.sendFile(__dirname + '/spritesheets/' + req.params.spritesheet);
 });
 
@@ -84,6 +88,13 @@ app.post('/save-tilemap', jsonParser, function(req, res) {
 	if (!req.body) return res.sendStatus(400);
 
 	fs.writeFile('tilemaps/'+req.body.name, JSON.stringify(req.body.data), function (err) {
+		console.log(err);
+	});
+});
+app.post('/save-spritesheet', jsonParser, function(req, res) {
+	if (!req.body) return res.sendStatus(400);
+
+	fs.writeFile('spritesheets/'+req.body.name, JSON.stringify(req.body.data), function (err) {
 		console.log(err);
 	});
 });

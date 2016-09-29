@@ -1,4 +1,4 @@
-app.factory('Draw', ['ResizableSquare', function(ResizableSquare) {
+app.factory('Draw', [function() {
 		
 	function Draw(stage) {
 		this.stage = stage;
@@ -28,20 +28,17 @@ app.factory('Draw', ['ResizableSquare', function(ResizableSquare) {
 		destroySelection : function() {
 			if(this.selectionBox)this.stage.getStage().removeChild(this.selectionBox);
 		},
-		spritesheet : function(spritesheet) {
+		spritesheet : function(spritesheet, cb) {
 			if(this.currentSpriteSheet)this.stage.removeChild(this.currentSpriteSheet);
 			var img = new createjs.Bitmap('spritesheets/' + spritesheet);
 			img.image.onload =function() {
 				img.scaleY = this.stage.getStage().canvas.height / img.image.height;
 				img.scaleX = this.stage.getStage().canvas.width / img.image.width;
+				cb && cb();
 			}.bind(this);
 			this.currentSpriteSheet = img;
 			this.stage.addChild(img);
 			return img;
-		},
-		createResizableSquare : function() {
-			var rs = new ResizableSquare(this.stage, this);
-			return rs;
 		},
 		text : function(text, font, color, align) {
 			var label = new createjs.Text(text, font || "bold 14px Arial", color || "#FFFFFF");

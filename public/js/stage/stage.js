@@ -1,7 +1,7 @@
 app.factory('stage', [
-	'Preload', 'Draw', 'TileMap', 'Item', 'Spritesheet', '$http', 'Selection', 'Paint', 'Erase', 'Move',  'SheetCutter',
+	'Preload', 'Draw', 'Save', 'Item', 'Frame', 'Spritesheet', '$http', 'Selection', 'Paint', 'Erase', 'Move',  'SheetCutter',
 	'keys', 'cursor', '$rootScope', 'Snapshot', 'File',
-	function(Preload, Draw, TileMap, Item, Spritesheet, $http, Selection, Paint, Erase, Move, SheetCutter,
+	function(Preload, Draw, Save, Item, Frame, Spritesheet, $http, Selection, Paint, Erase, Move, SheetCutter,
 			keys, cursor, $rootScope, Snapshot, File) {
 
 	function Stage(stageId) {
@@ -15,7 +15,7 @@ app.factory('stage', [
 
 		// Classes
 		this.draw = new Draw(this);
-		this.tileMap = new TileMap(this);
+		this.save = new Save(this);
 		this.snapshot = new Snapshot(this);
 		this.file = new File(this);
 		this.preload = new Preload;
@@ -224,6 +224,10 @@ app.factory('stage', [
 			item.drawImg();
 			this.addItem(item);
 			this.snapshot.updateSnapshotCanvas();		
+		},
+		createFrame : function() {
+			var frame = new Frame(this);
+			return frame;
 		},
 		createItem : function(row, col, x, y, w, h, file, src, element) {
 			var obj = row instanceof Object ? row : {

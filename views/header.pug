@@ -23,7 +23,7 @@
         li.map(ng-repeat="map in file.maps", ng-click="m.stage.file.loadTileMap(map)", ng-if="map.label") {{map.id}}
     .map Sprite Sheets
       ul.dropdown
-        li.map(ng-repeat="spritesheet in file.spritesheets", ng-click="m.stage.file.loadSpriteSheet(spritesheet)") {{spritesheet}}
+        li.map(ng-repeat="spritesheet in file.spritesheets", ng-click="m.stage.file.loadSpriteSheet(spritesheet)", ng-if="spritesheet") {{spritesheet}}
   .header-panel
     .item-info
       img(ng-src="{{m.stage.currentItem.src}}")
