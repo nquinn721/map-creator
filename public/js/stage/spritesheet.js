@@ -6,8 +6,10 @@ app.factory('Spritesheet', function() {
 		this.animations = {};
 	}
 	Spritesheet.prototype = {
-		drawImg : function() {
-			this.img = this.stage.draw.spritesheet(this.file);
+		drawImg : function(cb) {
+			this.img = this.stage.draw.spritesheet(this.file, function() {
+				this.stage.snapshot.updateSnapshotCanvas();
+			}.bind(this));
 		},
 		createAnimation : function (name) {
 			this.animations[name] = [];

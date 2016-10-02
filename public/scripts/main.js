@@ -1482,6 +1482,12 @@ app.factory('File', ['$http', '$rootScope', 'util',  function($http, $rootScope,
 				spritesheet : obj && obj.spritesheet || null
 			};
 			this.changeFile(id);
+
+			if(type === 'spritesheet'){
+				this.stage.createSpriteSheet({spritesheet : obj.spritesheet, w : 800, h : 600})
+				this.stage.files[id].frames =  this.createFramesFromRaw(obj.frames);
+			}
+
 			this.stage.updateCanvas();
 			if(obj && obj.data)
 				this.createItemsFromRaw(obj.data);
@@ -1510,13 +1516,11 @@ app.factory('File', ['$http', '$rootScope', 'util',  function($http, $rootScope,
 		loadSpriteSheet : function(spritesheet) {
 			$http.get('/load-spritesheet/' + spritesheet).then(function(data) {
 				if(!this.getFileById(spritesheet)){
-					// this.stage.createSpriteSheet({spritesheet : data.data.images[0], w : 800, h : 600})
-					this.stage.draw.spritesheet('img/' + data.data.images[0], function() {
-						this.stage.snapshot.updateSnapshotCanvas();
+					// this.stage.draw.spritesheet('img/' + data.data.images[0], function() {
 						
-					}.bind(this)); 
+					// }); 
 					
-					this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600, frames : this.createFramesFromRaw(data.data.frames), spritesheet : data.data.images[0]});
+					this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600, frames : data.data.frames, spritesheet : data.data.images[0]});
 					this.stage.setupModes();
 				}
 			}.bind(this));
@@ -1952,8 +1956,10 @@ app.factory('Spritesheet', function() {
 		this.animations = {};
 	}
 	Spritesheet.prototype = {
-		drawImg : function() {
-			this.img = this.stage.draw.spritesheet(this.file);
+		drawImg : function(cb) {
+			this.img = this.stage.draw.spritesheet(this.file, function() {
+				this.stage.snapshot.updateSnapshotCanvas();
+			}.bind(this));
 		},
 		createAnimation : function (name) {
 			this.animations[name] = [];
@@ -2010,7 +2016,8 @@ app.factory('stage', [
 				name : 'untitled.js',
 				items : [],
 				size : {w : this.baseWidth, h : this.baseHeight},
-				type : 'tilemap'
+				type : 'tilemap',
+				frames : []
 			}
 		};
 		this.currentFile = this.files['untitled.js'];
@@ -2218,7 +2225,9 @@ app.factory('stage', [
 			if(this.getItemByXY(x, y))return;
 			obj = $.extend(obj, this.getLoadedItemById(element));
 			item = new Item(this, obj);
-			item.drawImg();
+			item.drawImg(function() {
+				this.stage.snapshot.updateSnapshotCanvas();
+			}.bind(this));
 			
 			this.addItem(item);
 		},
@@ -2240,9 +2249,8 @@ app.factory('stage', [
 			for(var i = 0; i < this.currentFile.items.length; i++)
 				this.currentFile.items[i].destroyImages();
 
-			if(this.currentFile.frames)
-				for(var i = 0; i < this.currentFile.frames.length; i++)
-					this.currentFile.frames[i].destroy();
+			for(var i = 0; i < this.currentFile.frames.length; i++)
+				this.currentFile.frames[i].destroyImages();
 		},
 		getRowColFromXY : function(x, y) {
 			return {row : Math.floor(y / this.CELL_HEIGHT), col : Math.floor(x / this.CELL_WIDTH)};

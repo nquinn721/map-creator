@@ -17,6 +17,12 @@ app.factory('File', ['$http', '$rootScope', 'util',  function($http, $rootScope,
 				spritesheet : obj && obj.spritesheet || null
 			};
 			this.changeFile(id);
+
+			if(type === 'spritesheet'){
+				this.stage.createSpriteSheet({spritesheet : obj.spritesheet, w : 800, h : 600})
+				this.stage.files[id].frames =  this.createFramesFromRaw(obj.frames);
+			}
+
 			this.stage.updateCanvas();
 			if(obj && obj.data)
 				this.createItemsFromRaw(obj.data);
@@ -45,13 +51,11 @@ app.factory('File', ['$http', '$rootScope', 'util',  function($http, $rootScope,
 		loadSpriteSheet : function(spritesheet) {
 			$http.get('/load-spritesheet/' + spritesheet).then(function(data) {
 				if(!this.getFileById(spritesheet)){
-					// this.stage.createSpriteSheet({spritesheet : data.data.images[0], w : 800, h : 600})
-					this.stage.draw.spritesheet('img/' + data.data.images[0], function() {
-						this.stage.snapshot.updateSnapshotCanvas();
+					// this.stage.draw.spritesheet('img/' + data.data.images[0], function() {
 						
-					}.bind(this)); 
+					// }); 
 					
-					this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600, frames : this.createFramesFromRaw(data.data.frames), spritesheet : data.data.images[0]});
+					this.createFile(spritesheet, 'spritesheet', {w : 800, h : 600, frames : data.data.frames, spritesheet : data.data.images[0]});
 					this.stage.setupModes();
 				}
 			}.bind(this));

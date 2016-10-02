@@ -37,7 +37,8 @@ app.factory('stage', [
 				name : 'untitled.js',
 				items : [],
 				size : {w : this.baseWidth, h : this.baseHeight},
-				type : 'tilemap'
+				type : 'tilemap',
+				frames : []
 			}
 		};
 		this.currentFile = this.files['untitled.js'];
@@ -245,7 +246,9 @@ app.factory('stage', [
 			if(this.getItemByXY(x, y))return;
 			obj = $.extend(obj, this.getLoadedItemById(element));
 			item = new Item(this, obj);
-			item.drawImg();
+			item.drawImg(function() {
+				this.stage.snapshot.updateSnapshotCanvas();
+			}.bind(this));
 			
 			this.addItem(item);
 		},
@@ -267,9 +270,8 @@ app.factory('stage', [
 			for(var i = 0; i < this.currentFile.items.length; i++)
 				this.currentFile.items[i].destroyImages();
 
-			if(this.currentFile.frames)
-				for(var i = 0; i < this.currentFile.frames.length; i++)
-					this.currentFile.frames[i].destroy();
+			for(var i = 0; i < this.currentFile.frames.length; i++)
+				this.currentFile.frames[i].destroyImages();
 		},
 		getRowColFromXY : function(x, y) {
 			return {row : Math.floor(y / this.CELL_HEIGHT), col : Math.floor(x / this.CELL_WIDTH)};
