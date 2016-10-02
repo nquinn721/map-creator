@@ -48,7 +48,6 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 			else vm.options = menus.base;
 			vm.contextMenu = true;
 			vm.contextMenuPos = coords;
-			console.log(vm.options);
 		}else{
 			vm.contextMenu = false;
 			vm.options = menus.base;
@@ -56,19 +55,19 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 	});
 
 	vm.deleteSelected = function() {
-		stage.modes.selection.destroySelectedItems();
+		stage.mapModes.selection.destroySelectedItems();
 		vm.contextMenu = false;
 		vm.options = menus.base;
 	};
 
 	vm.combineSelected = function() {
-		stage.modes.selection.combineSelectedItems();
+		stage.mapModes.selection.combineSelectedItems();
 		vm.contextMenu = false;
 		vm.options = menus.base;
 	};
 
 	vm.fillSelected = function() {
-		stage.modes.selection.fillSelected();
+		stage.mapModes.selection.fillSelected();
 		vm.contextMenu = false;
 		vm.options = menus.base;
 	}

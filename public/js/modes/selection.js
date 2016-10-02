@@ -92,6 +92,10 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 			}
 			this.stage.showcontextMenu = false;
 		},
+		destroyAllSelected : function() {
+			this.destroySelectedItems();
+			this.destroySelectedFrames();	
+		},
 		destroySelectedItems : function() {
 			var items = this.getSelectedItems(),
 				item;
@@ -101,12 +105,28 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 			}	
 			this.stage.showcontextMenu = false;
 		},
+		destroySelectedFrames : function() {
+			var frames = this.getSelectedFrames(),
+				frame;
+			for(var i = 0; i < frames.length; i++){
+				frame = frames[i];
+				frame.destroy();
+			}
+			this.stage.showcontextMenu = false;
+		},
 		getSelectedItems : function() {
 			var items = [],
 				stage = this.stage.currentFile;
 			for(var i = 0; i < stage.items.length; i++)	
 				if(stage.items[i].selected)items.push(stage.items[i]);
 			return items;
+		},
+		getSelectedFrames : function() {
+			var frames = [];
+				stage = this.stage.currentFile;
+			for(var i = 0; i < stage.frames.length; i++)
+				if(stage.frames[i].selected)frames.push(stage.frames[i]);
+			return frames;	
 		},
 		select : function(els) {
 			if(!Array.isArray(els))els = [els];

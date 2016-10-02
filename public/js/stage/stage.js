@@ -71,9 +71,9 @@ app.factory('stage', [
 
 			var key = keys(e);
 			if(key === 'delete')
-				this.modes.selection.destroySelectedItems();
+				this.mapModes.selection.destroyAllSelected();
 			if(key === 'esc')
-				this.modes.selection.deselectItems();
+				this.mapModes.selection.deselectItems();
 			if(key === 'p')
 				this.setMode('paint');
 			if(key === 's')
@@ -207,7 +207,7 @@ app.factory('stage', [
 			this.createItem(obj);
 		},
 		updateSelectedItems : function() {
-			this.selectedItems = this.modes.selection.getSelectedItems();	
+			this.selectedItems = this.mapModes.selection.getSelectedItems();	
 		},
 		updateLoadedItem : function(id, attr, value) {
 			var item = this.getLoadedItemById(id);
@@ -253,6 +253,14 @@ app.factory('stage', [
 		addItem : function(obj) {
 			this.currentFile.items.push(obj);
 		},
+		destroyItem : function(item) {
+			item.destroyImages();
+			this.currentFile.items.splice(this.currentFile.items.indexOf(item), 1);
+		},
+		destroyFrame : function(frame) {
+			frame.destroyImages();
+			this.currentFile.frames.splice(this.currentFile.frames.indexOf(frame), 1);
+		},
 		
 		clearStageItems : function() {
 			this.dontUpdateMiniMap = true;
@@ -262,10 +270,6 @@ app.factory('stage', [
 			if(this.currentFile.frames)
 				for(var i = 0; i < this.currentFile.frames.length; i++)
 					this.currentFile.frames[i].destroy();
-		},
-		destroyItem : function(item) {
-			item.destroyImages();
-			this.currentFile.items.splice(this.currentFile.items.indexOf(item), 1);
 		},
 		getRowColFromXY : function(x, y) {
 			return {row : Math.floor(y / this.CELL_HEIGHT), col : Math.floor(x / this.CELL_WIDTH)};

@@ -514,7 +514,6 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 			else vm.options = menus.base;
 			vm.contextMenu = true;
 			vm.contextMenuPos = coords;
-			console.log(vm.options);
 		}else{
 			vm.contextMenu = false;
 			vm.options = menus.base;
@@ -522,19 +521,19 @@ app.controller('ContextMenu', ['$document', '$scope', 'watch', 'keys', 'stage', 
 	});
 
 	vm.deleteSelected = function() {
-		stage.modes.selection.destroySelectedItems();
+		stage.mapModes.selection.destroySelectedItems();
 		vm.contextMenu = false;
 		vm.options = menus.base;
 	};
 
 	vm.combineSelected = function() {
-		stage.modes.selection.combineSelectedItems();
+		stage.mapModes.selection.combineSelectedItems();
 		vm.contextMenu = false;
 		vm.options = menus.base;
 	};
 
 	vm.fillSelected = function() {
-		stage.modes.selection.fillSelected();
+		stage.mapModes.selection.fillSelected();
 		vm.contextMenu = false;
 		vm.options = menus.base;
 	}
@@ -726,7 +725,7 @@ app.controller('ModeMenu', ['$scope', 'watch', 'stage', function($scope, watch, 
 		stage.setMode(mode);
 	}
 	vm.setEraserSize = function(size) {
-		vm.stage.modes.erase.size = size;
+		vm.stage.mapModes.erase.size = size;
 	}
 	
 }]);
@@ -810,7 +809,7 @@ app.factory('Move', function() {
 		},
 		move : function() {
 			this.stage.isMoving = true;
-			var items = this.stage.modes.selection.getSelectedItems(),
+			var items = this.stage.mapModes.selection.getSelectedItems(),
 				coords = this.stage.mouseMoveMouseCoords,
 				row = coords.row,
 				col = coords.col,
@@ -970,6 +969,10 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 			}
 			this.stage.showcontextMenu = false;
 		},
+		destroyAllSelected : function() {
+			this.destroySelectedItems();
+			this.destroySelectedFrames();	
+		},
 		destroySelectedItems : function() {
 			var items = this.getSelectedItems(),
 				item;
@@ -979,12 +982,28 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 			}	
 			this.stage.showcontextMenu = false;
 		},
+		destroySelectedFrames : function() {
+			var frames = this.getSelectedFrames(),
+				frame;
+			for(var i = 0; i < frames.length; i++){
+				frame = frames[i];
+				frame.destroy();
+			}
+			this.stage.showcontextMenu = false;
+		},
 		getSelectedItems : function() {
 			var items = [],
 				stage = this.stage.currentFile;
 			for(var i = 0; i < stage.items.length; i++)	
 				if(stage.items[i].selected)items.push(stage.items[i]);
 			return items;
+		},
+		getSelectedFrames : function() {
+			var frames = [];
+				stage = this.stage.currentFile;
+			for(var i = 0; i < stage.frames.length; i++)
+				if(stage.frames[i].selected)frames.push(stage.frames[i]);
+			return frames;	
 		},
 		select : function(els) {
 			if(!Array.isArray(els))els = [els];
@@ -1044,7 +1063,7 @@ app.factory('SheetCutter', function() {
 			
 		},
 		
-
+		
 		sheetCutterMouseUp : function() {
 			if(this.currentFrame && !this.destroyFrame && this.creatingFrame){
 				this.stage.currentFile.frames.push(this.currentFrame);
@@ -1560,6 +1579,7 @@ app.factory('File', ['$http', '$rootScope', 'util',  function($http, $rootScope,
 app.factory('Frame', ['keyEvents', function(keyEvents) {
 	function Frame(stage) {
 		this.stage = stage;
+		this.currentColor = null;
 		keyEvents.register('keydown', 'spacebar', this.keydown.bind(this));
 		keyEvents.register('keyup', 'spacebar', this.keyup.bind(this));
 	}
@@ -1571,6 +1591,10 @@ app.factory('Frame', ['keyEvents', function(keyEvents) {
 		},
 		destroy : function() {
 			if(!this.body)return;
+			this.destroyImages();
+			this.stage.destroyFrame(this);
+		},
+		destroyImages : function() {
 			this.stage.removeChild(this.body);
 		},
 		createElements : function(x, y, w, h) {
@@ -1578,8 +1602,8 @@ app.factory('Frame', ['keyEvents', function(keyEvents) {
 			this.y = y || this.y;
 			this.w = w || this.w;
 			this.h = h || this.h;
-			this.destroy();
-			this.body = this.stage.draw.squareContainer(this.x, this.y, this.w, this.h);
+			this.destroyImages();
+			this.body = this.stage.draw.squareContainer(this.x, this.y, this.w, this.h, null, this.currentColor);
 			this.drawFrameNumber();
 			this.createCorners(this.x, this.y, this.w, this.h);
 			this.createBodyEvents();
@@ -1632,7 +1656,7 @@ app.factory('Frame', ['keyEvents', function(keyEvents) {
 				w = mousePos.x - body.x, 
 				h = mousePos.y - body.y;
 
-			this.destroy();
+			this.destroyImages();
 			if(this.cursorover === 'bottom-left'){
 				x = mousePos.x;
 				w = (body.x + body.w) - x;
@@ -1687,10 +1711,20 @@ app.factory('Frame', ['keyEvents', function(keyEvents) {
 		    this.y = el.y;
 		    this.originalY = e.stageY;
 		    this.originalX = e.stageX;
+		    this.wasMoving = true;
 		},
 		bodypressup : function() {
 			this.originalY = false;
-		    this.originalX = false;	
+		    this.originalX = false;
+
+		    if(!this.wasMoving){
+			  	this.selected = !this.selected;
+			    if(this.selected)
+			    	this.currentColor = 'rgba(247, 23, 23, 0.3)';
+			    else this.currentColor = null;
+			    this.create();
+		    }
+		    this.wasMoving = false;
 		},
 		updateBodyWidth : function() {
 			this.create();
@@ -1765,7 +1799,7 @@ app.factory('Item', function () {
 		},
 		pressmove : function(e) {
 			this.isMoving = true;
-			this.stage.modes.move.move();
+			this.stage.mapModes.move.move();
 		},
 		move : function (obj) {
 			if(isNaN(obj.row) || isNaN(obj.col))return;
@@ -1781,6 +1815,7 @@ app.factory('Item', function () {
 		},
 		select : function() {
 			if(this.selected)return;
+			console.log('selecting');
 			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
 			this.stage.addChild(this.selectionBox);
 			this.selected = true;
@@ -2009,9 +2044,9 @@ app.factory('stage', [
 
 			var key = keys(e);
 			if(key === 'delete')
-				this.modes.selection.destroySelectedItems();
+				this.mapModes.selection.destroyAllSelected();
 			if(key === 'esc')
-				this.modes.selection.deselectItems();
+				this.mapModes.selection.deselectItems();
 			if(key === 'p')
 				this.setMode('paint');
 			if(key === 's')
@@ -2145,7 +2180,7 @@ app.factory('stage', [
 			this.createItem(obj);
 		},
 		updateSelectedItems : function() {
-			this.selectedItems = this.modes.selection.getSelectedItems();	
+			this.selectedItems = this.mapModes.selection.getSelectedItems();	
 		},
 		updateLoadedItem : function(id, attr, value) {
 			var item = this.getLoadedItemById(id);
@@ -2191,6 +2226,14 @@ app.factory('stage', [
 		addItem : function(obj) {
 			this.currentFile.items.push(obj);
 		},
+		destroyItem : function(item) {
+			item.destroyImages();
+			this.currentFile.items.splice(this.currentFile.items.indexOf(item), 1);
+		},
+		destroyFrame : function(frame) {
+			frame.destroyImages();
+			this.currentFile.frames.splice(this.currentFile.frames.indexOf(frame), 1);
+		},
 		
 		clearStageItems : function() {
 			this.dontUpdateMiniMap = true;
@@ -2200,10 +2243,6 @@ app.factory('stage', [
 			if(this.currentFile.frames)
 				for(var i = 0; i < this.currentFile.frames.length; i++)
 					this.currentFile.frames[i].destroy();
-		},
-		destroyItem : function(item) {
-			item.destroyImages();
-			this.currentFile.items.splice(this.currentFile.items.indexOf(item), 1);
 		},
 		getRowColFromXY : function(x, y) {
 			return {row : Math.floor(y / this.CELL_HEIGHT), col : Math.floor(x / this.CELL_WIDTH)};

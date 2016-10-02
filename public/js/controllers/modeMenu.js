@@ -6,7 +6,7 @@ app.controller('ModeMenu', ['$scope', 'watch', 'stage', function($scope, watch, 
 		stage.setMode(mode);
 	}
 	vm.setEraserSize = function(size) {
-		vm.stage.modes.erase.size = size;
+		vm.stage.mapModes.erase.size = size;
 	}
 	
 }]);

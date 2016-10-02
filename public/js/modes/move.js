@@ -13,7 +13,7 @@ app.factory('Move', function() {
 		},
 		move : function() {
 			this.stage.isMoving = true;
-			var items = this.stage.modes.selection.getSelectedItems(),
+			var items = this.stage.mapModes.selection.getSelectedItems(),
 				coords = this.stage.mouseMoveMouseCoords,
 				row = coords.row,
 				col = coords.col,

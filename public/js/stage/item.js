@@ -36,7 +36,7 @@ app.factory('Item', function () {
 		},
 		pressmove : function(e) {
 			this.isMoving = true;
-			this.stage.modes.move.move();
+			this.stage.mapModes.move.move();
 		},
 		move : function (obj) {
 			if(isNaN(obj.row) || isNaN(obj.col))return;
@@ -52,6 +52,7 @@ app.factory('Item', function () {
 		},
 		select : function() {
 			if(this.selected)return;
+			console.log('selecting');
 			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
 			this.stage.addChild(this.selectionBox);
 			this.selected = true;

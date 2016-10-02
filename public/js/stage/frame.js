@@ -1,6 +1,7 @@
 app.factory('Frame', ['keyEvents', function(keyEvents) {
 	function Frame(stage) {
 		this.stage = stage;
+		this.currentColor = null;
 		keyEvents.register('keydown', 'spacebar', this.keydown.bind(this));
 		keyEvents.register('keyup', 'spacebar', this.keyup.bind(this));
 	}
@@ -12,6 +13,10 @@ app.factory('Frame', ['keyEvents', function(keyEvents) {
 		},
 		destroy : function() {
 			if(!this.body)return;
+			this.destroyImages();
+			this.stage.destroyFrame(this);
+		},
+		destroyImages : function() {
 			this.stage.removeChild(this.body);
 		},
 		createElements : function(x, y, w, h) {
@@ -19,8 +24,8 @@ app.factory('Frame', ['keyEvents', function(keyEvents) {
 			this.y = y || this.y;
 			this.w = w || this.w;
 			this.h = h || this.h;
-			this.destroy();
-			this.body = this.stage.draw.squareContainer(this.x, this.y, this.w, this.h);
+			this.destroyImages();
+			this.body = this.stage.draw.squareContainer(this.x, this.y, this.w, this.h, null, this.currentColor);
 			this.drawFrameNumber();
 			this.createCorners(this.x, this.y, this.w, this.h);
 			this.createBodyEvents();
@@ -73,7 +78,7 @@ app.factory('Frame', ['keyEvents', function(keyEvents) {
 				w = mousePos.x - body.x, 
 				h = mousePos.y - body.y;
 
-			this.destroy();
+			this.destroyImages();
 			if(this.cursorover === 'bottom-left'){
 				x = mousePos.x;
 				w = (body.x + body.w) - x;
@@ -128,10 +133,20 @@ app.factory('Frame', ['keyEvents', function(keyEvents) {
 		    this.y = el.y;
 		    this.originalY = e.stageY;
 		    this.originalX = e.stageX;
+		    this.wasMoving = true;
 		},
 		bodypressup : function() {
 			this.originalY = false;
-		    this.originalX = false;	
+		    this.originalX = false;
+
+		    if(!this.wasMoving){
+			  	this.selected = !this.selected;
+			    if(this.selected)
+			    	this.currentColor = 'rgba(247, 23, 23, 0.3)';
+			    else this.currentColor = null;
+			    this.create();
+		    }
+		    this.wasMoving = false;
 		},
 		updateBodyWidth : function() {
 			this.create();

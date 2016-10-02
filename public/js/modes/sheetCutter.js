@@ -46,7 +46,7 @@ app.factory('SheetCutter', function() {
 			
 		},
 		
-
+		
 		sheetCutterMouseUp : function() {
 			if(this.currentFrame && !this.destroyFrame && this.creatingFrame){
 				this.stage.currentFile.frames.push(this.currentFrame);
