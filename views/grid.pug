@@ -3,7 +3,7 @@
 		span(ng-click="m.stage.fileManager.drawFile(stage.name)") {{stage.name}} 
 		span.is-dirty
 			span.ng-cloak(ng-if="stage.isDirty") *
-		span.close-file(ng-click="m.stage.fileManager.closeFile(stage.name)") x
+		span.close-file(ng-click="file.closeFile(stage.name, stage.isDirty)") x
 .grid.main-grid.scrollable(ng-class="{saved : file.saved, fullscreen : m.fullScreenGrid}")
 	.current-item.ng-cloak(ng-style="m.currentItemStyle", ng-class="{'no-paint' : m.stage.noPaint === true}", ng-hide="m.hideCurrentItem")
 		.current-mode {{m.stage.mode.capitalize()}}

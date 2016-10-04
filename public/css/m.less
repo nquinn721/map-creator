@@ -109,7 +109,7 @@ ul.nav.nav-tabs {
     }
 }
 
-input, select {
+input:not([type=button]), select {
     background: none !important;
     color: #d64242 !important;
     border-bottom: 1px solid white !important;
@@ -121,18 +121,36 @@ input, select {
 input{
     padding-left:5px;
 }
-.new-file-splash {
-    background: rgba(0,0,0,0.4);
+.splash{
     position: absolute;
+    top: 0px;
+    width: 100%;
     color:white;
-    top: 0;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
     left: 0;
     z-index: 9999;
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    .splash-content {
+        background: #222;
+        width: 400px;
+        height: 250px;
+        padding: 50px;
+        border-radius: 5px;
+        box-shadow: 0 0 50px #190909;
+        flex-direction: column;
+        justify-content: space-around;
+        display: flex;
+        .buttons input {
+            width: 46%;
+            margin: 2%;
+        }
+    }
+}
+.new-file-splash {
+    
     h3 {
         padding: 0;
         margin: 0;
@@ -176,17 +194,7 @@ input{
 }
 
 .save-menu{
-    position: absolute;
-    top: 0px;
-    width: 100%;
-    color:white;
-    height: 100%;
-    background: rgba(0,0,0,0.4);
-    left: 0;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    
 
     .content {
         background: #222;
@@ -212,13 +220,6 @@ input{
 
 
 .full-screen-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 9999;
     padding: 50px;
     .image-content {
         background: #222;
@@ -241,6 +242,7 @@ input{
     display: none;
     pointer-events: none;
     .grid-tab {
+        pointer-events: auto;
         height: 30px;
         cursor: pointer;
         background: #121212;

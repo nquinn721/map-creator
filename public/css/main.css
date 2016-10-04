@@ -99,7 +99,7 @@ ul.nav.nav-tabs {
   position: absolute;
   left: -9999px;
 }
-input,
+input:not([type=button]),
 select {
   background: none !important;
   color: #d64242 !important;
@@ -112,18 +112,33 @@ select {
 input {
   padding-left: 5px;
 }
-.new-file-splash {
-  background: rgba(0, 0, 0, 0.4);
+.splash {
   position: absolute;
+  top: 0px;
+  width: 100%;
   color: white;
-  top: 0;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
   left: 0;
   z-index: 9999;
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.splash .splash-content {
+  background: #222;
+  width: 400px;
+  height: 250px;
+  padding: 50px;
+  border-radius: 5px;
+  box-shadow: 0 0 50px #190909;
+  flex-direction: column;
+  justify-content: space-around;
+  display: flex;
+}
+.splash .splash-content .buttons input {
+  width: 46%;
+  margin: 2%;
 }
 .new-file-splash h3 {
   padding: 0;
@@ -163,19 +178,6 @@ input {
 .new-file-splash .input-group .new-file-name {
   color: black;
 }
-.save-menu {
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  color: white;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  left: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .save-menu .content {
   background: #222;
   width: 400px;
@@ -194,13 +196,6 @@ input {
   margin-right: 5%;
 }
 .full-screen-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
   padding: 50px;
 }
 .full-screen-img .image-content {
@@ -222,6 +217,7 @@ input {
   pointer-events: none;
 }
 .grid-tabs .grid-tab {
+  pointer-events: auto;
   height: 30px;
   cursor: pointer;
   background: #121212;

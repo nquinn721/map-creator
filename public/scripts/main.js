@@ -548,9 +548,6 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 		vm.keys.ctrl = false;
 		vm.showSaveMenu = true;
 	}
-	vm.hideSaveMenu = function() {
-		vm.showSaveMenu = false;
-	}
 	
 	vm.saveTileMap = function() {
 		vm.hideSaveMenu();
@@ -596,6 +593,20 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 			}
 		});
 	}
+	vm.saveAndCloseFile = function() {
+		vm.save();
+	}
+
+	vm.closeFile = function(name, dirty) {
+		vm.currentFileNameToClose = name;
+		if(!dirty)
+			vm.stage.fileManager.closeFile(name);
+		else {
+			vm.stage.fileManager.drawFile(name);
+			vm.closeUnsaved = true;
+		}
+	}
+
 
 	vm.updateTileMaps();
 	vm.updateSpriteSheets();

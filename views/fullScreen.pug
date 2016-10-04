@@ -1,4 +1,4 @@
-.new-file-splash.ng-cloak(ng-show="file.showCreateNewFileMenu", ng-click="file.hideNewFileMenu();")
+.splash.new-file-splash.ng-cloak(ng-show="file.showCreateNewFileMenu", ng-click="file.hideNewFileMenu();")
 	.new-file-menu.ng-cloak(ng-click="$event.stopPropagation()")
 		h3 Create New {{file.newFileTypeText}}
 		
@@ -20,13 +20,20 @@
 			input.new-file-name.form-control(ng-model="file.newFileName", placeholder="File name...", focus-me="file.showCreateNewFileMenu")
 			input.btn.btn-primary(type="submit", value="Create")
 
-.full-screen-img.ng-cloak(ng-show="m.fullScreenImg", ng-click="m.hideFullScreenImg()")
+.splash.full-screen-img.ng-cloak(ng-show="m.fullScreenImg", ng-click="m.hideFullScreenImg()")
 	.image-content.ng-cloak
 		img(ng-src="{{m.fullScreenImg}}")
 
-.save-menu.ng-cloak(ng-if="file.showSaveMenu", ng-click="file.hideSaveMenu();")
+.splash.save-menu.ng-cloak(ng-if="file.showSaveMenu", ng-click="file.showSaveMenu = false;")
 	.content.ng-cloak(ng-click="$event.stopPropagation()")
 		.title Save Tile Map
 		form.name(ng-submit="file.saveTileMap()")
 			input.form-control(ng-model="m.stage.currentFile.name", placeholder="Filename...", focus-me="file.showSaveMenu")
 			input.btn.btn-primary(type="submit", value="Save")
+
+.splash.close-unsaved.ng-cloak(ng-if="file.closeUnsaved", ng-click="file.closeUnsaved = false;")
+	.splash-content.content.ng-cloak(ng-click="$event.stopPropagation()")
+		.title Are you sure you want to close without saving?
+		.buttons
+			input.btn.btn-primary(type="button", value="Yes", ng-click="file.stage.fileManager.closeFile(file.currentFileNameToClose); file.closeUnsaved = false;")
+			input.btn.btn-danger(type="button", value="No", ng-click="file.closeUnsaved = false")
