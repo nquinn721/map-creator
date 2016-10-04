@@ -99,7 +99,7 @@ ul.nav.nav-tabs {
   position: absolute;
   left: -9999px;
 }
-input:not([type=button]),
+input:not([type=button]):not([type=submit]),
 select {
   background: none !important;
   color: #d64242 !important;
@@ -1593,14 +1593,22 @@ input.form-control.number.ui-spinner-input {
   margin-right: 5px;
   cursor: pointer;
 }
+.stage-item-info-menu .selected-item {
+  padding-top: 10px;
+}
+.stage-item-info-menu .selected-item:not(:last-child) {
+  border-bottom: 1px solid #000;
+}
+.stage-item-info-menu .selected-item:not(:first-child) {
+  border-top: 1px solid #484848;
+}
+.stage-item-info-menu .selected-item:hover {
+  background: #282828;
+}
 .stage-item-info-menu .menu-content {
   padding-left: 17px;
   height: 80%;
   position: relative;
-}
-.stage-item-info-menu .selected-item {
-  float: left;
-  width: 50px;
 }
 .stage-item-info-menu .menu-title {
   padding: 10px;

@@ -1,19 +1,19 @@
-.stage-item-info-menu.minimizable.ng-cloak(ng-if="info.selectedItems", slider="right")
+.stage-item-info-menu.minimizable.ng-cloak(ng-show="info.stage.currentFile.hasSelected", slider="right")
 	.menu-title
 		i.fa.fa-caret-right.show-hide.slide-button
 		| Selected Items
-	.menu-content
+	.menu-content.scrollable
 		.item-info
 			.selected-items
-				.selected-item(ng-repeat="item in info.selectedItems")
+				.selected-item(ng-repeat="(selectedName, item) in info.stage.currentFile.selectedItems")
 					| {{item.length}} x 
 					img(ng-src="{{item[0].src}}")
-			.clear
-			.info.input-group
-				span Element Type
-				input(value="", ng-model="info.element")
-			.info.input-group
-				span Body
-				select
-					option(value="static") Static
-					option(value="dynamic") Dynamic
+					.info.input-group
+						span Element Type
+						input(ng-model="item[0].type", ng-keyup="info.stage.currentFile.updateSelected(selectedName, item[0])")
+					.info.input-group
+						span Body
+						select(ng-model="item[0].body", ng-change="info.stage.currentFile.updateSelected(selectedName, item[0])")
+							option(value="static") Static
+							option(value="dynamic") Dynamic
+							option(value="kinematic") Kinematic

@@ -13,14 +13,26 @@
         margin-right: 5px;
         cursor: pointer;
     }
+
+    .selected-item {
+        padding-top: 10px;
+        &:not(:last-child) {
+            border-bottom: 1px solid #000;
+        }
+        &:not(:first-child) {
+            border-top: 1px solid #484848;
+        }
+
+        &:hover {
+            background: #282828;
+        }
+    }
+
+
     .menu-content{
         padding-left: 17px;
         height: 80%;
         position: relative;
-    }
-    .selected-item {
-        float: left;
-        width: 50px;
     }
     .menu-title {
         padding: 10px;

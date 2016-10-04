@@ -4,13 +4,13 @@
 		
 		.new-file-info(ng-if="file.newFileType == 'tileMap'")
 			.radio-inline-group
-				.radio-inline
+				.radio-inline(ng-click="file.newFileExtension = 'js'", ng-class="{'radio-selected' : file.newFileExtension === 'js'}")
 					label
-						input(type="radio", ng-model="file.newFileExtension", value="js", checked)
+						input(type="radio", value="js", checked)
 						| JS
-				.radio-inline
+				.radio-inline(ng-click="file.newFileExtension = 'ts'", ng-class="{'radio-selected' : file.newFileExtension === 'ts'}")
 					label
-						input(type="radio", ng-model="file.newFileExtension", value="ts")
+						input(type="radio", value="ts")
 						| TS
 			span.new-file-width W:
 			input.form-control(type="number", step="25", ng-model="file.newFileWidth", value="2000")
@@ -24,14 +24,14 @@
 	.image-content.ng-cloak
 		img(ng-src="{{m.fullScreenImg}}")
 
-.splash.save-menu.ng-cloak(ng-if="file.showSaveMenu", ng-click="file.showSaveMenu = false;")
+.splash.save-menu.ng-cloak(ng-show="file.showSaveMenu", ng-click="file.showSaveMenu = false;")
 	.content.ng-cloak(ng-click="$event.stopPropagation()")
 		.title Save Tile Map
 		form.name(ng-submit="file.saveTileMap()")
 			input.form-control(ng-model="m.stage.currentFile.name", placeholder="Filename...", focus-me="file.showSaveMenu")
 			input.btn.btn-primary(type="submit", value="Save")
 
-.splash.close-unsaved.ng-cloak(ng-if="file.closeUnsaved", ng-click="file.closeUnsaved = false;")
+.splash.close-unsaved.ng-cloak(ng-show="file.closeUnsaved", ng-click="file.closeUnsaved = false;")
 	.splash-content.content.ng-cloak(ng-click="$event.stopPropagation()")
 		.title Are you sure you want to close without saving?
 		.buttons

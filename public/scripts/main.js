@@ -429,11 +429,11 @@ setInterval(function() {
 //         $(this).scrollTop(100);
 //     }
 
-$('.radio-inline').find(':checked').each(function() {
-  $(this).parents('.radio-inline').addClass('radio-selected');
-}).end().find('input[type=radio]').on('change', function() {
-  $('.radio-inline').removeClass('radio-selected').find(':checked').parents('.radio-inline').addClass('radio-selected');
-});
+// $('.radio-inline').find(':checked').each(function() {
+//   $(this).parents('.radio-inline').addClass('radio-selected');
+// }).end().find('input[type=radio]').on('change', function() {
+//   $('.radio-inline').removeClass('radio-selected').find(':checked').parents('.radio-inline').addClass('radio-selected');
+// });
 
 
 
@@ -537,6 +537,14 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 			vm.saveTileMap();
 		}
 	}
+	vm.hideFullScreenImg = function() {
+		vm.fullScreenImg = null;
+	}
+	vm.showFullScreenImg = function(url) {
+		vm.fullScreenImg = vm.stage.snapshot.createSnapShot();
+	}
+
+	
 
 	vm.showSaved = function() {
 		vm.saved = true;
@@ -550,7 +558,7 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	}
 	
 	vm.saveTileMap = function() {
-		vm.hideSaveMenu();
+		vm.showSaveMenu = false;
 		stage.fileManager.save();
 		vm.updateTileMaps();
 		vm.showSaved();
@@ -593,10 +601,7 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 			}
 		});
 	}
-	vm.saveAndCloseFile = function() {
-		vm.save();
-	}
-
+	
 	vm.closeFile = function(name, dirty) {
 		vm.currentFileNameToClose = name;
 		if(!dirty)
@@ -621,6 +626,12 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	keyEvents.register('keyup', 'ctrl', function() {
 		vm.keys.ctrl = false;
 	});
+	keyEvents.register('keydown', 'esc', function() {
+		vm.hideFullScreenImg();
+		vm.showSaveMenu = false;
+		vm.hideNewFileMenu();
+		vm.closeUnsaved = false;
+	});
 
 }]);
 app.controller('ItemsMenu', ['$scope', 'stage', function($scope, stage) {
@@ -642,16 +653,11 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 	var vm = this;
 	vm.stage = stage;
 	vm.keys = {};
-	
+
 	vm.currentImage = function() {
 		return vm.stage.currentImageName;
 	}
-	vm.hideFullScreenImg = function() {
-		vm.fullScreenImg = null;
-	}
-	vm.showFullScreenImg = function(url) {
-		vm.fullScreenImg = vm.stage.snapshot.createSnapShot();
-	}
+	
 	
 	vm.downloadCanvasImage = function() {
 		var link = document.createElement('a');
@@ -712,31 +718,10 @@ app.controller('ModeMenu', ['$scope', 'watch', 'stage', function($scope, watch, 
 	}
 	
 }]);
-app.controller('StageItemInfoMenu', ['$scope', 'watch', 'stage', function($scope, watch, stage) {
+app.controller('StageItemInfoMenu', ['stage', function(stage) {
 	var vm = this;
 	vm.stage = stage;
 
-
-	watch(vm, 'element', function(value) {
-		for(var i in vm.selectedItems){
-			for(var j = 0; j < vm.selectedItems[i].length; j++)
-			vm.selectedItems[i][j].element = value;
-		}
-	});
-
-	watch(stage, 'selectedItems', function(selectedItems) {
-		var items = {};
-		if(selectedItems.length === 0)
-			vm.selectedItems = null;
-		else{
-			for(var i = 0; i < selectedItems.length; i++){
-				if(!items[selectedItems[i].file])items[selectedItems[i].file] = [];
-				items[selectedItems[i].file].push(selectedItems[i]);
-				vm.element = selectedItems[i].type;
-			}
-			vm.selectedItems = items;
-		}
-	});
 }]);
 app.factory('Animation', function() {
 	function Animation(stage) {
@@ -855,10 +840,7 @@ app.factory('Paint', function() {
 				col * this.stage.CELL_WIDTH , 
 				row * this.stage.CELL_HEIGHT, 
 				this.stage.CELL_WIDTH, 
-				this.stage.CELL_HEIGHT, 
-				this.stage.currentItem.file, 
-				this.stage.currentItem.src,
-				this.stage.currentItem.element
+				this.stage.CELL_HEIGHT 
 			  );
 
 		},
@@ -961,11 +943,9 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 			var items = this.getSelectedItems(),
 				item;
 				
-			for(var i = 0; i < items.length; i++){
-				item = items[i];
-				item.deselect();
-				this.stage.removeChild(item.selectionBox);
-			}
+			for(var i = 0; i < items.length; i++)
+				items[i].deselect();
+			
 			this.stage.showcontextMenu = false;
 		},
 		destroyAllSelected : function() {
@@ -1553,9 +1533,67 @@ app.factory('File', function() {
 		this.frames = obj.frames || [];
 		this.animations = obj.animations || [{}];
 		this.spritesheet = obj.spritesheet || null;
+		this.selectedItems = {};
 	}
 	File.prototype = {
+		updateSelectedItems : function() {
+			var items = this.stage.mapModes.selection.getSelectedItems(),
+				item;
 
+			// Reset currentfile selectd items
+			this.selectedItems = {};
+			
+			for(var i = 0; i < items.length; i++){
+				item = items[i];
+
+				this.addSelected(item);
+			}
+
+			if(items.length)
+				this.hasSelected = true;
+			else this.hasSelected = false;
+
+
+			this.stage.applyRootScope();
+		},
+		updateSelected : function(selectionName, item) {
+			var items = this.selectedItems[selectionName].slice();
+
+			console.log(items);
+
+			for(var i = 0; i < items.length; i++){
+				items[i].body = item.body;
+				items[i].type = item.type;
+				this.addSelected(items[i]);
+				this.removeSelected(selectionName, items[i]);
+			}
+			console.log(this.selectedItems);
+		},
+		removeSelected : function(selectionName, item) {
+			var f = this.selectedItems[selectionName];
+			f.splice(f.indexOf(item), 1);
+			this.clearEmptySelecteds();
+		},
+		addSelected : function(name, item) {
+			if(typeof name === 'object'){
+				selectionName = this.selectionName(name);
+				item = name;
+			}else{
+				selectionName = name;
+			}
+			console.log('add');
+			if(!this.selectedItems[selectionName])
+				this.selectedItems[selectionName] = [];
+
+			this.selectedItems[selectionName].push(item);
+		},
+		clearEmptySelecteds : function() {
+			for(var i in this.selectedItems)
+				if(!this.selectedItems[i].length)delete this.selectedItems[i];
+		},
+		selectionName : function(item) {
+			return item.element + item.type + item.body;
+		}
 	}
 	return File;
 });
@@ -1887,6 +1925,9 @@ app.factory('Item', function () {
 			this.stage.addChild(this.img);
 			this.img.on('click', this.click.bind(this));
 			this.img.on('pressmove', this.pressmove.bind(this));
+
+			if(this.selected)
+				this.drawselectionBox();
 		},
 		click : function() {
 			if(!this.isMoving){
@@ -1915,10 +1956,13 @@ app.factory('Item', function () {
 		},
 		select : function() {
 			if(this.selected)return;
-			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
-			this.stage.addChild(this.selectionBox);
+			this.drawselectionBox();
 			this.selected = true;
 			this.stage.updateSelectedItems();
+		},
+		drawselectionBox : function() {
+			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
+			this.stage.addChild(this.selectionBox);
 		},
 		destroy : function() {
 			this.destroyImages();
@@ -1930,8 +1974,6 @@ app.factory('Item', function () {
 			this.stage.removeChild(this.img);
 			if(this.selectionBox)
 				this.stage.removeChild(this.selectionBox);
-			this.selected = false;
-
 		},
 		deselect : function() {
 			this.stage.removeChild(this.selectionBox);
@@ -2255,35 +2297,8 @@ app.factory('stage', [
 			return obj;
 		},
 		
-		createItemByXYWH : function(x, y, w, h) {
-			if(typeof x === 'object'){
-				y = x.y;
-				w = x.w;
-				h = x.h;
-				x = x.x;
-			}
-			var rowCol = this.getRowColFromXY(x, y),
-				endRowCol = this.getRowColFromXY(x + w, y + h)
-				startRow = rowCol.row,
-				startCol = rowCol.col,
-				endRow = endRowCol.row,
-				endCol = endRowCol.col,
-				obj = {
-					row : startRow,
-					col : startCol,
-					file : this.currentItem.file,
-					src : this.currentItem.src,
-					element : this.currentItem.element,
-					y : startRow * this.CELL_HEIGHT,
-					x : startCol * this.CELL_WIDTH,
-					w : (endCol - startCol + 1) * this.CELL_WIDTH, 
-					h : (endRow - startRow + 1) * this.CELL_HEIGHT
-				}
-
-			this.createItem(obj);
-		},
 		updateSelectedItems : function() {
-			this.selectedItems = this.mapModes.selection.getSelectedItems();	
+			this.currentFile.updateSelectedItems();
 		},
 		updateLoadedItem : function(id, attr, value) {
 			var item = this.getLoadedItemById(id);
@@ -2319,13 +2334,40 @@ app.factory('stage', [
 			}, item;
 
 			if(this.getItemByXY(x, y))return;
-			obj = $.extend(obj, this.getLoadedItemById(element));
+			
+			obj = $.extend(obj, this.currentItem);
+			
 			item = new Item(this, obj);
+			
 			item.drawImg(function() {
 				this.stage.snapshot.updateSnapshotCanvas();
 			}.bind(this));
 			
 			this.addItem(item);
+		},
+		createItemByXYWH : function(x, y, w, h) {
+			if(typeof x === 'object'){
+				y = x.y;
+				w = x.w;
+				h = x.h;
+				x = x.x;
+			}
+			var rowCol = this.getRowColFromXY(x, y),
+				endRowCol = this.getRowColFromXY(x + w, y + h)
+				startRow = rowCol.row,
+				startCol = rowCol.col,
+				endRow = endRowCol.row,
+				endCol = endRowCol.col,
+				obj = {
+					row : startRow,
+					col : startCol,
+					y : startRow * this.CELL_HEIGHT,
+					x : startCol * this.CELL_WIDTH,
+					w : (endCol - startCol + 1) * this.CELL_WIDTH, 
+					h : (endRow - startRow + 1) * this.CELL_HEIGHT
+				}
+
+			this.createItem(obj);
 		},
 		
 		addItem : function(obj) {
@@ -2403,6 +2445,9 @@ app.factory('stage', [
 				this.stage.update();
 			}.bind(this), 10);
 		},
+		applyRootScope : function() {
+			$rootScope.$apply();
+		}
 	}
 
 	var stage = new Stage('map-creator');

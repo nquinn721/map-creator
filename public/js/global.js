@@ -53,10 +53,10 @@ setInterval(function() {
 //         $(this).scrollTop(100);
 //     }
 
-$('.radio-inline').find(':checked').each(function() {
-  $(this).parents('.radio-inline').addClass('radio-selected');
-}).end().find('input[type=radio]').on('change', function() {
-  $('.radio-inline').removeClass('radio-selected').find(':checked').parents('.radio-inline').addClass('radio-selected');
-});
+// $('.radio-inline').find(':checked').each(function() {
+//   $(this).parents('.radio-inline').addClass('radio-selected');
+// }).end().find('input[type=radio]').on('change', function() {
+//   $('.radio-inline').removeClass('radio-selected').find(':checked').parents('.radio-inline').addClass('radio-selected');
+// });
 
 

@@ -19,6 +19,14 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 			vm.saveTileMap();
 		}
 	}
+	vm.hideFullScreenImg = function() {
+		vm.fullScreenImg = null;
+	}
+	vm.showFullScreenImg = function(url) {
+		vm.fullScreenImg = vm.stage.snapshot.createSnapShot();
+	}
+
+	
 
 	vm.showSaved = function() {
 		vm.saved = true;
@@ -32,7 +40,7 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	}
 	
 	vm.saveTileMap = function() {
-		vm.hideSaveMenu();
+		vm.showSaveMenu = false;
 		stage.fileManager.save();
 		vm.updateTileMaps();
 		vm.showSaved();
@@ -75,10 +83,7 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 			}
 		});
 	}
-	vm.saveAndCloseFile = function() {
-		vm.save();
-	}
-
+	
 	vm.closeFile = function(name, dirty) {
 		vm.currentFileNameToClose = name;
 		if(!dirty)
@@ -102,6 +107,12 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	});
 	keyEvents.register('keyup', 'ctrl', function() {
 		vm.keys.ctrl = false;
+	});
+	keyEvents.register('keydown', 'esc', function() {
+		vm.hideFullScreenImg();
+		vm.showSaveMenu = false;
+		vm.hideNewFileMenu();
+		vm.closeUnsaved = false;
 	});
 
 }]);

@@ -24,6 +24,9 @@ app.factory('Item', function () {
 			this.stage.addChild(this.img);
 			this.img.on('click', this.click.bind(this));
 			this.img.on('pressmove', this.pressmove.bind(this));
+
+			if(this.selected)
+				this.drawselectionBox();
 		},
 		click : function() {
 			if(!this.isMoving){
@@ -52,10 +55,13 @@ app.factory('Item', function () {
 		},
 		select : function() {
 			if(this.selected)return;
-			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
-			this.stage.addChild(this.selectionBox);
+			this.drawselectionBox();
 			this.selected = true;
 			this.stage.updateSelectedItems();
+		},
+		drawselectionBox : function() {
+			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
+			this.stage.addChild(this.selectionBox);
 		},
 		destroy : function() {
 			this.destroyImages();
@@ -67,8 +73,6 @@ app.factory('Item', function () {
 			this.stage.removeChild(this.img);
 			if(this.selectionBox)
 				this.stage.removeChild(this.selectionBox);
-			this.selected = false;
-
 		},
 		deselect : function() {
 			this.stage.removeChild(this.selectionBox);

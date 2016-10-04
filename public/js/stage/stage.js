@@ -181,35 +181,8 @@ app.factory('stage', [
 			return obj;
 		},
 		
-		createItemByXYWH : function(x, y, w, h) {
-			if(typeof x === 'object'){
-				y = x.y;
-				w = x.w;
-				h = x.h;
-				x = x.x;
-			}
-			var rowCol = this.getRowColFromXY(x, y),
-				endRowCol = this.getRowColFromXY(x + w, y + h)
-				startRow = rowCol.row,
-				startCol = rowCol.col,
-				endRow = endRowCol.row,
-				endCol = endRowCol.col,
-				obj = {
-					row : startRow,
-					col : startCol,
-					file : this.currentItem.file,
-					src : this.currentItem.src,
-					element : this.currentItem.element,
-					y : startRow * this.CELL_HEIGHT,
-					x : startCol * this.CELL_WIDTH,
-					w : (endCol - startCol + 1) * this.CELL_WIDTH, 
-					h : (endRow - startRow + 1) * this.CELL_HEIGHT
-				}
-
-			this.createItem(obj);
-		},
 		updateSelectedItems : function() {
-			this.selectedItems = this.mapModes.selection.getSelectedItems();	
+			this.currentFile.updateSelectedItems();
 		},
 		updateLoadedItem : function(id, attr, value) {
 			var item = this.getLoadedItemById(id);
@@ -245,13 +218,40 @@ app.factory('stage', [
 			}, item;
 
 			if(this.getItemByXY(x, y))return;
-			obj = $.extend(obj, this.getLoadedItemById(element));
+			
+			obj = $.extend(obj, this.currentItem);
+			
 			item = new Item(this, obj);
+			
 			item.drawImg(function() {
 				this.stage.snapshot.updateSnapshotCanvas();
 			}.bind(this));
 			
 			this.addItem(item);
+		},
+		createItemByXYWH : function(x, y, w, h) {
+			if(typeof x === 'object'){
+				y = x.y;
+				w = x.w;
+				h = x.h;
+				x = x.x;
+			}
+			var rowCol = this.getRowColFromXY(x, y),
+				endRowCol = this.getRowColFromXY(x + w, y + h)
+				startRow = rowCol.row,
+				startCol = rowCol.col,
+				endRow = endRowCol.row,
+				endCol = endRowCol.col,
+				obj = {
+					row : startRow,
+					col : startCol,
+					y : startRow * this.CELL_HEIGHT,
+					x : startCol * this.CELL_WIDTH,
+					w : (endCol - startCol + 1) * this.CELL_WIDTH, 
+					h : (endRow - startRow + 1) * this.CELL_HEIGHT
+				}
+
+			this.createItem(obj);
 		},
 		
 		addItem : function(obj) {
@@ -329,6 +329,9 @@ app.factory('stage', [
 				this.stage.update();
 			}.bind(this), 10);
 		},
+		applyRootScope : function() {
+			$rootScope.$apply();
+		}
 	}
 
 	var stage = new Stage('map-creator');

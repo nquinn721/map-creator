@@ -22,10 +22,7 @@ app.factory('Paint', function() {
 				col * this.stage.CELL_WIDTH , 
 				row * this.stage.CELL_HEIGHT, 
 				this.stage.CELL_WIDTH, 
-				this.stage.CELL_HEIGHT, 
-				this.stage.currentItem.file, 
-				this.stage.currentItem.src,
-				this.stage.currentItem.element
+				this.stage.CELL_HEIGHT 
 			  );
 
 		},

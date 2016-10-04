@@ -4,16 +4,11 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 	var vm = this;
 	vm.stage = stage;
 	vm.keys = {};
-	
+
 	vm.currentImage = function() {
 		return vm.stage.currentImageName;
 	}
-	vm.hideFullScreenImg = function() {
-		vm.fullScreenImg = null;
-	}
-	vm.showFullScreenImg = function(url) {
-		vm.fullScreenImg = vm.stage.snapshot.createSnapShot();
-	}
+	
 	
 	vm.downloadCanvasImage = function() {
 		var link = document.createElement('a');

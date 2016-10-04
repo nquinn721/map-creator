@@ -85,11 +85,9 @@ app.factory('Selection', ['$rootScope', function($rootScope) {
 			var items = this.getSelectedItems(),
 				item;
 				
-			for(var i = 0; i < items.length; i++){
-				item = items[i];
-				item.deselect();
-				this.stage.removeChild(item.selectionBox);
-			}
+			for(var i = 0; i < items.length; i++)
+				items[i].deselect();
+			
 			this.stage.showcontextMenu = false;
 		},
 		destroyAllSelected : function() {
