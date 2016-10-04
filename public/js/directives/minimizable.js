@@ -2,7 +2,7 @@ app.directive('minimizable', function() {
 	return {
 		restrict : 'C',
 		link : function($scope, $el, $attrs) {
-			var minimized, height;
+			var minimized, height, padding;
 
 			$($el).find('.minimize').on('click', function() {
 				if(!minimized){

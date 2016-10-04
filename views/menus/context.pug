@@ -1,4 +1,4 @@
-.menu.context-menu.draggable(ng-style="cm.contextMenuPos", ng-show="cm.contextMenu", ng-controller="ContextMenu as cm")
+.menu.context-menu(draggable, ng-style="cm.contextMenuPos", ng-show="cm.contextMenu", ng-controller="ContextMenu as cm")
 	.menu-title(ng-if="cm.options.modesTitle") Modes
 	.menu-title(ng-if="cm.options.selectionTitle") Options
 	div(ng-repeat="mode in cm.stage.modes", ng-if="cm.options[mode.name]" ng-class="mode.name", ng-click="cm.setMode(mode.name)")

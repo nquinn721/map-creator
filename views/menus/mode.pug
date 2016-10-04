@@ -1,7 +1,7 @@
 .mode-menu(ng-controller="ModeMenu as mm")
 	| {{mm.title}}
 	.modes
-		div(ng-attr-title="{{mode.name.capitalize()}} [{{mode.shortcut}}]", ng-repeat="mode in mm.stage.modes", ng-class="{selected: mm.stage.mode == mode.name}", ng-click="mm.stage.setMode(mode.name)") 
+		div(ng-attr-title="{{mode.name.capitalize()}} [{{mode.shortcut}}]", ng-repeat="mode in mm.stage.modes", ng-class="{selected: mm.stage.mode == mode.name}", ng-click="mm.stage.setMode(mode.shortcut)") 
 			| {{JSON.stringify(mode)}}
 			i(ng-class="m.getFAClass(mode)")
 		

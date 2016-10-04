@@ -40,16 +40,18 @@
     
 }
 .mini-map-menu{
-    .menu-content {
+    .mini-map-container {
         padding: 10px;
+
     }
-    .mini-map-container{
+    .mini-map-holder{
         position: relative;
+        height: 100%;
     }
     .mini-map-img{
         cursor: pointer;
-        width: 280px;
-        height: 200px;
+        height: 100%;
+        width: 100%;
         background: #131313;
     }
    
@@ -60,6 +62,9 @@
         height: 50px;
         border: 1px solid;
         position: absolute;
+    }
+    .menu-content{
+        max-height: 300px !important;
     }
 }
 
@@ -181,7 +186,7 @@
         }
 
         .menu-content {
-            max-height: 300px;
+            max-height: 200px;
             overflow-y: auto;
             overflow-x: hidden;
         }

@@ -1,0 +1,19 @@
+.stage-item-info-menu.animation-menu.minimizable.ng-cloak(ng-if="info.stage.currentFile.type === 'spritesheet' && info.stage.mode === 'animation'")
+	.menu-title
+		i.fa.fa-caret-right.show-hide.slide-button
+		| Animations
+	.menu-content.scrollable
+		.info.input-group Frames
+		.frames.scrollable
+			.frame(draggable="{appendTo: 'body', cursor: 'move', helper: 'clone', revert: 'invalid'}", ng-repeat="frame in info.stage.currentFile.frames") {{frame.frameNumber}}
+		.clear
+		.animations
+			.create-animation.info.input-group
+				span Create Animation
+				span.pointer(ng-click="info.stage.modes.animation.create()"): i.fa.fa-plus
+			.animation(ng-repeat="animation in info.stage.currentFile.animations")
+				.animation-title
+					input(placeholder="Animation Title", ng-model="animation.name")
+				.animation-frames(droppable)
+					.draggable-placeholder-text Drag frames here
+					.clear

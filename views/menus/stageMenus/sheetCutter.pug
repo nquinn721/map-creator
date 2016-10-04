@@ -1,0 +1,30 @@
+.stage-item-info-menu.minimizable.ng-cloak(ng-if="info.stage.currentFile.type === 'spritesheet' && info.stage.mode === 'sheetCutter'")
+		.menu-title
+			i.fa.fa-caret-right.show-hide.slide-button
+			| Sprite Sheet
+		.menu-content.scrollable
+			.set-size
+				| Set Size
+				br
+				input(type='checkbox', ng-model="info.stage.modes.sheetCutter.useSetSize")
+				span W: &nbsp;
+				input(type="number", value="32", ng-model="info.stage.modes.sheetCutter.frameWidth")
+				span H: &nbsp;
+				input(type="number", value="32", ng-model="info.stage.modes.sheetCutter.frameHeight")
+			.info.input-group
+				span Frames
+				span {{info.stage.currentFile.frames.length}}
+			.info.input-group.frame(ng-repeat="frame in info.stage.currentFile.frames")
+				.frame-number
+					| Frame {{info.stage.currentFile.frames.indexOf(frame) + 1}}
+				.frame-info
+					div
+						span x: 
+						input(type="number", ng-model="frame.body.x")
+						span y: 
+						input(type="number", ng-model="frame.body.y")
+					div
+						span w: 
+						input(type="number", ng-model="frame.w", ng-change="frame.updateBodyWidth()")
+						span h: 
+						input(type="number", ng-model="frame.h", ng-change="frame.updateBodyHeight()")

@@ -1,7 +1,9 @@
 app.factory('keys', function() {
 	var keys = {
 		17 : 'ctrl',
+		91 : 'ctrl', // command
 		46 : 'delete',
+		8 : 'delete', // backspace
 		32 : 'spacebar',
 		27 : 'esc',
 		65 : 'a',

@@ -9,7 +9,6 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	vm.newFileExtension = 'js';
 
 	vm.save = function() {
-		console.log('save');
 		if(!vm.stage.currentFile.isDirty)return;
 
 
@@ -37,7 +36,7 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	
 	vm.saveTileMap = function() {
 		vm.hideSaveMenu();
-		stage.file.save();
+		stage.fileManager.save();
 		vm.updateTileMaps();
 		vm.showSaved();
 	}
@@ -50,7 +49,7 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 	vm.createNewFile = function() {
 		vm.newFileName = vm.newFileName.split('.')[0] + '.' + vm.newFileExtension;
 		vm.showCreateNewFileMenu = false;
-		vm.stage.file.createFile(vm.newFileName, {
+		vm.stage.fileManager.createFile(vm.newFileName, {
 			name : vm.newFileName,
 			w : vm.newFileWidth, 
 			h : vm.newFileHeight

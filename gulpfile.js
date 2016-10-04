@@ -9,7 +9,8 @@ gulp.task('less', function() {
 		'bower_components/bootstrap/dist/css/bootstrap.min.css',
 		'bower_components/font-awesome/css/font-awesome.min.css',
 		'bower_components/animate.css/animate.min.css',
-		'bower_components/jquery-ui/themes/ui-darkness/jquery-ui.min.css'
+		'bower_components/jquery-ui/themes/ui-darkness/jquery-ui.min.css',
+		'public/js/lib/scroll/jquery.mCustomScrollbar.css'
 	]).pipe(concat('lib.css'))
 	  .pipe(gulp.dest('public/css'));
     gulp.src([
@@ -32,6 +33,7 @@ gulp.task('js', function() {
 		'bower_components/angular/angular.min.js',
 		'bower_components/jquery-ui/jquery-ui.min.js',
 		'bower_components/angular-ui-uploader/dist/uploader.min.js',
+		'public/js/lib/scroll/jquery.mCustomScrollbar.concat.min.js',
 		'public/js/lib/createjs.js', 
 		'public/js/lib/sb.js', 
 		'public/js/global.js', 

@@ -52,7 +52,6 @@ app.factory('Item', function () {
 		},
 		select : function() {
 			if(this.selected)return;
-			console.log('selecting');
 			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
 			this.stage.addChild(this.selectionBox);
 			this.selected = true;

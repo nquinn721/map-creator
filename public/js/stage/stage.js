@@ -1,8 +1,8 @@
 app.factory('stage', [
 	'Preload', 'Draw', 'Save', 'Item', 'Frame', 'Spritesheet', '$http', 'Selection', 'Paint', 'Erase', 'Move',  'SheetCutter',
-	'keys', 'cursor', '$rootScope', 'Snapshot', 'File',
+	'keys', 'cursor', '$rootScope', 'Snapshot', 'FileManager', 'Animation', 'File', 'minimap',
 	function(Preload, Draw, Save, Item, Frame, Spritesheet, $http, Selection, Paint, Erase, Move, SheetCutter,
-			keys, cursor, $rootScope, Snapshot, File) {
+			keys, cursor, $rootScope, Snapshot, FileManager, Animation, File, minimap) {
 
 	function Stage(stageId) {
 		this.CELL_WIDTH	= 25;
@@ -17,8 +17,9 @@ app.factory('stage', [
 		this.draw = new Draw(this);
 		this.save = new Save(this);
 		this.snapshot = new Snapshot(this);
-		this.file = new File(this);
+		this.fileManager = new FileManager(this);
 		this.preload = new Preload;
+		this.minimap = minimap;
 
 		// Modes
 		this.modes = {
@@ -30,17 +31,12 @@ app.factory('stage', [
 			erase : new Erase(this)
 		}
 		this.spritesheetModes = {
-			sheetCutter : new SheetCutter(this)
+			sheetCutter : new SheetCutter(this),
+			animation : new Animation(this)
 		}
 		this.files = {
-			'untitled.js' : {
-				name : 'untitled.js',
-				items : [],
-				size : {w : this.baseWidth, h : this.baseHeight},
-				type : 'tilemap',
-				frames : []
-			}
-		};
+			'untitled.js' : new File(this, {name : 'untitled.js', size : {w : this.baseWidth, h : this.baseHeight}, type : 'tilemap'})
+		}
 		this.currentFile = this.files['untitled.js'];
 		this.currentFileName = 'untitled.js';
 		this.rows = this.stage.canvas.height / this.CELL_HEIGHT;
@@ -65,6 +61,7 @@ app.factory('stage', [
 				this.snapshot.createSnapShot();
 				this.setupModes();
 				$rootScope.$apply();
+				this.minimap.update();
 			}.bind(this));
 		},
 		keydown : function(e) {
@@ -75,14 +72,7 @@ app.factory('stage', [
 				this.mapModes.selection.destroyAllSelected();
 			if(key === 'esc')
 				this.mapModes.selection.deselectItems();
-			if(key === 'p')
-				this.setMode('paint');
-			if(key === 's')
-				this.setMode('selection');
-			if(key === 'm')
-				this.setMode('move');
-			if(key === 'e')
-				this.setMode('erase');
+			this.setMode(key);
 
 			for(var i in this.modes)
 				if(this.modes[i].keydown)this.modes[i].keydown(key, e);
@@ -108,6 +98,7 @@ app.factory('stage', [
 			this.stage.canvas.height = this.currentFile.size.h;
 			this.snapshot.updateCanvas();
 			this.draw.clearLines();
+			this.minimap.update();
 			if(this.currentFile.type !== 'spritesheet'){
 				this.draw.drawCanvasGrid();	
 			}
@@ -149,11 +140,21 @@ app.factory('stage', [
 			this.dontUpdateMiniMap = false;
 
 		},
-		setMode : function(mode) {
-			cursor.change(mode);
+		setMode : function(key) {
+			var foundMode,
+				reg = new RegExp(key, 'i');
+			for(var i in this.modes)
+				if(this.modes[i].shortcut.match(reg))
+					foundMode = this.modes[i];
+
+			// Leave if the no mode is associated with the key
+			if(!foundMode)return;
+			
+			// cursor.change(key);
 			for(var i in this.modes)
 				if(this.modes[i].cleanUp)this.modes[i].cleanUp();
-			this.mode = mode;
+
+			this.mode = foundMode.name;
 		},
 		setSize : function(size) {
 			this.updateCanvas();

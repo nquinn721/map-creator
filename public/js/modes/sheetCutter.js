@@ -4,6 +4,7 @@ app.factory('SheetCutter', function() {
 		this.name = 'sheetCutter';
 		this.icon = 'scissors';
 		this.cursor = 'crosshairs';
+		this.shortcut = 'S';
 
 
 		this.useSetSize = false;
