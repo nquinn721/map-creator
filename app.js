@@ -26,17 +26,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'pug');
 
 app.get('/', function(req, res) {
-	var sprites = fs.readdirSync('tilemaps/img');
+	var sprites = getTileMaps();
+	var backgrounds = fs.readdirSync('tilemaps/backgrounds');
 	var maps = fs.readdirSync('tilemaps');
 	res.render('index', {
 		sprites : sprites,
-		maps : maps
+		maps : maps,
+		backgrounds : backgrounds
 	});
 });
-app.post('/canvas-image', function(req, res) {
-	console.log(req.body);
-	
-});
+
+function getTileMaps() {
+	var sprites = fs.readdirSync('tilemaps/img').map(function(v){
+		if(v.match(/[^\.DS_Store]/))return v;
+	}).filter(v => v !== undefined);
+	return sprites;
+}
+
 app.get('/tilemap-names', function(req, res) {
 	var files = fs.readdirSync('tilemaps');
 	files = files.map(function(file) {
@@ -54,7 +60,7 @@ app.get('/spritesheet-names', function(req, res) {
 });
 
 app.get('/manifest', function(req, res) {
-	var images = fs.readdirSync('tilemaps/img'),
+	var images = getTileMaps(),
 		manifest = [];
 	for(var i = 0; i < images.length; i++)
 		manifest.push({
@@ -79,7 +85,6 @@ app.get('/load-tilemap/:map', function(req, res) {
 
 app.get('/load-spritesheet/:spritesheet', function(req, res) {
 	if(!req.params.spritesheet)return;
-	console.log(req.params.spritesheet);
 	res.sendFile(__dirname + '/spritesheets/' + req.params.spritesheet);
 });
 
@@ -97,6 +102,11 @@ app.post('/save-spritesheet', jsonParser, function(req, res) {
 	fs.writeFile('spritesheets/'+req.body.name, JSON.stringify(req.body.data), function (err) {
 		console.log(err);
 	});
+});
+
+app.get('/getfile/:type/:name', function(req, res) {
+	if(!req.params.name)return;
+	res.sendFile(__dirname + '/' + req.params.type + 's/' + '/' + req.params.name);
 });
 
 

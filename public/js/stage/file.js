@@ -8,6 +8,8 @@ app.factory('File', function() {
 		this.frames = obj.frames || [];
 		this.animations = obj.animations || [{}];
 		this.spritesheet = obj.spritesheet || null;
+		this.background = obj.background || null;
+		this.prefabs = obj.prefabs || null;
 		this.selectedItems = {};
 	}
 	File.prototype = {
@@ -65,6 +67,14 @@ app.factory('File', function() {
 		},
 		selectionName : function(item) {
 			return item.element + item.type + item.body;
+		},
+		cleanup : function () {
+			this.stage.dontUpdateMiniMap = true;
+			for(var i = 0; i < this.items.length; i++)
+				this.items[i].destroyImages();
+
+			for(var i = 0; i < this.frames.length; i++)
+				this.frames[i].destroyImages();
 		}
 	}
 	return File;

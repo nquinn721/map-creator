@@ -1,0 +1,7 @@
+.grid-controls
+	.grid-color
+		span Grid Color &nbsp;
+		input(type='color', value="#ffffff", ng-model="m.stage.gridColor", ng-change="m.stage.updateCanvas()")
+	.grid-show
+		span Show Grid &nbsp;
+		input(type='checkbox', ng-model="m.stage.showGrid", ng-change="m.stage.updateCanvas()", checked)

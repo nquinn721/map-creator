@@ -8,11 +8,12 @@ app.factory('Draw', [function() {
 	}
 
 	Draw.prototype = {
-		line : function (x, y, endX, endY, color) {
+		line : function (x, y, endX, endY, color, alpha) {
 			var g = new createjs.Shape();
 			g.graphics.beginStroke(color || "rgba(255,255,255,0.5)");
 			g.graphics.moveTo(x,y); 
 			g.graphics.lineTo(endX,endY);
+			g.graphics.alpha = alpha || 1;
 			this.stage.addChild(g);
 			this.lines.push(g);
 			return g;
@@ -89,10 +90,12 @@ app.factory('Draw', [function() {
 			this.lines = [];
 		},
 		drawCanvasGrid : function() {
+			if(!this.stage.showGrid)return;
+
 			for(var i = 1; i < this.stage.rows; i++)
-				this.line(0, i * this.stage.CELL_HEIGHT, this.stage.getStage().canvas.width, i * this.stage.CELL_HEIGHT);
+				this.line(0, i * this.stage.CELL_HEIGHT, this.stage.getStage().canvas.width, i * this.stage.CELL_HEIGHT, this.stage.gridColor, 0.5);
 			for(var i = 1; i < this.stage.cols; i++)
-				this.line(i * this.stage.CELL_WIDTH, 0, i * this.stage.CELL_WIDTH, this.stage.getStage().canvas.height);
+				this.line(i * this.stage.CELL_WIDTH, 0, i * this.stage.CELL_WIDTH, this.stage.getStage().canvas.height, this.stage.gridColor);
 		}
 	}
 

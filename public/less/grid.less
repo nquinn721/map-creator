@@ -48,6 +48,26 @@
     box-shadow: -1px 1px 2px #000000;
 }
 
+.grid-controls {
+    position: fixed;
+    top: 120px;
+    left: 50%;
+    width: 300px;
+    background: #252525;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 6px 10px black;
+    justify-content: space-between;
+    .grid-color {
+        input[type=color] {
+            border: none;
+            background: none;
+            outline: none;
+        }
+    }
+}
 .grid {
     box-sizing: border-box;
     position: absolute;
@@ -100,7 +120,7 @@
         box-shadow: 0 0 10px 3px #121212;
         display: none;
         margin-right: 20px;
-        margin-top: 10px;
+        margin-top: 45px;
         margin-bottom: 10px;
     }
     .progress-container {

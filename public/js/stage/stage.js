@@ -12,6 +12,8 @@ app.factory('stage', [
 		this.stage.enableMouseOver(20);  
 		this.baseWidth = 2000;
 		this.baseHeight = 2000;
+		this.gridColor = '#ffffff';
+		this.showGrid = true;
 
 		// Classes
 		this.draw = new Draw(this);
@@ -43,7 +45,6 @@ app.factory('stage', [
 		this.cols = this.stage.canvas.width / this.CELL_WIDTH;
 
 
-		
 	}
 
 	Stage.prototype = {
@@ -218,8 +219,8 @@ app.factory('stage', [
 			}, item;
 
 			if(this.getItemByXY(x, y))return;
-			
-			obj = $.extend(obj, this.currentItem);
+
+			obj = $.extend(obj, this.getLoadedItemById(obj.element) || this.currentItem);
 			
 			item = new Item(this, obj);
 			
@@ -267,12 +268,7 @@ app.factory('stage', [
 		},
 		
 		clearStageItems : function() {
-			this.dontUpdateMiniMap = true;
-			for(var i = 0; i < this.currentFile.items.length; i++)
-				this.currentFile.items[i].destroyImages();
-
-			for(var i = 0; i < this.currentFile.frames.length; i++)
-				this.currentFile.frames[i].destroyImages();
+			this.currentFile.cleanup();
 		},
 		getRowColFromXY : function(x, y) {
 			return {row : Math.floor(y / this.CELL_HEIGHT), col : Math.floor(x / this.CELL_WIDTH)};

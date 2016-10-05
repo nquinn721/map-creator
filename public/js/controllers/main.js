@@ -11,9 +11,17 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 	
 	
 	vm.downloadCanvasImage = function() {
+		vm.download(vm.stage.snapshot.createSnapShot(), vm.stage.currentFile.name.replace('js', 'png'));
+	}
+
+	vm.downloadCanvasJSON = function() {
+		vm.download('/getfile/' + vm.stage.currentFile.type + '/' + vm.stage.currentFile.name, vm.stage.currentFile.name)
+	}
+
+	vm.download = function(href, name) {
 		var link = document.createElement('a');
-		link.href = vm.stage.snapshot.createSnapShot();
-		link.download = 'map.png';
+		link.href = href;
+		link.download = name;
 		link.click();
 	}
 	

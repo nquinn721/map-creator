@@ -1,9 +1,9 @@
-+menu("items-menu", "Items", "ItemsMenu as im")
-	for sprite, i in sprites
++menu("backgrounds-menu", "Backgrounds", "ItemsMenu as im")
+	for sprite, i in backgrounds
 		- sp = sprite.split('.')[0]
 		- spName = sp.replace(/([A-Z])/g, ' $1').capitalize();
 			.item(id=sp.toLowerCase(), 
 					ng-class="{selected: m.stage.currentItem.name == '" + spName + "'}", 
 					ng-click="m.stage.setCurrentItem('" + sp.toLowerCase() + "');")
 				span=spName
-				img(src="tilemaps/img/" + sprite)
+				img(src="tilemaps/backgrounds/" + sprite)

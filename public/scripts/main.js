@@ -636,10 +636,8 @@ app.controller('FileController', ['stage', '$scope', '$http', 'keys', '$document
 }]);
 app.controller('ItemsMenu', ['$scope', 'stage', function($scope, stage) {
 	var vm = this;
-	vm.selected = 'box';
 
 	vm.selectItem = function(item, file, itemName) {
-		console.log(item);
 		vm.selected = item;
 		stage.setCurrentItem(item);
 	}
@@ -660,9 +658,17 @@ app.controller('MainController', ['stage', '$scope', '$document', 'watch', '$htt
 	
 	
 	vm.downloadCanvasImage = function() {
+		vm.download(vm.stage.snapshot.createSnapShot(), vm.stage.currentFile.name.replace('js', 'png'));
+	}
+
+	vm.downloadCanvasJSON = function() {
+		vm.download('/getfile/' + vm.stage.currentFile.type + '/' + vm.stage.currentFile.name, vm.stage.currentFile.name)
+	}
+
+	vm.download = function(href, name) {
 		var link = document.createElement('a');
-		link.href = vm.stage.snapshot.createSnapShot();
-		link.download = 'map.png';
+		link.href = href;
+		link.download = name;
 		link.click();
 	}
 	
@@ -1432,11 +1438,12 @@ app.factory('Draw', [function() {
 	}
 
 	Draw.prototype = {
-		line : function (x, y, endX, endY, color) {
+		line : function (x, y, endX, endY, color, alpha) {
 			var g = new createjs.Shape();
 			g.graphics.beginStroke(color || "rgba(255,255,255,0.5)");
 			g.graphics.moveTo(x,y); 
 			g.graphics.lineTo(endX,endY);
+			g.graphics.alpha = alpha || 1;
 			this.stage.addChild(g);
 			this.lines.push(g);
 			return g;
@@ -1513,10 +1520,12 @@ app.factory('Draw', [function() {
 			this.lines = [];
 		},
 		drawCanvasGrid : function() {
+			if(!this.stage.showGrid)return;
+
 			for(var i = 1; i < this.stage.rows; i++)
-				this.line(0, i * this.stage.CELL_HEIGHT, this.stage.getStage().canvas.width, i * this.stage.CELL_HEIGHT);
+				this.line(0, i * this.stage.CELL_HEIGHT, this.stage.getStage().canvas.width, i * this.stage.CELL_HEIGHT, this.stage.gridColor, 0.5);
 			for(var i = 1; i < this.stage.cols; i++)
-				this.line(i * this.stage.CELL_WIDTH, 0, i * this.stage.CELL_WIDTH, this.stage.getStage().canvas.height);
+				this.line(i * this.stage.CELL_WIDTH, 0, i * this.stage.CELL_WIDTH, this.stage.getStage().canvas.height, this.stage.gridColor);
 		}
 	}
 
@@ -1533,6 +1542,8 @@ app.factory('File', function() {
 		this.frames = obj.frames || [];
 		this.animations = obj.animations || [{}];
 		this.spritesheet = obj.spritesheet || null;
+		this.background = obj.background || null;
+		this.prefabs = obj.prefabs || null;
 		this.selectedItems = {};
 	}
 	File.prototype = {
@@ -1590,6 +1601,14 @@ app.factory('File', function() {
 		},
 		selectionName : function(item) {
 			return item.element + item.type + item.body;
+		},
+		cleanup : function () {
+			this.stage.dontUpdateMiniMap = true;
+			for(var i = 0; i < this.items.length; i++)
+				this.items[i].destroyImages();
+
+			for(var i = 0; i < this.frames.length; i++)
+				this.frames[i].destroyImages();
 		}
 	}
 	return File;
@@ -2133,6 +2152,8 @@ app.factory('stage', [
 		this.stage.enableMouseOver(20);  
 		this.baseWidth = 2000;
 		this.baseHeight = 2000;
+		this.gridColor = '#ffffff';
+		this.showGrid = true;
 
 		// Classes
 		this.draw = new Draw(this);
@@ -2164,7 +2185,6 @@ app.factory('stage', [
 		this.cols = this.stage.canvas.width / this.CELL_WIDTH;
 
 
-		
 	}
 
 	Stage.prototype = {
@@ -2339,8 +2359,8 @@ app.factory('stage', [
 			}, item;
 
 			if(this.getItemByXY(x, y))return;
-			
-			obj = $.extend(obj, this.currentItem);
+
+			obj = $.extend(obj, this.getLoadedItemById(obj.element) || this.currentItem);
 			
 			item = new Item(this, obj);
 			
@@ -2388,12 +2408,7 @@ app.factory('stage', [
 		},
 		
 		clearStageItems : function() {
-			this.dontUpdateMiniMap = true;
-			for(var i = 0; i < this.currentFile.items.length; i++)
-				this.currentFile.items[i].destroyImages();
-
-			for(var i = 0; i < this.currentFile.frames.length; i++)
-				this.currentFile.frames[i].destroyImages();
+			this.currentFile.cleanup();
 		},
 		getRowColFromXY : function(x, y) {
 			return {row : Math.floor(y / this.CELL_HEIGHT), col : Math.floor(x / this.CELL_WIDTH)};
