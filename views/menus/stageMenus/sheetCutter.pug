@@ -1,29 +1,29 @@
-.stage-item-info-menu.minimizable.ng-cloak(ng-if="info.stage.currentFile.type === 'spritesheet' && info.stage.mode === 'sheetCutter'")
+.stage-item-info-menu.minimizable.ng-cloak.sheet-cutter-menu(ng-if="info.stage.currentFile.type === 'spritesheet' && info.stage.mode === 'sheetCutter'")
 		.menu-title
 			i.fa.fa-caret-right.show-hide.slide-button
 			| Sprite Sheet
 		.menu-content.scrollable
 			.set-size
 				| Set Size
-				br
-				input(type='checkbox', ng-model="info.stage.modes.sheetCutter.useSetSize")
-				span W: &nbsp;
-				input(type="number", value="32", ng-model="info.stage.modes.sheetCutter.frameWidth")
-				span H: &nbsp;
-				input(type="number", value="32", ng-model="info.stage.modes.sheetCutter.frameHeight")
-			.info.input-group
+				.flexed
+					input(type='checkbox', ng-model="info.stage.modes.sheetCutter.useSetSize")
+					span W: &nbsp;
+					input(type="number", value="32", ng-model="info.stage.modes.sheetCutter.frameWidth")
+					span H: &nbsp;
+					input(type="number", value="32", ng-model="info.stage.modes.sheetCutter.frameHeight")
+			.info.input-group.flexed
 				span Frames
 				span {{info.stage.currentFile.frames.length}}
 			.info.input-group.frame(ng-repeat="frame in info.stage.currentFile.frames")
 				.frame-number
 					| Frame {{info.stage.currentFile.frames.indexOf(frame) + 1}}
 				.frame-info
-					div
+					div.flexed
 						span x: 
 						input(type="number", ng-model="frame.body.x")
 						span y: 
 						input(type="number", ng-model="frame.body.y")
-					div
+					div.flexed
 						span w: 
 						input(type="number", ng-model="frame.w", ng-change="frame.updateBodyWidth()")
 						span h: 

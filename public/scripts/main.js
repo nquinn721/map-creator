@@ -1559,7 +1559,6 @@ app.factory('File', function() {
 		updateSelected : function(selectionName, item) {
 			var items = this.selectedItems[selectionName].slice();
 
-			console.log(items);
 
 			for(var i = 0; i < items.length; i++){
 				items[i].body = item.body;
@@ -1567,7 +1566,6 @@ app.factory('File', function() {
 				this.addSelected(items[i]);
 				this.removeSelected(selectionName, items[i]);
 			}
-			console.log(this.selectedItems);
 		},
 		removeSelected : function(selectionName, item) {
 			var f = this.selectedItems[selectionName];
@@ -1581,7 +1579,6 @@ app.factory('File', function() {
 			}else{
 				selectionName = name;
 			}
-			console.log('add');
 			if(!this.selectedItems[selectionName])
 				this.selectedItems[selectionName] = [];
 
@@ -1930,17 +1927,23 @@ app.factory('Item', function () {
 				this.drawselectionBox();
 		},
 		click : function() {
-			if(!this.isMoving){
+			console.log(this.pressmoving);
+			if(!this.pressmoving){
 				if(this.selected)
 					this.deselect();
 				else
 					this.select();
 			}
 			this.isMoving = false;
+			this.pressmoving = false;
 		},
 		pressmove : function(e) {
-			this.isMoving = true;
-			this.stage.mapModes.move.move();
+			if(this.isMoving){
+				console.log('this.presmoving');
+				this.stage.mapModes.move.move();
+				this.pressmoving = true;
+			}else
+				this.isMoving = true;
 		},
 		move : function (obj) {
 			if(isNaN(obj.row) || isNaN(obj.col))return;
@@ -1955,7 +1958,9 @@ app.factory('Item', function () {
 			this.col += obj.col;
 		},
 		select : function() {
+			console.log('select');
 			if(this.selected)return;
+			console.log('select');
 			this.drawselectionBox();
 			this.selected = true;
 			this.stage.updateSelectedItems();

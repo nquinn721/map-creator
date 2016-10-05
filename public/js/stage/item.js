@@ -29,17 +29,23 @@ app.factory('Item', function () {
 				this.drawselectionBox();
 		},
 		click : function() {
-			if(!this.isMoving){
+			console.log(this.pressmoving);
+			if(!this.pressmoving){
 				if(this.selected)
 					this.deselect();
 				else
 					this.select();
 			}
 			this.isMoving = false;
+			this.pressmoving = false;
 		},
 		pressmove : function(e) {
-			this.isMoving = true;
-			this.stage.mapModes.move.move();
+			if(this.isMoving){
+				console.log('this.presmoving');
+				this.stage.mapModes.move.move();
+				this.pressmoving = true;
+			}else
+				this.isMoving = true;
 		},
 		move : function (obj) {
 			if(isNaN(obj.row) || isNaN(obj.col))return;
@@ -54,7 +60,9 @@ app.factory('Item', function () {
 			this.col += obj.col;
 		},
 		select : function() {
+			console.log('select');
 			if(this.selected)return;
+			console.log('select');
 			this.drawselectionBox();
 			this.selected = true;
 			this.stage.updateSelectedItems();

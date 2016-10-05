@@ -34,7 +34,6 @@ app.factory('File', function() {
 		updateSelected : function(selectionName, item) {
 			var items = this.selectedItems[selectionName].slice();
 
-			console.log(items);
 
 			for(var i = 0; i < items.length; i++){
 				items[i].body = item.body;
@@ -42,7 +41,6 @@ app.factory('File', function() {
 				this.addSelected(items[i]);
 				this.removeSelected(selectionName, items[i]);
 			}
-			console.log(this.selectedItems);
 		},
 		removeSelected : function(selectionName, item) {
 			var f = this.selectedItems[selectionName];
@@ -56,7 +54,6 @@ app.factory('File', function() {
 			}else{
 				selectionName = name;
 			}
-			console.log('add');
 			if(!this.selectedItems[selectionName])
 				this.selectedItems[selectionName] = [];
 
