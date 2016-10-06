@@ -1476,15 +1476,15 @@ app.factory('Draw', [function() {
 			label.textAlign = align || "center";
 			return label;
 		},
-		square : function(x, y, w, h, stroke, color, dontAddChild) {
+		square : function(x, y, w, h, stroke, color, alpha, strokeWidth) {
 			var g = new createjs.Shape();
-			g.graphics.beginStroke(stroke || "blue")
-				.beginFill(color || "rgba(18, 30, 185, 0.58)")
-				.drawRect(x, y, w, h);
-
-			// if(!dontAddChild)
-			// 	this.stage.addChild(g);
-			return g;
+			g.graphics.setStrokeStyle(strokeWidth || 1);
+			g.graphics.beginStroke(stroke || "blue");
+			g.graphics.beginFill(color || "rgba(18, 30, 185, 0.58)");
+			g.graphics.drawRect(x, y, w, h);
+			var shape = new createjs.Shape(g.graphics);
+	        shape.alpha = alpha || 1;
+			return shape;
 		},
 		rawSquare : function(x, y, w, h, stroke, color) {
 			return this.square(x,y,w,h, stroke, color, true);
@@ -1545,6 +1545,7 @@ app.factory('File', function() {
 		this.background = obj.background || null;
 		this.prefabs = obj.prefabs || null;
 		this.selectedItems = {};
+		this.colors = ['red', 'green', 'pink', 'yellow', 'orange', 'blue']
 	}
 	File.prototype = {
 		updateSelectedItems : function() {
@@ -1584,16 +1585,27 @@ app.factory('File', function() {
 			this.clearEmptySelecteds();
 		},
 		addSelected : function(name, item) {
+			var color;
 			if(typeof name === 'object'){
 				selectionName = this.selectionName(name);
 				item = name;
 			}else{
 				selectionName = name;
 			}
-			if(!this.selectedItems[selectionName])
-				this.selectedItems[selectionName] = [];
-
-			this.selectedItems[selectionName].push(item);
+			if(!this.selectedItems[selectionName]){
+				color = this.colors[Object.keys(this.selectedItems).length];
+				this.selectedItems[selectionName] = {
+					config : {
+						color : color,
+						background : color + '-border'
+					},
+					items : []
+				};
+			}else{
+				color = this.selectedItems[selectionName].config.color;
+			}
+			item.addSelectedBackground(color);
+			this.selectedItems[selectionName].items.push(item);
 		},
 		clearEmptySelecteds : function() {
 			for(var i in this.selectedItems)
@@ -1946,7 +1958,6 @@ app.factory('Item', function () {
 				this.drawselectionBox();
 		},
 		click : function() {
-			console.log(this.pressmoving);
 			if(!this.pressmoving){
 				if(this.selected)
 					this.deselect();
@@ -1958,7 +1969,6 @@ app.factory('Item', function () {
 		},
 		pressmove : function(e) {
 			if(this.isMoving){
-				console.log('this.presmoving');
 				this.stage.mapModes.move.move();
 				this.pressmoving = true;
 			}else
@@ -1977,16 +1987,23 @@ app.factory('Item', function () {
 			this.col += obj.col;
 		},
 		select : function() {
-			console.log('select');
 			if(this.selected)return;
-			console.log('select');
 			this.drawselectionBox();
 			this.selected = true;
 			this.stage.updateSelectedItems();
 		},
 		drawselectionBox : function() {
-			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
+		},
+		addSelectedBackground : function(color) {
+			if(this.selectionBox)
+				this.stage.removeChild(this.selectionBox);
+			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, color, 'transparent', null, 3);
 			this.stage.addChild(this.selectionBox);
+
+			if(this.selectionBackground)
+				this.stage.removeChild(this.selectionBackground);
+			this.selectionBackground = this.stage.draw.square(this.x, this.y, this.w, this.h, 'transparent', color, 0.25);
+			this.stage.addChild(this.selectionBackground);
 		},
 		destroy : function() {
 			this.destroyImages();
@@ -2001,6 +2018,7 @@ app.factory('Item', function () {
 		},
 		deselect : function() {
 			this.stage.removeChild(this.selectionBox);
+			this.stage.removeChild(this.selectionBackground);
 			this.selected = false;
 			this.stage.updateSelectedItems();
 		}

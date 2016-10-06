@@ -121,6 +121,43 @@ input:not([type=button]):not([type=submit]):not([type=color]):not([type=checkmar
 input{
     padding-left:5px;
 }
+
+.red-background {
+    background: red;
+}
+.green-background{
+    background: green;
+}
+.pink-background{
+    background: pink;
+}
+.yellow-background{
+    background: yellow;
+}
+.orange-background{
+    background: orange;
+}
+.blue-background{
+    background: blue;
+}
+.red-border {
+    border:2px solid red;
+}
+.green-border{
+    border:2px solid green;
+}
+.pink-border{
+    border:2px solid pink;
+}
+.yellow-border{
+    border:2px solid yellow;
+}
+.orange-border{
+    border:2px solid orange;
+}
+.blue-border{
+    border:2px solid blue;
+}
 .splash{
     position: absolute;
     top: 0px;
@@ -1781,10 +1818,22 @@ input.form-control.number.ui-spinner-input {
     }
 }
 .selected-items-menu{
+    .selected-item{
+        position: relative;
+         .item-background {
+            position: absolute;
+            top: 8px;
+            width: 24px;
+            height: 24px;
+            left: 17px;
+        }
+    }
      .item-info {
+        position: relative;
         padding: 10px;
         font-size:12px;
         border-top: 1px solid #252525;
+
         .selected-items {
             margin-bottom: 10px;
             img {

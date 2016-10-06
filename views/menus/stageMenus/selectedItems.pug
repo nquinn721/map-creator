@@ -6,14 +6,14 @@
 		.item-info
 			.selected-items
 				.selected-item(ng-repeat="(selectedName, item) in info.stage.currentFile.selectedItems")
-					| {{item.length}} x 
-					img(ng-src="{{item[0].src}}")
+					| {{item.items.length}} x 
+					img(ng-src="{{item.items[0].src}}", ng-class="item.config.background")
 					.info.input-group
 						span Element Type
-						input(ng-model="item[0].type", ng-keyup="info.stage.currentFile.updateSelected(selectedName, item[0])")
+						input(ng-model="item.items[0].type", ng-keyup="info.stage.currentFile.updateSelected(selectedName, item.items[0])")
 					.info.input-group
 						span Body
-						select(ng-model="item[0].body", ng-change="info.stage.currentFile.updateSelected(selectedName, item[0])")
+						select(ng-model="item.items[0].body", ng-change="info.stage.currentFile.updateSelected(selectedName, item.items[0])")
 							option(value="static") Static
 							option(value="dynamic") Dynamic
 							option(value="kinematic") Kinematic

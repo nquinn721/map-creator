@@ -46,15 +46,15 @@ app.factory('Draw', [function() {
 			label.textAlign = align || "center";
 			return label;
 		},
-		square : function(x, y, w, h, stroke, color, dontAddChild) {
+		square : function(x, y, w, h, stroke, color, alpha, strokeWidth) {
 			var g = new createjs.Shape();
-			g.graphics.beginStroke(stroke || "blue")
-				.beginFill(color || "rgba(18, 30, 185, 0.58)")
-				.drawRect(x, y, w, h);
-
-			// if(!dontAddChild)
-			// 	this.stage.addChild(g);
-			return g;
+			g.graphics.setStrokeStyle(strokeWidth || 1);
+			g.graphics.beginStroke(stroke || "blue");
+			g.graphics.beginFill(color || "rgba(18, 30, 185, 0.58)");
+			g.graphics.drawRect(x, y, w, h);
+			var shape = new createjs.Shape(g.graphics);
+	        shape.alpha = alpha || 1;
+			return shape;
 		},
 		rawSquare : function(x, y, w, h, stroke, color) {
 			return this.square(x,y,w,h, stroke, color, true);

@@ -11,6 +11,7 @@ app.factory('File', function() {
 		this.background = obj.background || null;
 		this.prefabs = obj.prefabs || null;
 		this.selectedItems = {};
+		this.colors = ['red', 'green', 'pink', 'yellow', 'orange', 'blue']
 	}
 	File.prototype = {
 		updateSelectedItems : function() {
@@ -50,16 +51,27 @@ app.factory('File', function() {
 			this.clearEmptySelecteds();
 		},
 		addSelected : function(name, item) {
+			var color;
 			if(typeof name === 'object'){
 				selectionName = this.selectionName(name);
 				item = name;
 			}else{
 				selectionName = name;
 			}
-			if(!this.selectedItems[selectionName])
-				this.selectedItems[selectionName] = [];
-
-			this.selectedItems[selectionName].push(item);
+			if(!this.selectedItems[selectionName]){
+				color = this.colors[Object.keys(this.selectedItems).length];
+				this.selectedItems[selectionName] = {
+					config : {
+						color : color,
+						background : color + '-border'
+					},
+					items : []
+				};
+			}else{
+				color = this.selectedItems[selectionName].config.color;
+			}
+			item.addSelectedBackground(color);
+			this.selectedItems[selectionName].items.push(item);
 		},
 		clearEmptySelecteds : function() {
 			for(var i in this.selectedItems)

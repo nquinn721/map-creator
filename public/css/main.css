@@ -112,6 +112,42 @@ select {
 input {
   padding-left: 5px;
 }
+.red-background {
+  background: red;
+}
+.green-background {
+  background: green;
+}
+.pink-background {
+  background: pink;
+}
+.yellow-background {
+  background: yellow;
+}
+.orange-background {
+  background: orange;
+}
+.blue-background {
+  background: blue;
+}
+.red-border {
+  border: 2px solid red;
+}
+.green-border {
+  border: 2px solid green;
+}
+.pink-border {
+  border: 2px solid pink;
+}
+.yellow-border {
+  border: 2px solid yellow;
+}
+.orange-border {
+  border: 2px solid orange;
+}
+.blue-border {
+  border: 2px solid blue;
+}
 .splash {
   position: absolute;
   top: 0px;
@@ -1668,7 +1704,18 @@ input.form-control.number.ui-spinner-input {
 .sheet-cutter-menu .info:not(:last-child) {
   border-bottom: 1px solid black;
 }
+.selected-items-menu .selected-item {
+  position: relative;
+}
+.selected-items-menu .selected-item .item-background {
+  position: absolute;
+  top: 8px;
+  width: 24px;
+  height: 24px;
+  left: 17px;
+}
 .selected-items-menu .item-info {
+  position: relative;
   padding: 10px;
   font-size: 12px;
   border-top: 1px solid #252525;

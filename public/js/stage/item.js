@@ -29,7 +29,6 @@ app.factory('Item', function () {
 				this.drawselectionBox();
 		},
 		click : function() {
-			console.log(this.pressmoving);
 			if(!this.pressmoving){
 				if(this.selected)
 					this.deselect();
@@ -41,7 +40,6 @@ app.factory('Item', function () {
 		},
 		pressmove : function(e) {
 			if(this.isMoving){
-				console.log('this.presmoving');
 				this.stage.mapModes.move.move();
 				this.pressmoving = true;
 			}else
@@ -60,16 +58,23 @@ app.factory('Item', function () {
 			this.col += obj.col;
 		},
 		select : function() {
-			console.log('select');
 			if(this.selected)return;
-			console.log('select');
 			this.drawselectionBox();
 			this.selected = true;
 			this.stage.updateSelectedItems();
 		},
 		drawselectionBox : function() {
-			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, 'red', 'transparent');
+		},
+		addSelectedBackground : function(color) {
+			if(this.selectionBox)
+				this.stage.removeChild(this.selectionBox);
+			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, color, 'transparent', null, 3);
 			this.stage.addChild(this.selectionBox);
+
+			if(this.selectionBackground)
+				this.stage.removeChild(this.selectionBackground);
+			this.selectionBackground = this.stage.draw.square(this.x, this.y, this.w, this.h, 'transparent', color, 0.25);
+			this.stage.addChild(this.selectionBackground);
 		},
 		destroy : function() {
 			this.destroyImages();
@@ -84,6 +89,7 @@ app.factory('Item', function () {
 		},
 		deselect : function() {
 			this.stage.removeChild(this.selectionBox);
+			this.stage.removeChild(this.selectionBackground);
 			this.selected = false;
 			this.stage.updateSelectedItems();
 		}
