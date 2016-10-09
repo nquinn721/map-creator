@@ -50,20 +50,19 @@ app.factory('Item', function () {
 			this.y = (this.row + obj.row) * this.stage.CELL_HEIGHT;
 			this.img.y = this.y;
 			this.selectionBox.y = this.selectionBox.y + (obj.row * this.stage.CELL_HEIGHT);
+			this.selectionBackground.y = this.selectionBox.y;
 			this.row += obj.row;
 		
 			this.x = (this.col + obj.col) * this.stage.CELL_WIDTH;
 			this.img.x = this.x;
 			this.selectionBox.x = this.selectionBox.x +  (obj.col * this.stage.CELL_WIDTH);
+			this.selectionBackground.x = this.selectionBox.x;
 			this.col += obj.col;
 		},
 		select : function() {
 			if(this.selected)return;
-			this.drawselectionBox();
 			this.selected = true;
 			this.stage.updateSelectedItems();
-		},
-		drawselectionBox : function() {
 		},
 		addSelectedBackground : function(color) {
 			if(this.selectionBox)
