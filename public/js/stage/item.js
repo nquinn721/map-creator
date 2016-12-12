@@ -26,7 +26,7 @@ app.factory('Item', function () {
 			this.img.on('pressmove', this.pressmove.bind(this));
 
 			if(this.selected)
-				this.drawselectionBox();
+				this.addSelectedBackground();
 		},
 		click : function() {
 			if(!this.pressmoving){
@@ -52,7 +52,7 @@ app.factory('Item', function () {
 			this.selectionBox.y = this.selectionBox.y + (obj.row * this.stage.CELL_HEIGHT);
 			this.selectionBackground.y = this.selectionBox.y;
 			this.row += obj.row;
-		
+
 			this.x = (this.col + obj.col) * this.stage.CELL_WIDTH;
 			this.img.x = this.x;
 			this.selectionBox.x = this.selectionBox.x +  (obj.col * this.stage.CELL_WIDTH);
@@ -65,18 +65,21 @@ app.factory('Item', function () {
 			this.stage.updateSelectedItems();
 		},
 		addSelectedBackground : function(color) {
-			if(this.selectionBox)
+			this.color = color || this.color;
+			console.log(this.color);
+			if(this.selectionBox){
 				this.stage.removeChild(this.selectionBox);
-			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, color, 'transparent', null, 3);
+				console.log('removing box');
+			}
+			this.selectionBox = this.stage.draw.square(this.x, this.y, this.w, this.h, this.color, 'transparent', null, 3);
 			this.stage.addChild(this.selectionBox);
 
 			if(this.selectionBackground)
 				this.stage.removeChild(this.selectionBackground);
-			this.selectionBackground = this.stage.draw.square(this.x, this.y, this.w, this.h, 'transparent', color, 0.25);
+			this.selectionBackground = this.stage.draw.square(this.x, this.y, this.w, this.h, 'transparent', this.color, 0.25);
 			this.stage.addChild(this.selectionBackground);
 		},
 		destroy : function() {
-			this.destroyImages();
 			this.stage.destroyItem(this);
 			this.selected = false;
 			this.stage.updateSelectedItems();
@@ -85,6 +88,8 @@ app.factory('Item', function () {
 			this.stage.removeChild(this.img);
 			if(this.selectionBox)
 				this.stage.removeChild(this.selectionBox);
+			if(this.selectionBackground)
+				this.stage.removeChild(this.selectionBackground);
 		},
 		deselect : function() {
 			this.stage.removeChild(this.selectionBox);

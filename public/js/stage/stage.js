@@ -100,6 +100,7 @@ app.factory('stage', [
 			this.snapshot.updateCanvas();
 			this.draw.clearLines();
 			this.minimap.update();
+            this.showcontextMenu = false;
 			if(this.currentFile.type !== 'spritesheet'){
 				this.draw.drawCanvasGrid();	
 			}
